@@ -280,7 +280,7 @@ namespace simulation {
 
                 // Create window to display player data.
 		        cvNamedWindow("FromPlayer", CV_WINDOW_AUTOSIZE);
-		        cvMoveWindow("FromPlayer", 300, 100);
+		        cvMoveWindow("FromPlayer", 500, 100);
             }
 
             virtual void tearDown() {
