@@ -25,17 +25,21 @@
 #include <iostream>
 
 #include "core/SharedPointer.h"
-#include <core/base/module/TimeTriggeredConferenceClientModule.h>
+#include "core/base/Lock.h"
+#include "core/base/module/TimeTriggeredConferenceClientModule.h"
 #include "core/data/Container.h"
 #include "core/data/TimeStamp.h"
 #include "core/io/URL.h"
 #include "core/io/StreamFactory.h"
+#include "core/wrapper/SharedMemoryFactory.h"
 
 #include "context/base/DirectInterface.h"
 #include "context/base/RecordingContainer.h"
 #include "context/base/RuntimeControl.h"
 #include "context/base/RuntimeEnvironment.h"
 #include "context/base/PlaybackContainer.h"
+
+#include "tools/player/Player.h"
 
 #include "vehiclecontext/VehicleRuntimeControl.h"
 #include "vehiclecontext/model/CameraModel.h"
@@ -50,10 +54,12 @@ using namespace core::base;
 using namespace core::data;
 using namespace core::io;
 using namespace context::base;
+using namespace tools::player;
 using namespace vehiclecontext;
 using namespace vehiclecontext::model;
 using namespace vehiclecontext::report;
 using namespace automotive;
+using namespace coredata::image;
 
 
 namespace simulation {
@@ -88,15 +94,62 @@ namespace simulation {
              * @param argv Command line arguments.
              */
             FeatureMatcher(const int32_t &argc, char **argv) :
-                core::base::module::TimeTriggeredConferenceClientModule(argc, argv, "FeatureMatcher")
+                core::base::module::TimeTriggeredConferenceClientModule(argc, argv, "FeatureMatcher"),
+                m_player(),
+                m_hasAttachedToSharedImageMemoryFromSimulation(false),
+                m_sharedImageMemoryFromSimulation(),
+                m_imageFromSimulation(),
+                m_hasAttachedToSharedImageMemoryFromPlayer(false),
+                m_sharedImageMemoryFromPlayer(),
+                m_imageFromPlayer()
              {}
 
             virtual ~FeatureMatcher() {}
 
+            bool readSharedImage(Container &c) {
+	            bool retVal = false;
+
+	            if (c.getDataType() == Container::SHARED_IMAGE) {
+		            SharedImage si = c.getData<SharedImage> ();
+
+		            // Check if we have already attached to the shared memory.
+		            if (!m_hasAttachedToSharedImageMemoryFromSimulation) {
+			            m_sharedImageMemoryFromSimulation
+					            = core::wrapper::SharedMemoryFactory::attachToSharedMemory(
+							            si.getName());
+		            }
+
+		            // Check if we could successfully attach to the shared memory.
+		            if (m_sharedImageMemoryFromSimulation->isValid()) {
+			            // Lock the memory region to gain exclusive access using a scoped lock.
+                        Lock l(m_sharedImageMemoryFromSimulation);
+			            const uint32_t numberOfChannels = si.getBytesPerPixel();
+			            // For example, simply show the image.
+			            if (m_imageFromSimulation == NULL) {
+				            m_imageFromSimulation = cvCreateImage(cvSize(si.getWidth(), si.getHeight()), IPL_DEPTH_8U, numberOfChannels);
+			            }
+
+			            // Copying the image data is very expensive...
+			            if (m_imageFromSimulation != NULL) {
+				            memcpy(m_imageFromSimulation->imageData,
+						           m_sharedImageMemoryFromSimulation->getSharedMemory(),
+						           si.getWidth() * si.getHeight() * numberOfChannels);
+			            }
+
+			            // Mirror the image.
+			            cvFlip(m_imageFromSimulation, 0, -1);
+
+			            retVal = true;
+		            }
+	            }
+	            return retVal;
+            }
+
             coredata::dmcp::ModuleExitCodeMessage::ModuleExitCode body() {
 	            while (getModuleStateAndWaitForRemainingTimeInTimeslice() == coredata::dmcp::ModuleStateMessage::RUNNING) {
-                    cout << "Inside the main processing loop." << endl;
+                    cout << "[FeatureMatcher] Inside the main processing loop." << endl;
 
+                    // Trigger movement of vehicle to get valid simulation data.
                     VehicleControl vehicleControl;
                     vehicleControl.setSpeed(1);
                     vehicleControl.setSteeringWheelAngle(0);
@@ -106,6 +159,26 @@ namespace simulation {
                     // Send container.
                     getConference().send(c2);
 
+                    // Get virtual data from simulation.
+                    {
+                        bool hasNextFrame = false;
+		                Container c = getKeyValueDataStore().get(Container::SHARED_IMAGE);
+
+		                if (c.getDataType() == Container::SHARED_IMAGE) {
+			                // Example for processing the received container.
+			                hasNextFrame = readSharedImage(c);
+		                }
+
+		                // Process the read image and calculate regular lane following set values for control algorithm.
+		                if (true == hasNextFrame) {
+                            if (m_imageFromSimulation != NULL) {
+                                cvShowImage("FromSimulation", m_imageFromSimulation);
+                                cvWaitKey(10);
+                            }
+		                }
+                    }
+
+                    // Get some data from recording file. 
                 }
                 
                 return coredata::dmcp::ModuleExitCodeMessage::OKAY;
@@ -113,12 +186,58 @@ namespace simulation {
 
         private:
             virtual void setUp() {
-                cout << "setUp" << endl;
+                cout << "[FeatureMatcher] Setting up." << endl;
+                    
+                core::io::URL recordingFile(getKeyValueConfiguration().getValue<string>("featurematcher.recording"));
+
+                // Size of the memory buffer.
+                const uint32_t MEMORY_SEGMENT_SIZE = getKeyValueConfiguration().getValue<uint32_t>("global.buffer.memorySegmentSize");
+
+                // Number of memory segments.
+                const uint32_t NUMBER_OF_SEGMENTS = getKeyValueConfiguration().getValue<uint32_t>("global.buffer.numberOfMemorySegments");
+
+                // If AUTO_REWIND is true, the file will be played endlessly.
+                const bool AUTO_REWIND = true;
+
+                // Run player synchronously.
+                const bool THREADING = false;
+
+                // Create player.
+                m_player = auto_ptr<tools::player::Player>(new Player(recordingFile, AUTO_REWIND, MEMORY_SEGMENT_SIZE, NUMBER_OF_SEGMENTS, THREADING));
+
+                // Create window to display simulation data.
+		        cvNamedWindow("FromSimulation", CV_WINDOW_AUTOSIZE);
+		        cvMoveWindow("FromSimulation", 300, 100);
+
+                // Create window to display player data.
+		        cvNamedWindow("FromPlayer", CV_WINDOW_AUTOSIZE);
+		        cvMoveWindow("FromPlayer", 300, 100);
             }
 
             virtual void tearDown() {
-                cout << "tearDown" << endl;
+                cout << "[FeatureMatcher] Tear down." << endl;
+
+	            if (m_imageFromSimulation != NULL) {
+		            cvReleaseImage(&m_imageFromSimulation);
+	            }
+	            if (m_imageFromPlayer != NULL) {
+		            cvReleaseImage(&m_imageFromPlayer);
+	            }
+
+	            cvDestroyWindow("FromSimulation");
+	            cvDestroyWindow("FromPlayer");
             }
+
+        private:
+            auto_ptr<tools::player::Player> m_player;
+
+            bool m_hasAttachedToSharedImageMemoryFromSimulation;
+            core::SharedPointer<core::wrapper::SharedMemory> m_sharedImageMemoryFromSimulation;
+            IplImage *m_imageFromSimulation;
+
+            bool m_hasAttachedToSharedImageMemoryFromPlayer;
+            core::SharedPointer<core::wrapper::SharedMemory> m_sharedImageMemoryFromPlayer;
+            IplImage *m_imageFromPlayer;
     };
 
 
@@ -152,6 +271,8 @@ namespace simulation {
               << "odsimvehicle.LinearBicycleModelNew.wheelbase=2.65                 # Wheelbase; Attention! we used data from the miniature vehicle Meili and thus, all values are scaled by factor 10 to be compatible with the simulation!" << endl
               << "odsimvehicle.LinearBicycleModelNew.invertedSteering=0             # iff 0: interpret neg. steering wheel angles as steering to the left; iff 1: otherwise" << endl
               << "odsimvehicle.LinearBicycleModelNew.maxSpeed=2.0                   # maxium speed in m/ss" << endl
+              << endl
+              << "featurematcher.recording = file://straightroad.rec" << endl
               << endl;
 
         // 1. Setup runtime control.
