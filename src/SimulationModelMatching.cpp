@@ -106,7 +106,7 @@ namespace simulation {
 
             virtual ~FeatureMatcher() {}
 
-            bool readSharedImage(Container &c) {
+            bool readSharedImageFromSimulation(Container &c) {
 	            bool retVal = false;
 
 	            if (c.getDataType() == Container::SHARED_IMAGE) {
@@ -145,6 +145,45 @@ namespace simulation {
 	            return retVal;
             }
 
+            bool readSharedImageFromPlayer(Container &c) {
+	            bool retVal = false;
+
+	            if (c.getDataType() == Container::SHARED_IMAGE) {
+		            SharedImage si = c.getData<SharedImage> ();
+
+		            // Check if we have already attached to the shared memory.
+		            if (!m_hasAttachedToSharedImageMemoryFromPlayer) {
+			            m_sharedImageMemoryFromPlayer
+					            = core::wrapper::SharedMemoryFactory::attachToSharedMemory(
+							            si.getName());
+		            }
+
+		            // Check if we could successfully attach to the shared memory.
+		            if (m_sharedImageMemoryFromPlayer->isValid()) {
+			            // Lock the memory region to gain exclusive access using a scoped lock.
+                        Lock l(m_sharedImageMemoryFromPlayer);
+			            const uint32_t numberOfChannels = si.getBytesPerPixel();
+			            // For example, simply show the image.
+			            if (m_imageFromPlayer == NULL) {
+				            m_imageFromPlayer = cvCreateImage(cvSize(si.getWidth(), si.getHeight()), IPL_DEPTH_8U, numberOfChannels);
+			            }
+
+			            // Copying the image data is very expensive...
+			            if (m_imageFromPlayer != NULL) {
+				            memcpy(m_imageFromPlayer->imageData,
+						           m_sharedImageMemoryFromPlayer->getSharedMemory(),
+						           si.getWidth() * si.getHeight() * numberOfChannels);
+			            }
+
+			            // Mirror the image (not required for recording).
+//			            cvFlip(m_imageFromPlayer, 0, -1);
+
+			            retVal = true;
+		            }
+	            }
+	            return retVal;
+            }
+
             coredata::dmcp::ModuleExitCodeMessage::ModuleExitCode body() {
 	            while (getModuleStateAndWaitForRemainingTimeInTimeslice() == coredata::dmcp::ModuleStateMessage::RUNNING) {
                     cout << "[FeatureMatcher] Inside the main processing loop." << endl;
@@ -160,25 +199,55 @@ namespace simulation {
                     getConference().send(c2);
 
                     // Get virtual data from simulation.
+                    bool hasNextFrameFromSimulation = false;
                     {
-                        bool hasNextFrame = false;
 		                Container c = getKeyValueDataStore().get(Container::SHARED_IMAGE);
 
 		                if (c.getDataType() == Container::SHARED_IMAGE) {
 			                // Example for processing the received container.
-			                hasNextFrame = readSharedImage(c);
+			                hasNextFrameFromSimulation = readSharedImageFromSimulation(c);
 		                }
 
 		                // Process the read image and calculate regular lane following set values for control algorithm.
-		                if (true == hasNextFrame) {
+		                if (true == hasNextFrameFromSimulation) {
                             if (m_imageFromSimulation != NULL) {
                                 cvShowImage("FromSimulation", m_imageFromSimulation);
-                                cvWaitKey(10);
+                                cvWaitKey(1);
                             }
 		                }
                     }
 
-                    // Get some data from recording file. 
+                    // Get some data from recording file.
+                    bool hasNextFrameFromPlayer = false;
+                    {
+                        Container c;
+                        if (m_player.get() != NULL) {
+                            const uint16_t MAX_FRAMES = 50;
+                            for (uint16_t i = 0; i < MAX_FRAMES; i++) {
+                                // Read the next container from file.
+                                if (m_player->hasMoreData()) {
+                                    c = m_player->getNextContainerToBeSent();
+                                }
+
+		                        if (c.getDataType() == Container::SHARED_IMAGE) {
+			                        // Example for processing the received container.
+			                        hasNextFrameFromPlayer = readSharedImageFromPlayer(c);
+		                        }
+
+		                        // Process the read image and calculate regular lane following set values for control algorithm.
+		                        if (true == hasNextFrameFromPlayer) {
+                                    if (m_imageFromPlayer != NULL) {
+                                        cvShowImage("FromPlayer", m_imageFromPlayer);
+                                        cvWaitKey(1);
+                                    }
+		                        }
+
+                                if (hasNextFrameFromSimulation && hasNextFrameFromPlayer) {
+                                    cout << "[FeatureMatcher] TODO: Use the goodFeatureToTrack method to match reality with simulation here." << endl;
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 return coredata::dmcp::ModuleExitCodeMessage::OKAY;
