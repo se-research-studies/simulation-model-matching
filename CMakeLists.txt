@@ -100,7 +100,12 @@ ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/straightroad.rec.mem
                    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec ${CMAKE_BINARY_DIR}
                    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec.mem ${CMAKE_BINARY_DIR}
                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec.mem)
-ADD_CUSTOM_TARGET(${PROJECT_NAME}-CopyScenarioForSimulations DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/straightroad.rec.mem)
+ADD_CUSTOM_TARGET(${PROJECT_NAME}-CopyRecordingForSimulations DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/straightroad.rec.mem)
+
+ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Track.scnx
+                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/Track.scnx ${CMAKE_BINARY_DIR}
+                   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/resources/Track.scnx)
+ADD_CUSTOM_TARGET(${PROJECT_NAME}-CopyScenarioForSimulations DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Track.scnx)
 
 # Here, the actual simulation runners are generated. Depending on the
 # availability of libodsimulation, either all or only the ones that are
@@ -136,6 +141,7 @@ IF(CXXTEST_FOUND)
         # For the test suites that use an SCNX scenario, we are additionally copying
         # the required scenarios to where the simulation runners are going to be executed.
         ADD_DEPENDENCIES(${simulation-short}-TestSuite ${PROJECT_NAME}-CopyScenarioForSimulations)
+        ADD_DEPENDENCIES(${simulation-short}-TestSuite ${PROJECT_NAME}-CopyRecordingForSimulations)
     ENDFOREACH()
 ENDIF(CXXTEST_FOUND)
 
