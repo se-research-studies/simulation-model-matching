@@ -10,11 +10,38 @@ Further background about this project is provided here: http://arxiv.org/abs/140
 
 This project demonstrates how to design simulation studies with OpenDaVINCI.
 
+## How to build
+
 A simulation can be designed as a stand-alone application or embedded
 into a unit test environment. This example demonstrates how to create
 a CLI simulation using OpenDaVINCI and odSimulation; in addition, the
 simulation is also embedded into a CxxTest test suite to be automatically
 executed using a ``make test`` command.
 
-To build this example, create a build folder, run make within that folder referring
-to the sources, and call make.
+Install required libraries:
+
+    $ sudo apt-get install build-essential cmake git libcv-dev libhighgui-dev freeglut3 freeglut3-dev libboost-dev libopencv-photo-dev libopencv-contrib-dev 
+
+Install OpenDaVINCI according to the following instructions: http://opendavinci.readthedocs.org/en/latest/installation.pre-compiled.html#adding-opendavinci-to-your-ubuntu-linux-distribution
+
+Create a build folder within the source tree of your local working copy:
+
+    $ mkdir build
+
+Change to the build folder:
+
+    $ cd build
+
+Create the build files:
+
+    $ cmake ..
+
+Build the sources:
+
+    $ make
+
+Run the binary:
+
+    $ ./simulation-model-matching
+
+![Screenshot](https://github.com/se-research-studies/simulation-model-matching/blob/master/Screenshot.png)
