@@ -24,6 +24,10 @@ Install required libraries:
 
 Install OpenDaVINCI according to the following instructions: http://opendavinci.readthedocs.org/en/latest/installation.pre-compiled.html#adding-opendavinci-to-your-ubuntu-linux-distribution
 
+Install libautomotivedata:
+
+    $ sudo apt-get install libautomotivedata
+
 Create a build folder within the source tree of your local working copy:
 
     $ mkdir build
