@@ -26,7 +26,7 @@ Install OpenDaVINCI according to the following instructions: http://opendavinci.
 
 Install libautomotivedata:
 
-    $ sudo apt-get install libautomotivedata
+    $ sudo apt-get install libautomotivedata odsimulation-odsimlib odsimulation-odsimtools
 
 Create a build folder within the source tree of your local working copy:
 
