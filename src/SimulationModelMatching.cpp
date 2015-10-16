@@ -20,52 +20,54 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <memory>
 #include <sstream>
 #include <string>
 #include <iostream>
 
-#include <opendavinci/odcore/base/Lock.h>
-#include <opendavinci/odcore/base/module/TimeTriggeredConferenceClientModule.h>
-#include <opendavinci/odcore/data/Container.h>
-#include <opendavinci/odcore/data/TimeStamp.h>
-#include <opendavinci/odcore/io/URL.h>
-#include <opendavinci/odcore/io/StreamFactory.h>
-#include <opendavinci/odcore/wrapper/SharedMemoryFactory.h>
+#include "core/SharedPointer.h"
+#include "core/base/Lock.h"
+#include "core/base/module/TimeTriggeredConferenceClientModule.h"
+#include "core/data/Container.h"
+#include "core/data/TimeStamp.h"
+#include "core/io/URL.h"
+#include "core/io/StreamFactory.h"
+#include "core/wrapper/SharedMemoryFactory.h"
 
-#include <opendavinci/odcontext/base/DirectInterface.h>
-#include <opendavinci/odcontext/base/RecordingContainer.h>
-#include <opendavinci/odcontext/base/RuntimeControl.h>
-#include <opendavinci/odcontext/base/RuntimeEnvironment.h>
-#include <opendavinci/odcontext/base/PlaybackContainer.h>
+#include "context/base/DirectInterface.h"
+#include "context/base/RecordingContainer.h"
+#include "context/base/RuntimeControl.h"
+#include "context/base/RuntimeEnvironment.h"
+#include "context/base/PlaybackContainer.h"
 
-#include <opendavinci/odtools/player/Player.h>
+#include "tools/player/Player.h"
 
-#include <opendlv/vehiclecontext/VehicleRuntimeControl.h>
-#include <opendlv/vehiclecontext/model/CameraModel.h>
-#include <opendlv/vehiclecontext/model/SimplifiedBicycleModel.h>
-#include <opendlv/vehiclecontext/report/DistanceToObjectsReport.h>
+#include "vehiclecontext/VehicleRuntimeControl.h"
+#include "vehiclecontext/model/CameraModel.h"
+#include "vehiclecontext/model/SimplifiedBicycleModel.h"
+#include "vehiclecontext/report/DistanceToObjectsReport.h"
 
 #include "SimulationModelMatching.h"
 
+#include "FeatureExtractor.h"
+
 using namespace std;
-using namespace odcore;
-using namespace odcore::base;
-using namespace odcore::data;
-using namespace odcore::io;
-using namespace odcontext::base;
-using namespace odtools::player;
-using namespace opendlv::vehiclecontext;
-using namespace opendlv::vehiclecontext::model;
-using namespace opendlv::vehiclecontext::report;
+using namespace core;
+using namespace core::base;
+using namespace core::data;
+using namespace core::io;
+using namespace context::base;
+using namespace tools::player;
+using namespace vehiclecontext;
+using namespace vehiclecontext::model;
+using namespace vehiclecontext::report;
 using namespace automotive;
-using namespace odcore::data::image;
+using namespace coredata::image;
 
 
 namespace simulation {
 
 
-    class FeatureMatcher : public odcore::base::module::TimeTriggeredConferenceClientModule {
+    class FeatureMatcher : public core::base::module::TimeTriggeredConferenceClientModule {
         private:
             /**
              * "Forbidden" copy constructor. Goal: The compiler should warn
@@ -94,7 +96,7 @@ namespace simulation {
              * @param argv Command line arguments.
              */
             FeatureMatcher(const int32_t &argc, char **argv) :
-                odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, "FeatureMatcher"),
+                core::base::module::TimeTriggeredConferenceClientModule(argc, argv, "FeatureMatcher"),
                 m_player(),
                 m_hasAttachedToSharedImageMemoryFromSimulation(false),
                 m_sharedImageMemoryFromSimulation(),
@@ -109,13 +111,13 @@ namespace simulation {
             bool readSharedImageFromSimulation(Container &c) {
 	            bool retVal = false;
 
-	            if (c.getDataType() == SharedImage::ID()) {
+	            if (c.getDataType() == Container::SHARED_IMAGE) {
 		            SharedImage si = c.getData<SharedImage> ();
 
 		            // Check if we have already attached to the shared memory.
 		            if (!m_hasAttachedToSharedImageMemoryFromSimulation) {
 			            m_sharedImageMemoryFromSimulation
-					            = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(
+					            = core::wrapper::SharedMemoryFactory::attachToSharedMemory(
 							            si.getName());
 		            }
 
@@ -148,13 +150,13 @@ namespace simulation {
             bool readSharedImageFromPlayer(Container &c) {
 	            bool retVal = false;
 
-	            if (c.getDataType() == SharedImage::ID()) {
+	            if (c.getDataType() == Container::SHARED_IMAGE) {
 		            SharedImage si = c.getData<SharedImage> ();
 
 		            // Check if we have already attached to the shared memory.
 		            if (!m_hasAttachedToSharedImageMemoryFromPlayer) {
 			            m_sharedImageMemoryFromPlayer
-					            = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(
+					            = core::wrapper::SharedMemoryFactory::attachToSharedMemory(
 							            si.getName());
 		            }
 
@@ -184,8 +186,8 @@ namespace simulation {
 	            return retVal;
             }
 
-            odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode body() {
-	            while (getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING) {
+            coredata::dmcp::ModuleExitCodeMessage::ModuleExitCode body() {
+	            while (getModuleStateAndWaitForRemainingTimeInTimeslice() == coredata::dmcp::ModuleStateMessage::RUNNING) {
                     cout << "[FeatureMatcher] Inside the main processing loop." << endl;
 
                     // Trigger movement of vehicle to get valid simulation data.
@@ -194,16 +196,16 @@ namespace simulation {
                     vehicleControl.setSteeringWheelAngle(0);
 
                     // Create container for finally sending the set values for the control algorithm.
-                    Container c2(vehicleControl);
+                    Container c2(Container::VEHICLECONTROL, vehicleControl);
                     // Send container.
                     getConference().send(c2);
 
                     // Get virtual data from simulation.
                     bool hasNextFrameFromSimulation = false;
                     {
-		                Container c = getKeyValueDataStore().get(SharedImage::ID());
+		                Container c = getKeyValueDataStore().get(Container::SHARED_IMAGE);
 
-		                if (c.getDataType() == SharedImage::ID()) {
+		                if (c.getDataType() == Container::SHARED_IMAGE) {
 			                // Example for processing the received container.
 			                hasNextFrameFromSimulation = readSharedImageFromSimulation(c);
 		                }
@@ -229,7 +231,7 @@ namespace simulation {
                                     c = m_player->getNextContainerToBeSent();
                                 }
 
-		                        if (c.getDataType() == SharedImage::ID()) {
+		                        if (c.getDataType() == Container::SHARED_IMAGE) {
 			                        // Example for processing the received container.
 			                        hasNextFrameFromPlayer = readSharedImageFromPlayer(c);
 		                        }
@@ -243,21 +245,22 @@ namespace simulation {
 		                        }
 
                                 if (hasNextFrameFromSimulation && hasNextFrameFromPlayer) {
-                                    cout << "[FeatureMatcher] TODO: Use the goodFeatureToTrack method to match reality with simulation here." << endl;
+                                    m_imageFromPlayerCopy = cvarrToMat(m_imageFromPlayer,true,true,0);
+                                    m_fxt.drawFeaturesMinusLines(m_imageFromPlayerCopy, false);
                                 }
                             }
                         }
                     }
                 }
                 
-                return odcore::data::dmcp::ModuleExitCodeMessage::OKAY;
+                return coredata::dmcp::ModuleExitCodeMessage::OKAY;
             }
 
         private:
             virtual void setUp() {
                 cout << "[FeatureMatcher] Setting up." << endl;
                     
-                odcore::io::URL recordingFile(getKeyValueConfiguration().getValue<string>("featurematcher.recording"));
+                core::io::URL recordingFile(getKeyValueConfiguration().getValue<string>("featurematcher.recording"));
 
                 // Size of the memory buffer.
                 const uint32_t MEMORY_SEGMENT_SIZE = getKeyValueConfiguration().getValue<uint32_t>("global.buffer.memorySegmentSize");
@@ -268,11 +271,11 @@ namespace simulation {
                 // If AUTO_REWIND is true, the file will be played endlessly.
                 const bool AUTO_REWIND = true;
 
-                // Run player synchronously.
+                // Run player sMat m_imageFromPlayerCopy;ynchronously.
                 const bool THREADING = false;
 
                 // Create player.
-                m_player = auto_ptr<odtools::player::Player>(new Player(recordingFile, AUTO_REWIND, MEMORY_SEGMENT_SIZE, NUMBER_OF_SEGMENTS, THREADING));
+                m_player = auto_ptr<tools::player::Player>(new Player(recordingFile, AUTO_REWIND, MEMORY_SEGMENT_SIZE, NUMBER_OF_SEGMENTS, THREADING));
 
                 // Create window to display simulation data.
 		        cvNamedWindow("FromSimulation", CV_WINDOW_AUTOSIZE);
@@ -298,14 +301,16 @@ namespace simulation {
             }
 
         private:
-            auto_ptr<odtools::player::Player> m_player;
+            auto_ptr<tools::player::Player> m_player;
+            FeatureExtractor m_fxt;
+            Mat m_imageFromPlayerCopy;
 
             bool m_hasAttachedToSharedImageMemoryFromSimulation;
-            shared_ptr<odcore::wrapper::SharedMemory> m_sharedImageMemoryFromSimulation;
+            core::SharedPointer<core::wrapper::SharedMemory> m_sharedImageMemoryFromSimulation;
             IplImage *m_imageFromSimulation;
 
             bool m_hasAttachedToSharedImageMemoryFromPlayer;
-            shared_ptr<odcore::wrapper::SharedMemory> m_sharedImageMemoryFromPlayer;
+            core::SharedPointer<core::wrapper::SharedMemory> m_sharedImageMemoryFromPlayer;
             IplImage *m_imageFromPlayer;
     };
 
@@ -341,7 +346,7 @@ namespace simulation {
               << "odsimvehicle.LinearBicycleModelNew.invertedSteering=0             # iff 0: interpret neg. steering wheel angles as steering to the left; iff 1: otherwise" << endl
               << "odsimvehicle.LinearBicycleModelNew.maxSpeed=2.0                   # maxium speed in m/ss" << endl
               << endl
-              << "featurematcher.recording = file://straightroad.rec" << endl
+              << "featurematcher.recording = file://fulltrack1.rec_1270-1345.rec" << endl
               << endl;
 
         // 1. Setup runtime control.
