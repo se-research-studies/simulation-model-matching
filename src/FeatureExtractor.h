@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <stdio.h>
+#include <algorithm>
 
 #include "LineDetector.h"
 #include "Historizer.h"
@@ -63,8 +64,9 @@ class FeatureExtractor
                      bool convertToGray);
         
         void subtractLinesFromFeatures(const Mat &src,
-                                       bool convertToGray,
-                                       set<KeyPoint>& residue);
+                                       const bool convertToGray,
+                                       const float epsilon, 
+                                       vector<KeyPoint>& residue);
         
         void drawFeaturesMinusLines(const Mat &src,
                                     bool convertToGray);                    
@@ -77,8 +79,14 @@ class FeatureExtractor
         Historizer m_historizer;
         ORBMatcher m_matcher;
         
-        /**
-         * Returns true if pt is within the area identified by a keypoint
-         */
-        bool partOfFeature(Point pt, vector<KeyPoint>& keyPoints);
+        bool isKeyPointOnLine(const Mat &src, 
+                              const KeyPoint kp, 
+                              const float epsilon, 
+                              const vector<Vec4i> lines);
+        
+        bool keyPointContains(const KeyPoint kp, 
+                              const Point pt,
+                              const float epsilon);
+
+        
 };

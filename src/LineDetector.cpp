@@ -75,7 +75,7 @@ void LineDetector::detectLinesHoughP(const Mat& src,
   
     Mat dst;
     Canny(src, dst, 50, 200, 3);
-    HoughLinesP(dst, lines, rho, theta, threshold, minLineLength, maxLineGap );
+    HoughLinesP(dst, lines, rho, theta, threshold, minLineLength, maxLineGap);
 }
                     
 void LineDetector::drawLinesHoughP(const Mat& src, 

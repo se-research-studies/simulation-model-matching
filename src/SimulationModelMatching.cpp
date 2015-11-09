@@ -246,7 +246,8 @@ namespace simulation {
 
                                 if (hasNextFrameFromSimulation && hasNextFrameFromPlayer) {
                                     m_imageFromPlayerCopy = cvarrToMat(m_imageFromPlayer,true,true,0);
-                                    m_fxt.drawFeaturesMinusLines(m_imageFromPlayerCopy, false);
+                                    m_fxt.showOff(m_imageFromPlayerCopy, false);
+//                                     m_fxt.drawFeaturesMinusLines(m_imageFromPlayerCopy, false);
                                 }
                             }
                         }

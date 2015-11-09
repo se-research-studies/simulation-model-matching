@@ -68,39 +68,7 @@ void FeatureExtractor::getGoodORBFeatures(const Mat &src, bool convertToGray, ve
 
 void FeatureExtractor::showOff(const Mat &src, bool convertToGray) 
 {
-  // imshow("source", src);
-  
-  /*
-  Mat dest;
-  drawLinesHough(src, 1, CV_PI/180, 200, dest);
-  imshow("detected lines", dest);
-  */
-  
   vector<Vec2f> lines;
-  /*
-  detectLinesHough(src, 1, CV_PI/180, 200, lines);
-  for( size_t i = 0; i < lines.size(); i++ )
-  {
-     float rho = lines[i][0], theta = lines[i][1];
-     Point pt1, pt2;
-     double a = cos(theta), b = sin(theta);
-     double x0 = a*rho, y0 = b*rho;
-     pt1.x = cvRound(x0 + 1000*(-b));
-     pt1.y = cvRound(y0 + 1000*(a));
-     pt2.x = cvRound(x0 - 1000*(-b));
-     pt2.y = cvRound(y0 - 1000*(a));
-     LineIterator it(src, pt1, pt2, 8);
-     vector<Vec2f> buf(it.count);
-     
-     Point p;
-     for(int j = 0; j < it.count; j++, ++it)
-     {
-        p = it.pos();
-        cout << "Found hough point at (" << p.x << "," << p.y << ")" << endl;
-     } 
-  }ength, maxLineGap, lines);
-
-  */
 
   Mat destP;
   drawLinesHoughP(src, 1, CV_PI/180, 100, 50, 30, destP);
@@ -121,19 +89,21 @@ void FeatureExtractor::showOff(const Mat &src, bool convertToGray)
   drawFeaturesMinusLines(src, false, subtracted);
   imshow("subtracted", subtracted);
     
-  /*
-  for (size_t i = 0; i < keyPoints.size(); i++) 
-  {
-    pt = keyPoints[i].pt;
-    cout << "Found feature at (" << pt.x << "," << pt.y << ") of size " << keyPoints[i].size << endl;
-    cout << "Rounded to (" << cvRound(pt.x) << "," << cvRound(pt.y) << ")" << endl;
-  }
-  */
-  // waitKey();
 }
 
-void FeatureExtractor::subtractLinesFromFeatures(const Mat &src, bool convertToGray, vector<KeyPoint>& residue)
+/**
+ * Calculates the ORB features of the passed image, its Hough lines and 
+ * removes all points in an epsilon environment on lines from the features 
+ * (they are interpreted as  lanes). Returns the remaining features.
+ * 
+ * @param: src, the image to process
+ * @param: convertToGray, includes gray-scale conversion for colored images
+ * @param: epsilon, lane-environment where features should be removed
+ * @param: residue, remaining features after subtraction
+ */ 
+void FeatureExtractor::subtractLinesFromFeatures(const Mat &src, bool convertToGray, float epsilon, vector<KeyPoint>& residue)
 {
+    // vector<int> savedKeyPointIndices;
     residue.clear();
 
     // 1. Detect ORB Features
@@ -141,36 +111,77 @@ void FeatureExtractor::subtractLinesFromFeatures(const Mat &src, bool convertToG
     vector<KeyPoint> keyPoints;
     getGoodORBFeatures(src, convertToGray, keyPoints);
     
-    cout << "[FeatureExtractor] Found " << keyPoints.size() << " key points" << endl;
+    cout << "[FeatureExtractor] Found " << keyPoints.size() << " key points (e=" << epsilon << ")" << endl;
     
     // 2. Detect Hough lines
     vector<Vec4i> lines;
     detectLinesHoughP(src,1,CV_PI/180,100,50,25,lines);
         
-    // 3. Iterate over Hough lines; remove lines pixels from ORB features
-    Point p;
+    // 3. Iterate over features (to check for each feature whether it is on
+    // a Hough line
+    KeyPoint kp;
     for (size_t i = 0; i < keyPoints.size(); i++)
     {
-        Point pt1(lines[0][1],lines[0][1]);
-        Point pt2(lines[0][2],lines[0][3]);
-        LineIterator it(src, pt1, pt2, 8);
-        // cout << "[FeatureExtractor] Checking line from (" << pt1.x << "," << pt1.y << ") to (" << pt2.x << "," << pt2.y << ")" << endl;
-        
-        // Iterate over each line's pixels
-        for(int j = 0; j < it.count; j++, ++it)
-        {
-            p = it.pos();
-            // cout << "Found hough point at (" << p.x << "," << p.y << ")" << endl;
-           
-            // If the point p is part of a line, and we have detected a 
-            // feature on that line, we can remove that feature             
-            if (!partOfFeature(p, keyPoints)) 
-            {
-                residue.push_back(keyPoints[i]); //TODO: Continue here
-            }
-        } 
+      kp = keyPoints[i];
+      // If the KeyPoint is not on any line, we save it
+      if (!isKeyPointOnLine(src, kp, epsilon, lines))
+      {
+        residue.push_back(kp);
+      }
     }
     cout << "[FeatureExtractor] Reduced to " << residue.size() << " key points" << endl;
+}
+
+/**
+ * Checks whether the passed KeyPoint kp is on one of the passed lines.
+ *
+ * @param src, source image 
+ * @param kp, KeyPoint to investigate
+ * @param epsilon, currently unused
+ * @param lines, the lines to investigate
+ * @return true, iff any point of the passed lines is in the environment of the KeyPoint
+ */
+bool FeatureExtractor::isKeyPointOnLine(const Mat &src, const KeyPoint kp, const float epsilon, const vector<Vec4i> lines) 
+{
+  Point *from, *to, pt;
+  for (size_t i = 0; i < lines.size(); i++)
+  {
+    from = new Point(lines[0][1],lines[0][1]);
+    to = new Point(lines[0][2],lines[0][3]);
+    LineIterator it(src, *from, *to, 8);
+    for(int j = 0; j < it.count; j++, ++it)
+    {
+      pt = it.pos();
+      if (keyPointContains(kp, pt, epsilon))
+      {
+        // cout << "[FeatureExtractor] KeyPoint" << kp.pt << " is on line (" << from->x << "," << from->y << ") to (" << to->x << "," << to->y << ") with e = " << epsilon << endl;
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Checks whether the passed Point pt is in the passed KeyPoint's environment
+ *
+ * @param kp, KeyPoint to investigate
+ * @param pt, Point to investigate
+ * @return true, iff pt is in the environment of the KeyPoint
+ */
+bool FeatureExtractor::keyPointContains(const KeyPoint kp, 
+                                        const Point pt,
+                                        const float epsilon) 
+{
+  float r = kp.size / 2.0;
+  float dX = (kp.pt.x - pt.x) * (kp.pt.x - pt.x);
+  float dY = (kp.pt.y - pt.y) * (kp.pt.y - pt.y);
+  float r2 = r * r;
+  if (dX + dY < r2 + epsilon)
+  {
+    return true;
+  }
+  return false;
 }
 
 void FeatureExtractor::drawFeaturesMinusLines(const Mat &src,
@@ -186,30 +197,7 @@ void FeatureExtractor::drawFeaturesMinusLines(const Mat &src,
                                               Mat &target)
 {
     vector<KeyPoint> residue;
-    subtractLinesFromFeatures(src, convertToGray, residue);
+    subtractLinesFromFeatures(src, convertToGray, 0, residue);
+    //TODO: subtractCarFromFeatures(src, convertToGray, residue);
     drawKeypoints(src, residue, target);
-}
-
-bool FeatureExtractor::partOfFeature(Point pt, vector<KeyPoint>& keyPoints) 
-{
-    Point kp;
-    for (size_t i = 0; i < keyPoints.size(); i++) 
-    {
-        kp = keyPoints[i].pt;
-        float r = keyPoints[i].size / 2.0;
-        float dX = (kp.x - pt.x) * (kp.x - pt.x);
-        float dY = (kp.y - pt.y) * (kp.y - pt.y);
-        float r2 = r * r;
-        /*
-        cout << "dX = " << dX << endl;
-        cout << "dY = " << dY << endl;
-        cout << "r2 = " << r2 << endl;
-        */
-        if (dX + dY < r2)
-        {
-            // cout << "Dropping feature at (" << kp.x << "," << kp.y << ")" << endl;
-            return true;
-        }
-    }
-    return false;
 }

@@ -96,11 +96,11 @@ TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${PROJECT_NAME}lib-static ${LIBRARIES})
 # the test suites are generated (more correctly to the parent folder) so
 # that the test suite "ExampleDriverTestSuite2.h" can open it during
 # exection.
-ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/straightroad.rec.mem
-                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec ${CMAKE_BINARY_DIR}
-                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec.mem ${CMAKE_BINARY_DIR}
-                   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec.mem)
-ADD_CUSTOM_TARGET(${PROJECT_NAME}-CopyRecordingForSimulations DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/straightroad.rec.mem)
+ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/fulltrack1.rec_1270-1345.rec.mem
+                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/03.straight/02.medium/fulltrack1.rec_1270-1345.rec ${CMAKE_BINARY_DIR}
+                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/03.straight/02.medium/fulltrack1.rec_1270-1345.rec.mem ${CMAKE_BINARY_DIR}
+                   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/resources/03.straight/02.medium/fulltrack1.rec_1270-1345.rec.mem)
+ADD_CUSTOM_TARGET(${PROJECT_NAME}-CopyRecordingForSimulations DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/fulltrack1.rec_1270-1345.rec.mem)
 
 ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Track.scnx
                    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/Track.scnx ${CMAKE_BINARY_DIR}
