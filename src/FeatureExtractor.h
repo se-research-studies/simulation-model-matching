@@ -68,16 +68,25 @@ class FeatureExtractor
                                        const float epsilon, 
                                        vector<KeyPoint>& residue);
         
+        void subtractLinesFromFeaturesSmart(const Mat &src,
+                                            const bool convertToGray,
+                                            const float epsilon, 
+                                            vector<KeyPoint>& residue);
+        
         void drawFeaturesMinusLines(const Mat &src,
-                                    bool convertToGray);                    
+                                    const bool convertToGray,
+                                    const float epsilon);                    
                                     
-        void drawFeaturesMinusLines(const Mat &src,
-                                    bool convertToGray,
-                                    Mat &target);
+        
     private:
         LineDetector m_detector;
         Historizer m_historizer;
         ORBMatcher m_matcher;
+        
+        void drawFeaturesMinusLines(const Mat &src,
+                                    const bool convertToGray,
+                                    const float epsilon,
+                                    Mat &target);
         
         bool isKeyPointOnLine(const Mat &src, 
                               const KeyPoint kp, 
