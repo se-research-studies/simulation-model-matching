@@ -1,3 +1,6 @@
+#ifndef RECORDEDSEQUENCE_H
+#define RECORDEDSEQUENCE_H
+
 #include <iostream>
 #include <stdio.h>
 #include <boost/archive/text_oarchive.hpp>
@@ -32,3 +35,4 @@ class RecordedSequence
         string toString();
 };
 
+#endif

@@ -336,9 +336,11 @@ namespace simulation {
               << "global.scenario = file://Track.scnx" << endl
               << "global.showGrid = 0" << endl
               << endl
+              /** vv Hier Positionen konfigurieren vv **/
               << "odsimvehicle.posX = 0                     # Initial position X in cartesian coordinates." << endl
               << "odsimvehicle.posY = 0                     # Initial position Y in cartesian coordinates." << endl
               << "odsimvehicle.headingDEG = 90" << endl
+              /** ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ **/
               << "odsimvehicle.model=LinearBicycleModelNew  # Which motion model to be used: LinearBicycleModelNew or LinearBicycleModel (for CaroloCup 2013!)." << endl
               << "odsimvehicle.LinearBicycleModelNew.withSpeedController=1          # iff 1: use the VehicleControl.m_speed field; otherwise, ignore m_speed and use VehicleControl.m_acceleration field" << endl
               << "odsimvehicle.LinearBicycleModelNew.minimumTurningRadiusLeft=4.85  # Minimum turning radius to the left (for calculating maximum steering angle to the left); Attention! we used data from the miniature vehicle Meili and thus, all values are scaled by factor 10 to be compatible with the simulation!" << endl
@@ -347,7 +349,9 @@ namespace simulation {
               << "odsimvehicle.LinearBicycleModelNew.invertedSteering=0             # iff 0: interpret neg. steering wheel angles as steering to the left; iff 1: otherwise" << endl
               << "odsimvehicle.LinearBicycleModelNew.maxSpeed=2.0                   # maxium speed in m/ss" << endl
               << endl
+              /** Recording ID **/
               << "featurematcher.recording = file://fulltrack1.rec_1270-1345.rec" << endl
+              /** ^^^^^^^^^^^^ **/
               << endl;
 
         // 1. Setup runtime control.
