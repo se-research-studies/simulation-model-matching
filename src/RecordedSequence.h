@@ -6,6 +6,8 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
+#include "Noise.h"
+
 using namespace std;
 
 class RecordedSequence 
@@ -14,6 +16,7 @@ class RecordedSequence
         string m_filename;
         int m_startFrame;
         int m_endFrame;
+        Noise m_noise;
         
     public:
         RecordedSequence();
@@ -21,6 +24,7 @@ class RecordedSequence
         string getFilename();
         int getStartFrame();
         int getEndFrame();
+        void setNoise(Noise noise);
         
         friend class boost::serialization::access;
         template<class Archive>
@@ -29,6 +33,7 @@ class RecordedSequence
             ar & m_filename;
             ar & m_startFrame;
             ar & m_endFrame;
+            ar & m_noise;
         }
         
         string toString();

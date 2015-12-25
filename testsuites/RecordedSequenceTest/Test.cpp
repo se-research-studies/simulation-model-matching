@@ -15,6 +15,31 @@ int main(int argc, const char* argv[])
     int endFrame = 100;
     RecordedSequence sim(filename, startFrame, endFrame);
     
+    // Frame 0 has a single KeyPoint at (1,1) of size 3
+    cv::Point2f p(1,1);
+    cv::KeyPoint kp(p,3);
+    vector<cv::KeyPoint> frame0KeyPoints;
+    frame0KeyPoints.push_back(kp);
+    
+    // Frame 1 has a KeyPoint at (2,4) of size 1 and a KeyPoint at (3,1) 
+    // of size 2
+    cv::Point2f q(2,4);
+    cv::KeyPoint kq(q,1);
+    cv::Point2f r(3,1);
+    cv::KeyPoint kr(r,2);
+    vector<cv::KeyPoint> frame1KeyPoints;
+    frame1KeyPoints.push_back(kq);
+    frame1KeyPoints.push_back(kr);
+    
+    // KeyPoints of each frame
+    vector<vector<cv::KeyPoint>> keyPointsPerFrame;
+    keyPointsPerFrame.push_back(frame0KeyPoints);
+    keyPointsPerFrame.push_back(frame1KeyPoints);
+    
+    Noise noise(keyPointsPerFrame);
+    
+    sim.setNoise(noise);
+    
     cout << "----- I/O Part -----" << endl;
     
     cout << sim.toString() << endl;

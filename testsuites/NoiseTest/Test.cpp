@@ -31,9 +31,7 @@ int main(int argc, const char* argv[])
     keyPointsPerFrame.push_back(frame0KeyPoints);
     keyPointsPerFrame.push_back(frame1KeyPoints);
     
-    RecordedSequence sim("simcrec", 0, 100);
-    
-    Noise noise(sim, keyPointsPerFrame);
+    Noise noise(keyPointsPerFrame);
 
     cout << "----- I/O Part -----" << endl;
 
