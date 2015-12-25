@@ -14,11 +14,10 @@ class RecordedSequence
         string m_filename;
         int m_startFrame;
         int m_endFrame;
-        string info = "extra info";
         
     public:
-        RecordedSequence(string filename, int startFrame, int endFrame);
         RecordedSequence();
+        RecordedSequence(string filename, int startFrame, int endFrame);
         string getFilename();
         int getStartFrame();
         int getEndFrame();

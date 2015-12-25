@@ -1,5 +1,6 @@
 #include"RecordedSequence.h"
 #include <boost/archive/binary_oarchive.hpp>
+#include <sstream> 
 
 RecordedSequence::RecordedSequence()
 {
@@ -32,5 +33,9 @@ int RecordedSequence::getEndFrame()
 
 string RecordedSequence::toString() 
 {
-  return m_filename + " (" + std::to_string(m_startFrame) + "," + std::to_string(m_endFrame) + ")";
+    ostringstream os;
+    os << "RecordedSequence [filename=" << m_filename;
+    os << ", startFrame=" << m_startFrame;
+    os << ", endFrame=" << m_startFrame << "]";
+    return os.str();
 }

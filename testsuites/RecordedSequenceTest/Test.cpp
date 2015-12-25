@@ -14,7 +14,12 @@ int main(int argc, const char* argv[])
     int startFrame = 0;
     int endFrame = 100;
     RecordedSequence sim(filename, startFrame, endFrame);
+    
+    cout << "----- I/O Part -----" << endl;
+    
     cout << sim.toString() << endl;
+    
+    cout << "----- Serialization Part -----" << endl;
     
     // save to file
     {

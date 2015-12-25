@@ -29,13 +29,15 @@ void Correspondence::getRealRecordings(list<RecordedSequence>& recordings)
 string Correspondence::toString() 
 {
     ostringstream os;
-    os << m_simRecording.toString() << " " << m_realRecordings.size() << "@[";
+    os << "Correspondence " << "[simRecording=" << m_simRecording.toString();
+    os << ", #realRecordings=" << m_realRecordings.size();
+    os << ", realRecordings=<";
     string sep = "";
     for (RecordedSequence rs : m_realRecordings) 
     {
         os << sep + rs.toString();
         sep = ", ";
     }
-    os << "]";
+    os << ">]";
     return os.str();
 }
