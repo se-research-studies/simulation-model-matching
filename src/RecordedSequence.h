@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdio.h>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 using namespace std;
 
@@ -11,9 +11,11 @@ class RecordedSequence
         string m_filename;
         int m_startFrame;
         int m_endFrame;
+        string info = "extra info";
         
     public:
         RecordedSequence(string filename, int startFrame, int endFrame);
+        RecordedSequence();
         string getFilename();
         int getStartFrame();
         int getEndFrame();
@@ -26,5 +28,7 @@ class RecordedSequence
             ar & m_startFrame;
             ar & m_endFrame;
         }
+        
+        string toString();
 };
 
