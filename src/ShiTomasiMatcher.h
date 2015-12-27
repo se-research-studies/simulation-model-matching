@@ -12,12 +12,12 @@ class ShiTomasiMatcher
 {
     private:
         // Shi-Tomasi configuration
-        static const double QUALITY_LEVEL = 0.01;
-        static const double MIN_DISTANCE = 5; // Distance between edges
-        static const double BLOCK_SIZE = 3;
-        static const double MAX_CORNERS = 50; // Maximal # of corners to find
-        static const double USE_HARRIS = false;
-        static const double HARRIS_K = 0.50; // Harris free parameter 
+        static constexpr  double QUALITY_LEVEL = 0.01;
+        static constexpr  double MIN_DISTANCE = 5; // Distance between edges
+        static constexpr  double BLOCK_SIZE = 3;
+        static constexpr  double MAX_CORNERS = 50; // Maximal # of corners to find
+        static constexpr  double USE_HARRIS = false;
+        static constexpr  double HARRIS_K = 0.50; // Harris free parameter 
         
         // Members
         double m_qualityLevel;

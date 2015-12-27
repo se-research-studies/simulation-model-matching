@@ -28,8 +28,13 @@ class Correspondence
         template<class Archive>
         void serialize(Archive & ar, const unsigned int version)
         {
-            ar & m_simRecording;
-            ar & m_realRecordings;
+            // Supposedly, boost isn't compiled with -Weffc++ 
+            // Thus we need to do something with version.
+            if (version > -1) 
+            {
+                ar & m_simRecording;
+                ar & m_realRecordings;
+            }
         }  
 };
 

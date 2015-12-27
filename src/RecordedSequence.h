@@ -30,10 +30,14 @@ class RecordedSequence
         template<class Archive>
         void serialize(Archive & ar, const unsigned int version)
         {
-            ar & m_filename;
-            ar & m_startFrame;
-            ar & m_endFrame;
-            ar & m_noise;
+            // Supposedly, boost isn't compiled with -Weffc++ 
+            // Thus we need to do something with version.
+            if (version > -1) {
+                ar & m_filename;
+                ar & m_startFrame;
+                ar & m_endFrame;
+                ar & m_noise;
+            }
         }
         
         string toString();

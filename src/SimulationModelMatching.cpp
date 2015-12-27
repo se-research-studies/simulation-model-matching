@@ -23,6 +23,9 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <stdio.h>
+
+#include <boost/archive/text_oarchive.hpp>
 
 #include "core/SharedPointer.h"
 #include "core/base/Lock.h"
@@ -49,6 +52,8 @@
 #include "SimulationModelMatching.h"
 
 #include "FeatureExtractor.h"
+#include "RecordedSequence.h"
+#include "Noise.h"
 
 using namespace std;
 using namespace core;
@@ -225,6 +230,9 @@ namespace simulation {
                         Container c;
                         if (m_player.get() != NULL) {
                             const uint16_t MAX_FRAMES = 50;
+                            
+                            vector<vector<cv::KeyPoint>> keyPointsPerFrame;
+                            
                             for (uint16_t i = 0; i < MAX_FRAMES; i++) {
                                 // Read the next container from file.
                                 if (m_player->hasMoreData()) {
@@ -246,9 +254,24 @@ namespace simulation {
 
                                 if (hasNextFrameFromSimulation && hasNextFrameFromPlayer) {
                                     m_imageFromPlayerCopy = cvarrToMat(m_imageFromPlayer,true,true,0);
-                                    m_fxt.showOff(m_imageFromPlayerCopy, false);
-//                                     m_fxt.drawFeaturesMinusLines(m_imageFromPlayerCopy, false);
+                                    // (1) Calcualte this image's features minus lines (= noise)                                    
+                                    vector<KeyPoint> residue;
+                                    m_fxt.subtractLinesFromFeatures(m_imageFromPlayerCopy, true, 0, residue);
+                                    keyPointsPerFrame.push_back(residue);
+//                                    m_fxt.showOff(m_imageFromPlayerCopy, false);
                                 }
+                            }
+
+                            // (2) Create RecordedSequence with Noise (of images of all frames)
+                            RecordedSequence seq("fulltrack1.rec_1270-1345.rec", 0, 49);                            
+                            Noise noise(keyPointsPerFrame);
+                            seq.setNoise(noise);
+                            
+                            // (3) Save RecordedSequence to file
+                            {
+                                ofstream ofs("filename.rs");
+                                boost::archive::text_oarchive oa(ofs);
+                            	oa << seq;
                             }
                         }
                     }
@@ -337,6 +360,10 @@ namespace simulation {
               << "global.showGrid = 0" << endl
               << endl
               /** vv Hier Positionen konfigurieren vv **/
+              /** Straight road 1: (0,7,90) bis (0,14,90) **/
+              /** Straight road 2: (0,39,90) bis (0,49.6,90) **/
+              /** Left curve: (0,58,90) bis (-26,77,225) **/
+              /** Right curve: (-73.1,33.5,138) bis NN **/
               << "odsimvehicle.posX = 0                     # Initial position X in cartesian coordinates." << endl
               << "odsimvehicle.posY = 0                     # Initial position Y in cartesian coordinates." << endl
               << "odsimvehicle.headingDEG = 90" << endl

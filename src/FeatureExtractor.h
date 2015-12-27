@@ -49,11 +49,11 @@ class FeatureExtractor
         void drawRGBHistogram(const Mat &src, 
                               Mat &histogram);
                               
-        void drawGoodORBFeatures(const Mat &src, 
+        void drawGoodORBFeatures(const Mat& src, 
                                  Mat &target, 
                                  bool convertToGray);
                               
-        void getGoodORBFeatures(const Mat &src, 
+        void getGoodORBFeatures(const Mat& src, 
                                 bool convertToGray, 
                                 vector<KeyPoint>& keyPoints);
                                 
@@ -63,17 +63,17 @@ class FeatureExtractor
         void showOff(const Mat &src,
                      bool convertToGray);
         
-        void subtractLinesFromFeatures(const Mat &src,
+        void subtractLinesFromFeatures(const Mat& src,
                                        const bool convertToGray,
                                        const float epsilon, 
                                        vector<KeyPoint>& residue);
         
-        void subtractLinesFromFeaturesSmart(const Mat &src,
+        void subtractLinesFromFeaturesSmart(const Mat& src,
                                             const bool convertToGray,
                                             const float epsilon, 
                                             vector<KeyPoint>& residue);
         
-        void drawFeaturesMinusLines(const Mat &src,
+        void drawFeaturesMinusLines(const Mat& src,
                                     const bool convertToGray,
                                     const float epsilon);                    
                                     

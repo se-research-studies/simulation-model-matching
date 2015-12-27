@@ -6,6 +6,8 @@
 
 RecordedSequence::RecordedSequence()
 {
+    // -Weffc++ warnings on member initialization are erroneous
+    // http://stackoverflow.com/questions/14002454/can-i-ignore-the-gcc-warning-foom-bar-should-be-initialized-in-the-member-i
     m_filename = "NULL";
     m_startFrame = -1;
     m_endFrame = -1;

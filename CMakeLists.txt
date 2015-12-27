@@ -23,6 +23,11 @@ CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 PROJECT (simulation-model-matching)
 
 ###########################################################################
+
+SET(GCC_COVERAGE_COMPILE_FLAGS "-std=c++11")
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+
+###########################################################################
 # Set the search path for .cmake files.
 SET (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake.Modules" ${CMAKE_MODULE_PATH})
 
@@ -144,6 +149,17 @@ IF(CXXTEST_FOUND)
         ADD_DEPENDENCIES(${simulation-short}-TestSuite ${PROJECT_NAME}-CopyRecordingForSimulations)
     ENDFOREACH()
 ENDIF(CXXTEST_FOUND)
+
+set(Boost_USE_STATIC_LIBS OFF) 
+set(Boost_USE_MULTITHREADED ON)  
+set(Boost_USE_STATIC_RUNTIME OFF) 
+set(BOOST_INCLUDEDIR /usr/include)
+find_package(Boost COMPONENTS system serialization REQUIRED)
+
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS}) 
+    target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+endif()
 
 ###########################################################################
 # This project will not be installed.

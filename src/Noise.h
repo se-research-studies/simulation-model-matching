@@ -16,13 +16,13 @@ using namespace std;
 class Noise 
 {        
     private:
-        vector<vector<cv::KeyPoint>> m_keyPointsPerFrame;
+        vector< vector<cv::KeyPoint> > m_keyPointsPerFrame;
         
     public:
         Noise();
-        Noise(vector<vector<cv::KeyPoint>> keyPointsPerFrame);
-        vector<vector<cv::KeyPoint>> getKeyPointsPerFrame();
-        vector<cv::KeyPoint> getKeyPointsOfFrame(int frameID);        
+        Noise(vector< vector<cv::KeyPoint> > keyPointsPerFrame);
+        vector< vector<cv::KeyPoint> > getKeyPointsPerFrame();
+         vector<cv::KeyPoint>  getKeyPointsOfFrame(int frameID);        
         string toString();
         
         friend class boost::serialization::access;
@@ -30,20 +30,25 @@ class Noise
         template<class Archive>
         void save(Archive & ar, const unsigned int version) const
         {
-            int numFrames = m_keyPointsPerFrame.size();
-            ar << numFrames;
-            int numFrameKeyPoints = 0;
-            for (vector<cv::KeyPoint> frameKPs : m_keyPointsPerFrame) 
+            // Supposedly, boost isn't compiled with -Weffc++ 
+            // Thus we need to do something with version.
+            if (version > -1) 
             {
-                numFrameKeyPoints = frameKPs.size();
-                ar << numFrameKeyPoints;
-                for (cv::KeyPoint kp : frameKPs)
+                int numFrames = m_keyPointsPerFrame.size();
+                ar << numFrames;
+                int numFrameKeyPoints = 0;
+                for ( vector<cv::KeyPoint>  frameKPs : m_keyPointsPerFrame) 
                 {
-                    ar << kp.pt.x;
-                    ar << kp.pt.y;
-                    ar << kp.size;
+                    numFrameKeyPoints = frameKPs.size();
+                    ar << numFrameKeyPoints;
+                    for (cv::KeyPoint kp : frameKPs)
+                    {
+                        ar << kp.pt.x;
+                        ar << kp.pt.y;
+                        ar << kp.size;
+                    }
                 }
-            }
+            }               
         }  
         
         template<class Archive>
@@ -56,7 +61,7 @@ class Noise
             
             for (int i=0; i<numFrames; i++) 
             {
-                vector<cv::KeyPoint> frameKeyPoints;
+                 vector<cv::KeyPoint>  frameKeyPoints;
                 ar >> numFrameKeyPoints;
                 for (int j=0; j<numFrameKeyPoints; j++) 
                 {
