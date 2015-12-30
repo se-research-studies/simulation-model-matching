@@ -20,12 +20,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <cstdio>
+
+#include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
-#include <iostream>
-#include <stdio.h>
 
-#include <boost/archive/text_oarchive.hpp>
+//#include <boost/archive/text_oarchive.hpp>
 
 #include "core/SharedPointer.h"
 #include "core/base/Lock.h"
@@ -48,6 +50,8 @@
 #include "vehiclecontext/model/CameraModel.h"
 #include "vehiclecontext/model/SimplifiedBicycleModel.h"
 #include "vehiclecontext/report/DistanceToObjectsReport.h"
+
+#include "GeneratedHeaders_AutomotiveData.h"
 
 #include "SimulationModelMatching.h"
 
@@ -103,6 +107,8 @@ namespace simulation {
             FeatureMatcher(const int32_t &argc, char **argv) :
                 core::base::module::TimeTriggeredConferenceClientModule(argc, argv, "FeatureMatcher"),
                 m_player(),
+                m_fxt(),
+                m_imageFromPlayerCopy(),
                 m_hasAttachedToSharedImageMemoryFromSimulation(false),
                 m_sharedImageMemoryFromSimulation(),
                 m_imageFromSimulation(),
@@ -268,10 +274,53 @@ namespace simulation {
                             seq.setNoise(noise);
                             
                             // (3) Save RecordedSequence to file
+//                            {
+//                                ofstream ofs("filename.rs");
+//                                boost::archive::text_oarchive oa(ofs);
+//                            	oa << seq;
+//                            }
                             {
-                                ofstream ofs("filename.rs");
-                                boost::archive::text_oarchive oa(ofs);
-                            	oa << seq;
+                                cartesian::Point2 p;
+                                p.getP()[0] = 1.0;
+                                p.getP()[1] = 2.0;
+
+                                fxe::KeyPoint kp;
+                                kp.setPt(p);
+                                kp.setSize(3.0);
+
+                                fxe::Noise n;
+                                n.addTo_ListOfNoisePerFrame(kp);
+
+                                fxe::Recording sim;
+                                sim.setFilename("abc.txt");
+                                sim.setStartFrame(42);
+                                sim.setEndFrame(48);
+                                sim.addTo_ListOfNoises(n);
+
+                                fxe::Recording real1;
+                                real1.setFilename("def.txt");
+                                real1.setStartFrame(32);
+                                real1.setEndFrame(38);
+                                real1.addTo_ListOfNoises(n);
+
+                                fxe::Correspondence corr;
+                                corr.setSimulation(sim);
+                                corr.addTo_ListOfRealRecordings(real1);
+
+                                // Next, put everything into a Container.
+                                Container c3(Container::USER_DATA_0, corr);
+                                stringstream out; // Could also be a file (fstream...).
+                                out << c3;
+
+                                {
+                                    // Read back:
+                                    Container c4;
+                                    out >> c4;
+                                    if (c4.getDataType() == Container::USER_DATA_0) {
+                                        fxe::Correspondence corr2 = c4.getData<fxe::Correspondence>();
+                                        cout << corr2.toString() << endl;
+                                    }
+                                }
                             }
                         }
                     }

@@ -150,16 +150,16 @@ IF(CXXTEST_FOUND)
     ENDFOREACH()
 ENDIF(CXXTEST_FOUND)
 
-set(Boost_USE_STATIC_LIBS OFF) 
-set(Boost_USE_MULTITHREADED ON)  
-set(Boost_USE_STATIC_RUNTIME OFF) 
-set(BOOST_INCLUDEDIR /usr/include)
-find_package(Boost COMPONENTS system serialization REQUIRED)
-
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS}) 
-    target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-endif()
+#set(Boost_USE_STATIC_LIBS OFF) 
+#set(Boost_USE_MULTITHREADED ON)  
+#set(Boost_USE_STATIC_RUNTIME OFF) 
+#set(BOOST_INCLUDEDIR /usr/include)
+#find_package(Boost COMPONENTS system serialization REQUIRED)
+#
+#if(Boost_FOUND)
+#    include_directories(${Boost_INCLUDE_DIRS}) 
+#    target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+#endif()
 
 ###########################################################################
 # This project will not be installed.
