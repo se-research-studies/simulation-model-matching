@@ -23,7 +23,7 @@
 #ifndef SIMULATIONMODELMATCHING_H_
 #define SIMULATIONMODELMATCHING_H_
 
-#include "core/opendavinci.h"
+#include <opendavinci/odcore/opendavinci.h>
 
 namespace simulation {
     class SimulationModelMatching {
