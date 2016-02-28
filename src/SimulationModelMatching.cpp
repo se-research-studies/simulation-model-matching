@@ -20,11 +20,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <memory>
 #include <sstream>
 #include <string>
 #include <iostream>
 
-#include <opendavinci/odcore/SharedPointer.h>
 #include <opendavinci/odcore/base/Lock.h>
 #include <opendavinci/odcore/base/module/TimeTriggeredConferenceClientModule.h>
 #include <opendavinci/odcore/data/Container.h>
@@ -301,11 +301,11 @@ namespace simulation {
             auto_ptr<odtools::player::Player> m_player;
 
             bool m_hasAttachedToSharedImageMemoryFromSimulation;
-            odcore::SharedPointer<odcore::wrapper::SharedMemory> m_sharedImageMemoryFromSimulation;
+            shared_ptr<odcore::wrapper::SharedMemory> m_sharedImageMemoryFromSimulation;
             IplImage *m_imageFromSimulation;
 
             bool m_hasAttachedToSharedImageMemoryFromPlayer;
-            odcore::SharedPointer<odcore::wrapper::SharedMemory> m_sharedImageMemoryFromPlayer;
+            shared_ptr<odcore::wrapper::SharedMemory> m_sharedImageMemoryFromPlayer;
             IplImage *m_imageFromPlayer;
     };
 
