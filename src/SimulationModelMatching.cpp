@@ -20,63 +20,52 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <cstdio>
-
-#include <fstream>
-#include <iostream>
+#include <memory>
 #include <sstream>
 #include <string>
+#include <iostream>
 
-//#include <boost/archive/text_oarchive.hpp>
+#include <opendavinci/odcore/base/Lock.h>
+#include <opendavinci/odcore/base/module/TimeTriggeredConferenceClientModule.h>
+#include <opendavinci/odcore/data/Container.h>
+#include <opendavinci/odcore/data/TimeStamp.h>
+#include <opendavinci/odcore/io/URL.h>
+#include <opendavinci/odcore/io/StreamFactory.h>
+#include <opendavinci/odcore/wrapper/SharedMemoryFactory.h>
 
-#include "core/SharedPointer.h"
-#include "core/base/Lock.h"
-#include "core/base/module/TimeTriggeredConferenceClientModule.h"
-#include "core/data/Container.h"
-#include "core/data/TimeStamp.h"
-#include "core/io/URL.h"
-#include "core/io/StreamFactory.h"
-#include "core/wrapper/SharedMemoryFactory.h"
+#include <opendavinci/odcontext/base/DirectInterface.h>
+#include <opendavinci/odcontext/base/RecordingContainer.h>
+#include <opendavinci/odcontext/base/RuntimeControl.h>
+#include <opendavinci/odcontext/base/RuntimeEnvironment.h>
+#include <opendavinci/odcontext/base/PlaybackContainer.h>
 
-#include "context/base/DirectInterface.h"
-#include "context/base/RecordingContainer.h"
-#include "context/base/RuntimeControl.h"
-#include "context/base/RuntimeEnvironment.h"
-#include "context/base/PlaybackContainer.h"
+#include <opendavinci/odtools/player/Player.h>
 
-#include "tools/player/Player.h"
-
-#include "vehiclecontext/VehicleRuntimeControl.h"
-#include "vehiclecontext/model/CameraModel.h"
-#include "vehiclecontext/model/SimplifiedBicycleModel.h"
-#include "vehiclecontext/report/DistanceToObjectsReport.h"
-
-#include "GeneratedHeaders_AutomotiveData.h"
+#include <opendlv/vehiclecontext/VehicleRuntimeControl.h>
+#include <opendlv/vehiclecontext/model/CameraModel.h>
+#include <opendlv/vehiclecontext/model/SimplifiedBicycleModel.h>
+#include <opendlv/vehiclecontext/report/DistanceToObjectsReport.h>
 
 #include "SimulationModelMatching.h"
 
-#include "FeatureExtractor.h"
-#include "RecordedSequence.h"
-#include "Noise.h"
-
 using namespace std;
-using namespace core;
-using namespace core::base;
-using namespace core::data;
-using namespace core::io;
-using namespace context::base;
-using namespace tools::player;
-using namespace vehiclecontext;
-using namespace vehiclecontext::model;
-using namespace vehiclecontext::report;
+using namespace odcore;
+using namespace odcore::base;
+using namespace odcore::data;
+using namespace odcore::io;
+using namespace odcontext::base;
+using namespace odtools::player;
+using namespace opendlv::vehiclecontext;
+using namespace opendlv::vehiclecontext::model;
+using namespace opendlv::vehiclecontext::report;
 using namespace automotive;
-using namespace coredata::image;
+using namespace odcore::data::image;
 
 
 namespace simulation {
 
 
-    class FeatureMatcher : public core::base::module::TimeTriggeredConferenceClientModule {
+    class FeatureMatcher : public odcore::base::module::TimeTriggeredConferenceClientModule {
         private:
             /**
              * "Forbidden" copy constructor. Goal: The compiler should warn
@@ -105,10 +94,8 @@ namespace simulation {
              * @param argv Command line arguments.
              */
             FeatureMatcher(const int32_t &argc, char **argv) :
-                core::base::module::TimeTriggeredConferenceClientModule(argc, argv, "FeatureMatcher"),
+                odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, "FeatureMatcher"),
                 m_player(),
-                m_fxt(),
-                m_imageFromPlayerCopy(),
                 m_hasAttachedToSharedImageMemoryFromSimulation(false),
                 m_sharedImageMemoryFromSimulation(),
                 m_imageFromSimulation(),
@@ -122,13 +109,13 @@ namespace simulation {
             bool readSharedImageFromSimulation(Container &c) {
 	            bool retVal = false;
 
-	            if (c.getDataType() == Container::SHARED_IMAGE) {
+	            if (c.getDataType() == SharedImage::ID()) {
 		            SharedImage si = c.getData<SharedImage> ();
 
 		            // Check if we have already attached to the shared memory.
 		            if (!m_hasAttachedToSharedImageMemoryFromSimulation) {
 			            m_sharedImageMemoryFromSimulation
-					            = core::wrapper::SharedMemoryFactory::attachToSharedMemory(
+					            = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(
 							            si.getName());
 		            }
 
@@ -161,13 +148,13 @@ namespace simulation {
             bool readSharedImageFromPlayer(Container &c) {
 	            bool retVal = false;
 
-	            if (c.getDataType() == Container::SHARED_IMAGE) {
+	            if (c.getDataType() == SharedImage::ID()) {
 		            SharedImage si = c.getData<SharedImage> ();
 
 		            // Check if we have already attached to the shared memory.
 		            if (!m_hasAttachedToSharedImageMemoryFromPlayer) {
 			            m_sharedImageMemoryFromPlayer
-					            = core::wrapper::SharedMemoryFactory::attachToSharedMemory(
+					            = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(
 							            si.getName());
 		            }
 
@@ -197,8 +184,8 @@ namespace simulation {
 	            return retVal;
             }
 
-            coredata::dmcp::ModuleExitCodeMessage::ModuleExitCode body() {
-	            while (getModuleStateAndWaitForRemainingTimeInTimeslice() == coredata::dmcp::ModuleStateMessage::RUNNING) {
+            odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode body() {
+	            while (getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING) {
                     cout << "[FeatureMatcher] Inside the main processing loop." << endl;
 
                     // Trigger movement of vehicle to get valid simulation data.
@@ -207,16 +194,16 @@ namespace simulation {
                     vehicleControl.setSteeringWheelAngle(0);
 
                     // Create container for finally sending the set values for the control algorithm.
-                    Container c2(Container::VEHICLECONTROL, vehicleControl);
+                    Container c2(vehicleControl);
                     // Send container.
                     getConference().send(c2);
 
                     // Get virtual data from simulation.
                     bool hasNextFrameFromSimulation = false;
                     {
-		                Container c = getKeyValueDataStore().get(Container::SHARED_IMAGE);
+		                Container c = getKeyValueDataStore().get(SharedImage::ID());
 
-		                if (c.getDataType() == Container::SHARED_IMAGE) {
+		                if (c.getDataType() == SharedImage::ID()) {
 			                // Example for processing the received container.
 			                hasNextFrameFromSimulation = readSharedImageFromSimulation(c);
 		                }
@@ -236,16 +223,13 @@ namespace simulation {
                         Container c;
                         if (m_player.get() != NULL) {
                             const uint16_t MAX_FRAMES = 50;
-                            
-                            vector<vector<cv::KeyPoint>> keyPointsPerFrame;
-                            
                             for (uint16_t i = 0; i < MAX_FRAMES; i++) {
                                 // Read the next container from file.
                                 if (m_player->hasMoreData()) {
                                     c = m_player->getNextContainerToBeSent();
                                 }
 
-		                        if (c.getDataType() == Container::SHARED_IMAGE) {
+		                        if (c.getDataType() == SharedImage::ID()) {
 			                        // Example for processing the received container.
 			                        hasNextFrameFromPlayer = readSharedImageFromPlayer(c);
 		                        }
@@ -259,81 +243,21 @@ namespace simulation {
 		                        }
 
                                 if (hasNextFrameFromSimulation && hasNextFrameFromPlayer) {
-                                    m_imageFromPlayerCopy = cvarrToMat(m_imageFromPlayer,true,true,0);
-                                    // (1) Calcualte this image's features minus lines (= noise)                                    
-                                    vector<KeyPoint> residue;
-                                    m_fxt.subtractLinesFromFeatures(m_imageFromPlayerCopy, true, 0, residue);
-                                    keyPointsPerFrame.push_back(residue);
-//                                    m_fxt.showOff(m_imageFromPlayerCopy, false);
-                                }
-                            }
-
-                            // (2) Create RecordedSequence with Noise (of images of all frames)
-                            RecordedSequence seq("fulltrack1.rec_1270-1345.rec", 0, 49);                            
-                            Noise noise(keyPointsPerFrame);
-                            seq.setNoise(noise);
-                            
-                            // (3) Save RecordedSequence to file
-//                            {
-//                                ofstream ofs("filename.rs");
-//                                boost::archive::text_oarchive oa(ofs);
-//                            	oa << seq;
-//                            }
-                            {
-                                cartesian::Point2 p;
-                                p.getP()[0] = 1.0;
-                                p.getP()[1] = 2.0;
-
-                                fxe::KeyPoint kp;
-                                kp.setPt(p);
-                                kp.setSize(3.0);
-
-                                fxe::Noise n;
-                                n.addTo_ListOfNoisePerFrame(kp);
-
-                                fxe::Recording sim;
-                                sim.setFilename("abc.txt");
-                                sim.setStartFrame(42);
-                                sim.setEndFrame(48);
-                                sim.addTo_ListOfNoises(n);
-
-                                fxe::Recording real1;
-                                real1.setFilename("def.txt");
-                                real1.setStartFrame(32);
-                                real1.setEndFrame(38);
-                                real1.addTo_ListOfNoises(n);
-
-                                fxe::Correspondence corr;
-                                corr.setSimulation(sim);
-                                corr.addTo_ListOfRealRecordings(real1);
-
-                                // Next, put everything into a Container.
-                                Container c3(Container::USER_DATA_0, corr);
-                                stringstream out; // Could also be a file (fstream...).
-                                out << c3;
-
-                                {
-                                    // Read back:
-                                    Container c4;
-                                    out >> c4;
-                                    if (c4.getDataType() == Container::USER_DATA_0) {
-                                        fxe::Correspondence corr2 = c4.getData<fxe::Correspondence>();
-                                        cout << corr2.toString() << endl;
-                                    }
+                                    cout << "[FeatureMatcher] TODO: Use the goodFeatureToTrack method to match reality with simulation here." << endl;
                                 }
                             }
                         }
                     }
                 }
                 
-                return coredata::dmcp::ModuleExitCodeMessage::OKAY;
+                return odcore::data::dmcp::ModuleExitCodeMessage::OKAY;
             }
 
         private:
             virtual void setUp() {
                 cout << "[FeatureMatcher] Setting up." << endl;
                     
-                core::io::URL recordingFile(getKeyValueConfiguration().getValue<string>("featurematcher.recording"));
+                odcore::io::URL recordingFile(getKeyValueConfiguration().getValue<string>("featurematcher.recording"));
 
                 // Size of the memory buffer.
                 const uint32_t MEMORY_SEGMENT_SIZE = getKeyValueConfiguration().getValue<uint32_t>("global.buffer.memorySegmentSize");
@@ -344,11 +268,11 @@ namespace simulation {
                 // If AUTO_REWIND is true, the file will be played endlessly.
                 const bool AUTO_REWIND = true;
 
-                // Run player sMat m_imageFromPlayerCopy;ynchronously.
+                // Run player synchronously.
                 const bool THREADING = false;
 
                 // Create player.
-                m_player = auto_ptr<tools::player::Player>(new Player(recordingFile, AUTO_REWIND, MEMORY_SEGMENT_SIZE, NUMBER_OF_SEGMENTS, THREADING));
+                m_player = auto_ptr<odtools::player::Player>(new Player(recordingFile, AUTO_REWIND, MEMORY_SEGMENT_SIZE, NUMBER_OF_SEGMENTS, THREADING));
 
                 // Create window to display simulation data.
 		        cvNamedWindow("FromSimulation", CV_WINDOW_AUTOSIZE);
@@ -374,16 +298,14 @@ namespace simulation {
             }
 
         private:
-            auto_ptr<tools::player::Player> m_player;
-            FeatureExtractor m_fxt;
-            Mat m_imageFromPlayerCopy;
+            auto_ptr<odtools::player::Player> m_player;
 
             bool m_hasAttachedToSharedImageMemoryFromSimulation;
-            core::SharedPointer<core::wrapper::SharedMemory> m_sharedImageMemoryFromSimulation;
+            shared_ptr<odcore::wrapper::SharedMemory> m_sharedImageMemoryFromSimulation;
             IplImage *m_imageFromSimulation;
 
             bool m_hasAttachedToSharedImageMemoryFromPlayer;
-            core::SharedPointer<core::wrapper::SharedMemory> m_sharedImageMemoryFromPlayer;
+            shared_ptr<odcore::wrapper::SharedMemory> m_sharedImageMemoryFromPlayer;
             IplImage *m_imageFromPlayer;
     };
 
@@ -408,15 +330,9 @@ namespace simulation {
               << "global.scenario = file://Track.scnx" << endl
               << "global.showGrid = 0" << endl
               << endl
-              /** vv Hier Positionen konfigurieren vv **/
-              /** Straight road 1: (0,7,90) bis (0,14,90) **/
-              /** Straight road 2: (0,39,90) bis (0,49.6,90) **/
-              /** Left curve: (0,58,90) bis (-26,77,225) **/
-              /** Right curve: (-73.1,33.5,138) bis NN **/
               << "odsimvehicle.posX = 0                     # Initial position X in cartesian coordinates." << endl
               << "odsimvehicle.posY = 0                     # Initial position Y in cartesian coordinates." << endl
               << "odsimvehicle.headingDEG = 90" << endl
-              /** ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ **/
               << "odsimvehicle.model=LinearBicycleModelNew  # Which motion model to be used: LinearBicycleModelNew or LinearBicycleModel (for CaroloCup 2013!)." << endl
               << "odsimvehicle.LinearBicycleModelNew.withSpeedController=1          # iff 1: use the VehicleControl.m_speed field; otherwise, ignore m_speed and use VehicleControl.m_acceleration field" << endl
               << "odsimvehicle.LinearBicycleModelNew.minimumTurningRadiusLeft=4.85  # Minimum turning radius to the left (for calculating maximum steering angle to the left); Attention! we used data from the miniature vehicle Meili and thus, all values are scaled by factor 10 to be compatible with the simulation!" << endl
@@ -425,9 +341,7 @@ namespace simulation {
               << "odsimvehicle.LinearBicycleModelNew.invertedSteering=0             # iff 0: interpret neg. steering wheel angles as steering to the left; iff 1: otherwise" << endl
               << "odsimvehicle.LinearBicycleModelNew.maxSpeed=2.0                   # maxium speed in m/ss" << endl
               << endl
-              /** Recording ID **/
-              << "featurematcher.recording = file://fulltrack1.rec_1270-1345.rec" << endl
-              /** ^^^^^^^^^^^^ **/
+              << "featurematcher.recording = file://straightroad.rec" << endl
               << endl;
 
         // 1. Setup runtime control.
