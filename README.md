@@ -24,9 +24,9 @@ Install required libraries:
 
 Install OpenDaVINCI according to the following instructions: http://opendavinci.readthedocs.org/en/latest/installation.pre-compiled.html#adding-opendavinci-to-your-ubuntu-linux-distribution
 
-Install libautomotivedata and the OpenDaVINCI simulation environment:
+Install the OpenDaVINCI simulation environment:
 
-    $ sudo apt-get install libautomotivedata odsimulation-odsimlib odsimulation-odsimtools
+    $ sudo apt-get install odsimulation-odsimtools
 
 Create a build folder within the source tree of your local working copy:
 
