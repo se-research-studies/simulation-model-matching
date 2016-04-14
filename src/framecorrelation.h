@@ -2,12 +2,15 @@
 
 #include <cstdint>
 
+#include <NoiseSimulation/Loadable>
 #include <NoiseSimulation/Savable>
 #include <NoiseSimulation/Sequence>
 
 namespace NoiseSimulation {
 
-    class FrameCorrelation : public Savable
+    class Recording;
+
+    class FrameCorrelation : public Savable, public Loadable
     {
     public:
         FrameCorrelation();
@@ -17,7 +20,11 @@ namespace NoiseSimulation {
         std::map<std::string, std::string> toMap() const override;
 
     private:
-        uint32_t id;
+        void setDataFromMap(const std::map<std::string, std::string>& map) override;
+
+    private:
+        Recording* video;
+        Recording* simulation;
         Sequence videoSequence;
         Sequence simulationSequence;
     };

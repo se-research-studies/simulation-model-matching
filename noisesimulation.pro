@@ -28,7 +28,11 @@ SOURCES += \
     src/framecorrelationdao.cpp \
     src/datasource.cpp \
     src/sqlitedatasource.cpp \
-    src/filedatasource.cpp
+    src/filedatasource.cpp \
+    src/area.cpp \
+    src/point.cpp \
+    src/datacontracts.cpp \
+    src/loadable.cpp
 
 HEADERS += \
     src/framecorrelation.h \
@@ -43,4 +47,8 @@ HEADERS += \
     src/framecorrelationdao.h \
     src/datasource.h \
     src/sqlitedatasource.h \
-    src/filedatasource.h
+    src/filedatasource.h \
+    src/area.h \
+    src/point.h \
+    src/datacontracts.h \
+    src/loadable.h

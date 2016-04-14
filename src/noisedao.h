@@ -5,15 +5,15 @@
 
 namespace NoiseSimulation {
 
-    class NoiseDAO : public DataAccessObject<Noise>
-    {
-    public:
-        NoiseDAO();
-        virtual ~NoiseDAO();
+//    class NoiseDAO : public DataAccessObject<Noise>
+//    {
+//    public:
+//        NoiseDAO();
+//        virtual ~NoiseDAO();
 
-    public:
-        Noise load(const std::string& videoFilename) const;
-    };
+//    public:
+//        Noise load(const std::string& videoFilename) const;
+//    };
 
 } // namespace NoiseSimulation
 

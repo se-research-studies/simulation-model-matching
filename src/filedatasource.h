@@ -4,12 +4,20 @@
 
 namespace NoiseSimulation {
 
-    template <typename SavableType>
-    class FileDataSource : public DataSource<SavableType>
+    class FileDataSource : public DataSource
     {
     public:
-        FileDataSource() {}
-        virtual ~FileDataSource() {}
+        virtual ~FileDataSource();
+
+    public:
+        FileDataSource(const FileDataSource&) = delete;
+        FileDataSource& operator=(const FileDataSource&) = delete;
+
+    private:
+        FileDataSource();
+
+    public:
+        static void createInstance();
     };
 
 } // namespace NoiseSimulation

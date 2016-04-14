@@ -10,4 +10,9 @@ namespace NoiseSimulation {
     {
     }
 
+    std::string Recording::getFilename() const
+    {
+        return filename;
+    }
+
 } // namespace NoiseExtractor

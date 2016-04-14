@@ -5,14 +5,14 @@
 
 namespace NoiseSimulation {
 
-    class FrameCorrelationDAO : public DataAccessObject<FrameCorrelation>
-    {
-    public:
-        FrameCorrelationDAO();
-        virtual ~FrameCorrelationDAO();
+//    class FrameCorrelationDAO : public DataAccessObject<FrameCorrelation>
+//    {
+//    public:
+//        FrameCorrelationDAO();
+//        virtual ~FrameCorrelationDAO();
 
-    public:
-        FrameCorrelation load(const std::string& videoFilename, const std::string& simFilename) const;
-    };
+//    public:
+//        FrameCorrelation load(const std::string& videoFilename, const std::string& simFilename) const;
+//    };
 
 }

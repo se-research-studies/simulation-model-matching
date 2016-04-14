@@ -13,9 +13,11 @@ namespace NoiseSimulation {
         Recording();
         virtual ~Recording();
 
+    public:
+        std::string getFilename() const;
+
     private:
         std::string filename;
-        std::vector<std::unique_ptr<Frame>> frames;
     };
 
 } // namespace NoiseSimulation
