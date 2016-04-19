@@ -1,3 +1,0 @@
-clear
-[H[2Jclear
-[H[2Jg++ -Wall -g -std=c++11 -o test Test.cpp ../../src/RecordedSequence.cpp ../../src/Correspondence.cpp ../../src/Noise.cpp -lboost_system -lboost_serialization	

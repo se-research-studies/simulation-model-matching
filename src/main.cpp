@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
     std::clog << "Using video " << videoFilename << " and sim " << simulationFilename << std::endl;
 
-    NoiseSimulation::SQLiteDataSource::createInstance();
+    //NoiseSimulation::SQLiteDataSource::createInstance();
 
     exit(EXIT_SUCCESS);
 }
