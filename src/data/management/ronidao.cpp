@@ -10,4 +10,10 @@ namespace FeatureExtraction {
   {
   }
 
+  std::vector<Region> RoniDAO::load(const std::string recordingFilename)
+  {
+    std::vector<Region> result;
+    return result;
+  }
+
 } // namespace FeatureExtraction
