@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DataManagement/Coordinates>
+#include <Data/Coordinates>
 
 namespace FeatureExtraction {
 
@@ -8,10 +8,10 @@ namespace FeatureExtraction {
   {
     Region(const Coordinates& topLeft, const Coordinates& topRight, const Coordinates& bottomLeft, const Coordinates& bottomRight);
 
-    Coordinates topLeft;
-    Coordinates topRight;
-    Coordinates bottomLeft;
-    Coordinates bottomRight;
+    const Coordinates topLeft;
+    const Coordinates topRight;
+    const Coordinates bottomLeft;
+    const Coordinates bottomRight;
   };
 
 } // namespace FeatureExtraction

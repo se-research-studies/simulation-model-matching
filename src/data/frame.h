@@ -1,20 +1,18 @@
 #pragma once
 
-#include <memory>
 #include <vector>
 
-#include <DataManagement/Feature>
+#include <Data/Feature>
 
 namespace FeatureExtraction {
 
-  class Frame
+  struct Frame
   {
-  public:
-    Frame();
-    virtual ~Frame();
+    Frame(Frame&& other);
 
-  private:
-    std::vector<std::unique_ptr<Feature>> features;
+    Frame(const Frame& other) = delete;
+
+    std::vector<Feature> features;
   };
 
 } // namespace FeatureExtraction

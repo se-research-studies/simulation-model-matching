@@ -2,11 +2,8 @@
 
 namespace FeatureExtraction {
 
-  Frame::Frame()
-  {
-  }
-
-  Frame::~Frame()
+  Frame::Frame(Frame&& other)
+    : features(move(other.features))
   {
   }
 

@@ -1,21 +1,21 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
+#include <vector>
 
-#include <DataManagement/Frame>
+#include <Data/FeatureModel>
 
 namespace FeatureExtraction {
 
-  class Simulation
+  struct Simulation
   {
-  public:
-    Simulation();
-    virtual ~Simulation();
+    Simulation(const std::string& filename);
+    Simulation(Simulation&& other);
 
-  private:
-    std::unordered_map<uint32_t, std::unique_ptr<Frame>> frames;
+    Simulation(const Simulation& other) = delete;
 
+    const std::string filename;
+    std::vector<std::unique_ptr<FeatureModel>> featureModels;
   };
 
 } // namespace FeatureExtraction

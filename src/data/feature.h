@@ -1,13 +1,17 @@
 #pragma once
 
-#include <DataManagement/Coordinates>
+#include <cstdint>
+
+#include <Data/Coordinates>
 
 namespace FeatureExtraction {
 
   struct Feature
   {
-    Coordinates coordinates;
-    uint32_t radius = 0;
+    Feature(const Coordinates& coordinates, uint32_t radius);
+
+    const Coordinates coordinates;
+    const uint32_t radius = 0;
   };
 
 } // namespace FeatureExtraction

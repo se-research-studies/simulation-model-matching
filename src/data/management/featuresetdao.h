@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Data/FeatureSet>
 
 namespace FeatureExtraction {
 
@@ -8,6 +9,10 @@ namespace FeatureExtraction {
   public:
     FeatureSetDAO();
     virtual ~FeatureSetDAO();
+
+  public:
+    std::unique_ptr<FeatureSet> load(const std::string recordingFilename);
+    void save(FeatureSet& featureSet);
   };
 
 } // namespace FeatureExtraction
