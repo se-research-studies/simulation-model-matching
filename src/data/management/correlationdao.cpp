@@ -25,7 +25,18 @@ namespace FeatureExtraction {
       uint32_t startFrame = (*iterator)["startFrame"].asUInt();
       uint32_t endFrame = (*iterator)["endFrame"].asUInt();
       Json::Value startPosition = (*iterator)["startPosition"];
+      uint32_t startX = startPosition["x"].asUInt();
+      uint32_t startY = startPosition["y"].asUInt();
+      uint16_t startTheta = startPosition["theta"].asUInt();
       Json::Value endPosition = (*iterator)["endPosition"];
+      uint32_t endX = endPosition["x"].asUInt();
+      uint32_t endY = endPosition["y"].asUInt();
+      uint16_t endTheta = endPosition["theta"].asUInt();
+
+      Position startPos({ startX, startY }, startTheta);
+      Position endPos({ endX, endY }, endTheta);
+      Correlation correlation(startFrame, endFrame, startPos, endPos);
+      result.insert({recordingFile, correlation});
     }
 
     return result;
