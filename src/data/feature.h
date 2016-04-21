@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DataManagement/Point>
+#include <DataManagement/Coordinates>
 
 namespace FeatureExtraction {
 

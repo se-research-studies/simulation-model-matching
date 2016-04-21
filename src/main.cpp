@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include <NoiseSimulation/SQLiteDataSource>
-
 int main(int argc, char* argv[])
 {
     if (argc != 5) {

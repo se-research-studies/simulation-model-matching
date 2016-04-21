@@ -16,15 +16,33 @@ LIBS += -lopendavinci -lopendlv -lautomotivedata
 
 SOURCES += \
     src/main.cpp \
-    src/DataManagement/region.cpp \
-    src/DataManagement/feature.cpp \
-    src/DataManagement/position.cpp \
-    src/DataManagement/coordinates.cpp
+    src/data/region.cpp \
+    src/data/feature.cpp \
+    src/data/position.cpp \
+    src/data/coordinates.cpp \
+    src/data/frame.cpp \
+    src/data/simulation.cpp \
+    src/data/featuremodel.cpp \
+    src/data/featureset.cpp \
+    src/data/correlation.cpp \
+    src/data/management/featuremodeldao.cpp \
+    src/data/management/correlationdao.cpp \
+    src/data/management/featuresetdao.cpp \
+    src/data/management/ronidao.cpp
 
 
 HEADERS += \
-    src/DataManagement/region.h \
-    src/DataManagement/feature.h \
-    src/DataManagement/position.h \
-    src/DataManagement/coordinates.h
+    src/data/region.h \
+    src/data/feature.h \
+    src/data/position.h \
+    src/data/coordinates.h \
+    src/data/frame.h \
+    src/data/simulation.h \
+    src/data/featuremodel.h \
+    src/data/featureset.h \
+    src/data/correlation.h \
+    src/data/management/featuremodeldao.h \
+    src/data/management/correlationdao.h \
+    src/data/management/featuresetdao.h \
+    src/data/management/ronidao.h
 

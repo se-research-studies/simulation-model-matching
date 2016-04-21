@@ -2,12 +2,4 @@
 
 namespace FeatureExtraction {
 
-  Position::Position()
-  {
-  }
-
-  Position::~Position()
-  {
-  }
-
 } // namespace FeatureExtraction
