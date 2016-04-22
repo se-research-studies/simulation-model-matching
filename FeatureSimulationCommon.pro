@@ -21,7 +21,9 @@ HEADERS += \
     src/common/datamanagement/correlationdao.h \
     src/common/datamanagement/featuremodeldao.h \
     src/common/datamanagement/featuresetdao.h \
-    src/common/datamanagement/ronidao.h
+    src/common/datamanagement/ronidao.h \
+    src/common/datamanagement/database.h \
+    src/common/datamanagement/cursor.h
 
 SOURCES += \
     src/common/data/coordinates.cpp \
@@ -36,4 +38,6 @@ SOURCES += \
     src/common/datamanagement/correlationdao.cpp \
     src/common/datamanagement/featuremodeldao.cpp \
     src/common/datamanagement/featuresetdao.cpp \
-    src/common/datamanagement/ronidao.cpp
+    src/common/datamanagement/ronidao.cpp \
+    src/common/datamanagement/database.cpp \
+    src/common/datamanagement/cursor.cpp
