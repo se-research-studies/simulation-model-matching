@@ -16,7 +16,7 @@ namespace Common {
     virtual ~CorrelationDAO();
 
   public:
-    std::unordered_map<std::string, Correlation> load(const std::string& simulationFilename);
+    std::unordered_map<std::string, Correlation> load(const std::string& simulationFilename) const;
 
   private:
     std::string toCorFilename(const std::string& simulationFilename) const;

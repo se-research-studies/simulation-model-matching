@@ -15,7 +15,7 @@ namespace Common {
     virtual ~RoniDAO();
 
   public:
-    std::vector<Region> load(const std::string recordingFilename);
+    std::vector<Region> load(const std::string recordingFilename) const;
 
   private:
     std::string toRoniFilename(const std::string& recordingFilename) const;

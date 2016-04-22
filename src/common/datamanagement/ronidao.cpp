@@ -11,7 +11,7 @@ namespace Common {
   RoniDAO::~RoniDAO() {
   }
 
-  std::vector<Region> RoniDAO::load(const std::string recordingFilename) {
+  std::vector<Region> RoniDAO::load(const std::string recordingFilename) const {
     std::vector<Region> result;
 
     Json::Value root = readFile(toRoniFilename(recordingFilename));

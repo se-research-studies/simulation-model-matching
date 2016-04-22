@@ -11,7 +11,7 @@ namespace Common {
   CorrelationDAO::~CorrelationDAO() {
   }
 
-  std::unordered_map<std::string, Correlation> CorrelationDAO::load(const std::string& simulationFilename) {
+  std::unordered_map<std::string, Correlation> CorrelationDAO::load(const std::string& simulationFilename) const {
     std::unordered_map<std::string, Correlation> result;
 
     Json::Value root = readFile(toCorFilename(simulationFilename));
