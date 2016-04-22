@@ -30,4 +30,5 @@
 *.pyc
 *~
 build*
+bin*
 *.user
