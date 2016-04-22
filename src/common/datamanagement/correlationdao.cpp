@@ -2,54 +2,34 @@
 
 #include <cstring>
 #include <fstream>
-#include <type_traits>
 
 namespace Common {
 
-  CorrelationDAO::CorrelationDAO()
-  {
+  CorrelationDAO::CorrelationDAO() {
   }
 
-  CorrelationDAO::~CorrelationDAO()
-  {
+  CorrelationDAO::~CorrelationDAO() {
   }
 
-  std::unordered_map<std::string, Correlation> CorrelationDAO::load(const std::string& simulationFilename)
-  {
+  std::unordered_map<std::string, Correlation> CorrelationDAO::load(const std::string& simulationFilename) {
     std::unordered_map<std::string, Correlation> result;
 
     Json::Value root = readFile(toCorFilename(simulationFilename));
     Json::Value correlationArray = root["correlations"];
     for (auto iterator = correlationArray.begin(); iterator != correlationArray.end(); ++iterator) {
       std::string recordingFile = (*iterator)["recordingFile"].asString();
-      uint32_t startFrame = (*iterator)["startFrame"].asUInt();
-      uint32_t endFrame = (*iterator)["endFrame"].asUInt();
-      Json::Value startPosition = (*iterator)["startPosition"];
-      uint32_t startX = startPosition["x"].asUInt();
-      uint32_t startY = startPosition["y"].asUInt();
-      uint16_t startTheta = startPosition["theta"].asUInt();
-      Json::Value endPosition = (*iterator)["endPosition"];
-      uint32_t endX = endPosition["x"].asUInt();
-      uint32_t endY = endPosition["y"].asUInt();
-      uint16_t endTheta = endPosition["theta"].asUInt();
-
-      Position startPos({ startX, startY }, startTheta);
-      Position endPos({ endX, endY }, endTheta);
-      Correlation correlation(startFrame, endFrame, startPos, endPos);
-      result.insert({recordingFile, correlation});
+      result.insert({recordingFile, toCorrelation(*iterator)});
     }
 
     return result;
   }
 
-  std::string CorrelationDAO::toCorFilename(const std::string& simulationFilename) const
-  {
+  std::string CorrelationDAO::toCorFilename(const std::string& simulationFilename) const {
     std::string strippedSimulationName = simulationFilename.substr(0, simulationFilename.find_last_of("."));
     return strippedSimulationName + ".cor";
   }
 
-  Json::Value CorrelationDAO::readFile(const std::string& corFilename) const
-  {
+  Json::Value CorrelationDAO::readFile(const std::string& corFilename) const {
     std::ifstream file;
     file.open(corFilename);
     if (!file.is_open()) {
@@ -58,6 +38,19 @@ namespace Common {
     Json::Value root;
     file >> root;
     return root;
+  }
+
+  Correlation CorrelationDAO::toCorrelation(const Json::Value& value) const {
+    uint32_t startFrame = value["startFrame"].asUInt();
+    uint32_t endFrame = value["endFrame"].asUInt();
+    return Correlation(startFrame, endFrame, toPosition(value["startPosition"]), toPosition(value["endPosition"]));
+  }
+
+  Position CorrelationDAO::toPosition(const Json::Value& value) const {
+    uint32_t x = value["x"].asUInt();
+    uint32_t y = value["y"].asUInt();
+    uint16_t theta = value["theta"].asUInt();
+    return Position({ x, y }, theta);
   }
 
 } // namespace FeatureExtraction

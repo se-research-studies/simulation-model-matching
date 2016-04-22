@@ -21,6 +21,8 @@ namespace Common {
   private:
     std::string toCorFilename(const std::string& simulationFilename) const;
     Json::Value readFile(const std::string& corFilename) const;
+    Correlation toCorrelation(const Json::Value& value) const;
+    Position toPosition(const Json::Value& value) const;
   };
 
 } // namespace FeatureExtraction
