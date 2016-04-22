@@ -10,7 +10,7 @@ namespace Common {
   {
     Frame(Frame&& other);
 
-    Frame(const Frame& other) = delete;
+    Frame(const Frame&) = delete;
 
     std::vector<Feature> features;
   };

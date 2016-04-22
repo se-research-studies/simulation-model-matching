@@ -12,7 +12,7 @@ namespace Common {
     Simulation(const std::string& filename);
     Simulation(Simulation&& other);
 
-    Simulation(const Simulation& other) = delete;
+    Simulation(const Simulation&) = delete;
 
     const std::string filename;
     std::vector<std::unique_ptr<FeatureModel>> featureModels;

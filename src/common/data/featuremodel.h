@@ -13,7 +13,7 @@ namespace Common {
     FeatureModel(const Correlation& correlation, uint16_t permutation);
     FeatureModel(FeatureModel&& other);
 
-    FeatureModel(const FeatureModel& other) = delete;
+    FeatureModel(const FeatureModel&) = delete;
 
     const Correlation correlation;
     const uint16_t permutation = 0;

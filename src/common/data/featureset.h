@@ -13,7 +13,7 @@ namespace Common {
     FeatureSet(const std::string recordingName);
     FeatureSet(FeatureSet&& other);
 
-    FeatureSet(const FeatureSet& other) = delete;
+    FeatureSet(const FeatureSet&) = delete;
 
     const std::string recordingName;
     std::unordered_map<uint16_t, std::unique_ptr<Frame>> frames;
