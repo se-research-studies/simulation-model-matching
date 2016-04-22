@@ -9,9 +9,11 @@ LIBS += -L$$PWD/build/ -lFeatureSimulationCommon
 LIBS += -lpthread -lgtest -pthread
 
 HEADERS += \
-    test/common/datamanagement/correlationdao_test.h
+    test/common/datamanagement/correlationdao_test.h \
+    test/common/datamanagement/ronidao_test.h
 
 SOURCES += \
     test/common/datamanagement/correlationdao_test.cpp \
-    test/test_main.cpp
+    test/test_main.cpp \
+    test/common/datamanagement/ronidao_test.cpp
 
