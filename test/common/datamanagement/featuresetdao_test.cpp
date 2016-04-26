@@ -21,3 +21,7 @@ TEST(FeatureSetDAOTest, saveAndRead) {
   ASSERT_NE(nullptr, loadedFeatureSet->getFrame(2));
   ASSERT_EQ("{7,8,9}", loadedFeatureSet->getFrame(2)->toString());
 }
+
+TEST(FeatureSetDAOTest, load_ranged) {
+  ASSERT_TRUE(false);
+}

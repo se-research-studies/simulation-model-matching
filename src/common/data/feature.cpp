@@ -14,8 +14,8 @@ namespace Common {
     return "{" + std::to_string(coordinates.x) + "," + std::to_string(coordinates.y) + "," + std::to_string(radius) + "}";
   }
 
-  Feature Feature::fromString(const std::string& string) {
-    std::stringstream stream(Utils::removeBraces(string));
+  Feature Feature::fromString(const std::string& stringFormatted) {
+    std::stringstream stream(Utils::removeBraces(stringFormatted));
     std::string x, y, radius;
     std::getline(stream, x, ',');
     std::getline(stream, y, ',');

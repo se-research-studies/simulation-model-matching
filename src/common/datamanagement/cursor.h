@@ -14,9 +14,9 @@ namespace Common {
 
   public:
     bool moveToNext();
-    std::string getString(uint8_t column);
-    uint32_t getUInt(uint8_t column);
-    uint16_t getUShort(uint8_t column);
+    std::string getString(uint8_t column) const;
+    uint32_t getUInt(uint8_t column) const;
+    uint16_t getUShort(uint8_t column) const;
 
   private:
     sqlite3_stmt* statement;

@@ -16,7 +16,7 @@ namespace Common {
     return sqlite3_step(statement) == SQLITE_ROW;
   }
 
-  std::string Cursor::getString(uint8_t column) {
+  std::string Cursor::getString(uint8_t column) const {
     const unsigned char* result = sqlite3_column_text(statement, column);
     if (result == nullptr) {
       return "NULL";
@@ -25,11 +25,11 @@ namespace Common {
     }
   }
 
-  uint32_t Cursor::getUInt(uint8_t column) {
+  uint32_t Cursor::getUInt(uint8_t column) const {
     return sqlite3_column_int(statement, column);
   }
 
-  uint16_t Cursor::getUShort(uint8_t column) {
+  uint16_t Cursor::getUShort(uint8_t column) const {
     return sqlite3_column_int(statement, column);
   }
 

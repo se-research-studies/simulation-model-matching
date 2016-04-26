@@ -1,10 +1,6 @@
 #pragma once
 
+#include <gtest/gtest.h>
 
-class FeatureModelDAOTest
-{
-public:
-  FeatureModelDAOTest();
-  virtual ~FeatureModelDAOTest();
+class FeatureModelDAOTest : public ::testing::Test {
 };
-

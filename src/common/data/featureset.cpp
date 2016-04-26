@@ -18,15 +18,15 @@ namespace Common {
     return frames.size();
   }
 
-  Frame* FeatureSet::getFrame(uint16_t index) const {
+  Frame* FeatureSet::getFrame(uint32_t index) const {
     return frames.at(index).get();
   }
 
-  const std::map<uint16_t, std::unique_ptr<Frame> >&FeatureSet::getFrames() const {
+  const std::map<uint32_t, std::unique_ptr<Frame>>& FeatureSet::getFrames() const {
     return frames;
   }
 
-  void FeatureSet::addFrame(uint16_t index, std::unique_ptr<Frame> frame) {
+  void FeatureSet::addFrame(uint32_t index, std::unique_ptr<Frame> frame) {
     frames.insert(std::make_pair(index, move(frame)));
   }
 

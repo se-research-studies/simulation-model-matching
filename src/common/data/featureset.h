@@ -18,13 +18,13 @@ namespace Common {
   public:
     std::string getRecordingName() const;
     size_t getFrameCount() const;
-    Frame* getFrame(uint16_t index) const;
-    const std::map<uint16_t, std::unique_ptr<Frame>>& getFrames() const;
-    void addFrame(uint16_t index, std::unique_ptr<Frame> frame);
+    Frame* getFrame(uint32_t index) const;
+    const std::map<uint32_t, std::unique_ptr<Frame>>& getFrames() const;
+    void addFrame(uint32_t index, std::unique_ptr<Frame> frame);
 
   private:
     const std::string recordingName;
-    std::map<uint16_t, std::unique_ptr<Frame>> frames;
+    std::map<uint32_t, std::unique_ptr<Frame>> frames;
     std::vector<Region> regionsOfNoInterest;
   };
 
