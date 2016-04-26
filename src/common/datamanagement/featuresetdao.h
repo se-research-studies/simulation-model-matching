@@ -30,7 +30,6 @@ namespace Common {
     std::string selectionString(const std::string& recordingName) const;
     std::string selectionString(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const;
     std::unique_ptr<FeatureSet> toFeatureSet(const std::string& recordingName, Cursor& cursor) const;
-    std::unique_ptr<Frame> currentRowToFrame(const Cursor& cursor) const;
     std::vector<TableField> toRow(const std::string& recordingName, const std::pair<const uint32_t, std::unique_ptr<Frame>>& frame) const;
   };
 

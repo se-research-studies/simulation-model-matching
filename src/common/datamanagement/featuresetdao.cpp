@@ -39,14 +39,10 @@ namespace Common {
   std::unique_ptr<FeatureSet> FeatureSetDAO::toFeatureSet(const std::string& recordingName, Cursor& cursor) const {
     std::unique_ptr<FeatureSet> result = std::make_unique<FeatureSet>(recordingName);
     while (cursor.moveToNext()) {
-      result->addFrame(cursor.getUShort(FeatureSetsContract::INDEX_FRAME), currentRowToFrame(cursor));
+      std::string features = cursor.getString(FeatureSetsContract::INDEX_FEATURES);
+      result->addFrame(cursor.getUShort(FeatureSetsContract::INDEX_FRAME), Frame::fromString(features));
     }
     return result;
-  }
-
-  std::unique_ptr<Frame> FeatureSetDAO::currentRowToFrame(const Cursor& cursor) const {
-    std::string features = cursor.getString(FeatureSetsContract::INDEX_FEATURES);
-    return Frame::fromString(features);
   }
 
   void FeatureSetDAO::save(FeatureSet& featureSet) {
