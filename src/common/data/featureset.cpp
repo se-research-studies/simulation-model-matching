@@ -3,13 +3,31 @@
 namespace Common {
 
   FeatureSet::FeatureSet(const std::string recordingName)
-    : recordingName(recordingName)
-  {
+    : recordingName(recordingName) {
   }
 
   FeatureSet::FeatureSet(FeatureSet&& other)
-    : recordingName(other.recordingName), frames(move(other.frames)), regionsOfNoInterest(move(other.regionsOfNoInterest))
-  {
+    : recordingName(other.recordingName), frames(move(other.frames)), regionsOfNoInterest(move(other.regionsOfNoInterest)) {
+  }
+
+  std::string FeatureSet::getRecordingName() const {
+    return recordingName;
+  }
+
+  size_t FeatureSet::getFrameCount() const {
+    return frames.size();
+  }
+
+  Frame* FeatureSet::getFrame(uint16_t index) const {
+    return frames.at(index).get();
+  }
+
+  const std::map<uint16_t, std::unique_ptr<Frame> >&FeatureSet::getFrames() const {
+    return frames;
+  }
+
+  void FeatureSet::addFrame(uint16_t index, std::unique_ptr<Frame> frame) {
+    frames.insert(std::make_pair(index, move(frame)));
   }
 
 } // namespace FeatureExtraction

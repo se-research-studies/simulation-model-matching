@@ -47,9 +47,18 @@ namespace Common {
     return Cursor(statement);
   }
 
-  void Database::insert(const std::string& table, const std::vector<std::pair<std::string, std::string>>& content) {
+  void Database::insert(const std::string& table, const std::vector<TableField>& content) {
     std::pair<std::string, std::string> contentStrings = buildContentStrings(content);
     std::string sql = "INSERT INTO " + table + " (" + contentStrings.first + ") VALUES (" + contentStrings.second + ");";
+    execSql(sql);
+  }
+
+  void Database::deleteRows(const std::string& table, const std::string& selection)
+  {
+    std::string sql = "DELETE FROM " + table;
+    if (selection.size() > 0) {
+      sql += " WHERE " + selection;
+    }
     execSql(sql);
   }
 
@@ -69,12 +78,12 @@ namespace Common {
     return result;
   }
 
-  std::pair<std::string, std::string> Database::buildContentStrings(const std::vector<std::pair<std::string, std::string> >& content) const {
+  std::pair<std::string, std::string> Database::buildContentStrings(const std::vector<TableField>& content) const {
     std::string columns;
     std::string values;
-    for (const std::pair<std::string, std::string>& contentPair : content) {
-      columns += contentPair.first + ",";
-      values += contentPair.second + ",";
+    for (const TableField& tableField : content) {
+      columns += tableField.field + ",";
+      values += "'" + tableField.value + "',";
     }
     columns.pop_back();
     values.pop_back();

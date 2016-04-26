@@ -23,7 +23,10 @@ HEADERS += \
     src/common/datamanagement/featuresetdao.h \
     src/common/datamanagement/ronidao.h \
     src/common/datamanagement/database.h \
-    src/common/datamanagement/cursor.h
+    src/common/datamanagement/cursor.h \
+    src/common/makeunique.h \
+    src/common/datamanagement/tablefield.h \
+    src/common/utils.h
 
 SOURCES += \
     src/common/data/coordinates.cpp \
@@ -40,4 +43,6 @@ SOURCES += \
     src/common/datamanagement/featuresetdao.cpp \
     src/common/datamanagement/ronidao.cpp \
     src/common/datamanagement/database.cpp \
-    src/common/datamanagement/cursor.cpp
+    src/common/datamanagement/cursor.cpp \
+    src/common/datamanagement/tablefield.cpp \
+    src/common/utils.cpp
