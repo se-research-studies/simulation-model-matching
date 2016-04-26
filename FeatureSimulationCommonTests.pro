@@ -5,7 +5,7 @@ CONFIG -= qt
 
 INCLUDEPATH += $$_PRO_FILE_PWD_/include/
 
-LIBS += -L$$PWD/build/ -lFeatureSimulationCommon
+LIBS += -L$$PWD/bin/ -lFeatureSimulationCommon
 LIBS += -lpthread -lgtest -pthread
 
 HEADERS += \

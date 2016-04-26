@@ -9,8 +9,7 @@
 
 namespace Common {
 
-  class Database
-  {
+  class Database {
   public:
     virtual ~Database();
 

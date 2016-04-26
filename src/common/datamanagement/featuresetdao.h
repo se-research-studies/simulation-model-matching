@@ -4,6 +4,11 @@
 
 namespace Common {
 
+  namespace FeatureSetsContract {
+    std::string TABLENAME = "FeatureSets";
+    std::string COL_RECORDINGFILENAME = "recordingFilename";
+  }
+
   class FeatureSetDAO
   {
   public:
