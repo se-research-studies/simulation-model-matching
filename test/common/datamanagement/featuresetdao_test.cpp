@@ -1,13 +1,16 @@
 #include "featuresetdao_test.h"
 
-#include <FeatureSimulationCommon/MakeUnique>
 #include <FeatureSimulationCommon/DataManagement/Database>
-#include <FeatureSimulationCommon/DataManagement/FeatureSetDAO>
 
-TEST(FeatureSetDAOTest, saveAndRead) {
-  Common::FeatureSetDAO dao;
+void FeatureSetDAOTest::SetUp() {
   Common::Database::getInstance().deleteRows(Common::FeatureSetsContract::TABLENAME, "");
+}
 
+void FeatureSetDAOTest::TearDown() {
+  Common::Database::getInstance().deleteRows(Common::FeatureSetsContract::TABLENAME, "");
+}
+
+TEST_F(FeatureSetDAOTest, saveAndLoad) {
   Common::FeatureSet featureSet("recordingName");
   featureSet.addFrame(1, Common::Frame::fromString("{1,2,3};{4,5,6}"));
   featureSet.addFrame(2, Common::Frame::fromString("{7,8,9}"));
@@ -22,6 +25,21 @@ TEST(FeatureSetDAOTest, saveAndRead) {
   ASSERT_EQ("{7,8,9}", loadedFeatureSet->getFrame(2)->toString());
 }
 
-TEST(FeatureSetDAOTest, load_ranged) {
-  ASSERT_TRUE(false);
+TEST_F(FeatureSetDAOTest, load_ranged) {
+  Common::FeatureSet featureSet("recordingName");
+  featureSet.addFrame(1, Common::Frame::fromString("{1,2,3}"));
+  featureSet.addFrame(2, Common::Frame::fromString("{4,5,6}"));
+  featureSet.addFrame(3, Common::Frame::fromString("{7,8,9}"));
+  featureSet.addFrame(4, Common::Frame::fromString("{10,11,12}"));
+  featureSet.addFrame(5, Common::Frame::fromString("{13,14,15}"));
+  dao.save(featureSet);
+
+  std::unique_ptr<Common::FeatureSet> loadedFeatureSet = dao.load("recordingName", 2, 4);
+  ASSERT_EQ(3, loadedFeatureSet->getFrameCount());
+  ASSERT_NE(nullptr, loadedFeatureSet->getFrame(2));
+  ASSERT_EQ("{4,5,6}", loadedFeatureSet->getFrame(2)->toString());
+  ASSERT_NE(nullptr, loadedFeatureSet->getFrame(3));
+  ASSERT_EQ("{7,8,9}", loadedFeatureSet->getFrame(3)->toString());
+  ASSERT_NE(nullptr, loadedFeatureSet->getFrame(4));
+  ASSERT_EQ("{10,11,12}", loadedFeatureSet->getFrame(4)->toString());
 }

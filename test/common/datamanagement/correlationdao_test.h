@@ -6,8 +6,8 @@
 
 class CorrelationDAOTest : public ::testing::Test {
 protected:
-  virtual void SetUp();
-  virtual void TearDown();
+  void SetUp() override;
+  void TearDown() override;
 
 protected:
   Common::CorrelationDAO dao;

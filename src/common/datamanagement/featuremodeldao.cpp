@@ -11,11 +11,9 @@ namespace Common {
   FeatureModelDAO::~FeatureModelDAO() {
   }
 
-  std::vector<std::unique_ptr<FeatureModel>> FeatureModelDAO::load(const std::string& simulationName) {
-    Database::getInstance().beginTransaction();
+  std::vector<std::unique_ptr<FeatureModel>> FeatureModelDAO::load(const std::string& simulationName) const {
     Cursor cursor = Database::getInstance().query(FeatureModelsContract::TABLENAME, {"*"}, selectionString(simulationName));
     std::vector<std::unique_ptr<FeatureModel>> result = toFeatureModels(simulationName, cursor);
-    Database::getInstance().endTransaction();
     return result;
   }
 
@@ -39,13 +37,13 @@ namespace Common {
     uint32_t startFrame = cursor.getUInt(FeatureModelsContract::INDEX_STARTFRAME);
     uint32_t endFrame = cursor.getUInt(FeatureModelsContract::INDEX_ENDFRAME);
     Correlation correlation(startFrame, endFrame, Position::fromString(startPosition), Position::fromString(endPosition));
-    return std::make_unique<FeatureModel>(simulationName, correlation, permutation);
+    std::unique_ptr<FeatureSet> featureSet = featureSetDao.load(recordingName, startFrame, endFrame);
+    return std::make_unique<FeatureModel>(simulationName, correlation, permutation, move(featureSet));
   }
 
-  void FeatureModelDAO::save(const FeatureModel& featureModel) {
-    Database::getInstance().beginTransaction();
+  void FeatureModelDAO::save(const FeatureModel& featureModel) const {
     Database::getInstance().insert(FeatureModelsContract::TABLENAME, toRow(featureModel));
-    Database::getInstance().endTransaction();
+    featureSetDao.save(*featureModel.featureSet);
   }
 
   std::vector<TableField> FeatureModelDAO::toRow(const FeatureModel& featureModel) const {

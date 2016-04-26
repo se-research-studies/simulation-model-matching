@@ -11,19 +11,15 @@ namespace Common {
   FeatureSetDAO::~FeatureSetDAO() {
   }
 
-  std::unique_ptr<FeatureSet> FeatureSetDAO::load(const std::string& recordingName) {
-    Database::getInstance().beginTransaction();
+  std::unique_ptr<FeatureSet> FeatureSetDAO::load(const std::string& recordingName) const {
     Cursor cursor = Database::getInstance().query(FeatureSetsContract::TABLENAME, {"*"}, selectionString(recordingName));
     std::unique_ptr<FeatureSet> result = toFeatureSet(recordingName, cursor);
-    Database::getInstance().endTransaction();
     return result;
   }
 
-  std::unique_ptr<FeatureSet> FeatureSetDAO::load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) {
-    Database::getInstance().beginTransaction();
+  std::unique_ptr<FeatureSet> FeatureSetDAO::load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const {
     Cursor cursor = Database::getInstance().query(FeatureSetsContract::TABLENAME, {"*"}, selectionString(recordingName, startFrame, endFrame));
     std::unique_ptr<FeatureSet> result = toFeatureSet(recordingName, cursor);
-    Database::getInstance().endTransaction();
     return result;
   }
 
@@ -45,12 +41,10 @@ namespace Common {
     return result;
   }
 
-  void FeatureSetDAO::save(FeatureSet& featureSet) {
-    Database::getInstance().beginTransaction();
+  void FeatureSetDAO::save(FeatureSet& featureSet) const {
     for (auto frame = featureSet.getFrames().cbegin(); frame != featureSet.getFrames().cend(); ++frame) {
       Database::getInstance().insert(FeatureSetsContract::TABLENAME, toRow(featureSet.getRecordingName(), *frame));
     }
-    Database::getInstance().endTransaction();
   }
 
   std::vector<TableField> FeatureSetDAO::toRow(const std::string& recordingName, const std::pair<const uint32_t, std::unique_ptr<Frame>>& frame) const {

@@ -7,13 +7,13 @@
 namespace Common {
 
   namespace FeatureSetsContract {
-    std::string TABLENAME = "FeatureSets";
-    std::string COL_RECORDINGNAME = "recordingName";
-    uint8_t INDEX_RECORDINGFILENAME = 0;
-    std::string COL_FRAME = "frame";
-    uint8_t INDEX_FRAME = 1;
-    std::string COL_FEATURES = "features";
-    uint8_t INDEX_FEATURES = 2;
+    static const std::string TABLENAME = "FeatureSets";
+    static const std::string COL_RECORDINGNAME = "recordingName";
+    static const std::string COL_FRAME = "frame";
+    static const std::string COL_FEATURES = "features";
+    static const uint8_t INDEX_RECORDINGFILENAME = 0;
+    static const uint8_t INDEX_FRAME = 1;
+    static const uint8_t INDEX_FEATURES = 2;
   }
 
   class FeatureSetDAO {
@@ -22,9 +22,9 @@ namespace Common {
     virtual ~FeatureSetDAO();
 
   public:
-    std::unique_ptr<FeatureSet> load(const std::string& recordingName);
-    std::unique_ptr<FeatureSet> load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame);
-    void save(FeatureSet& featureSet);
+    std::unique_ptr<FeatureSet> load(const std::string& recordingName) const;
+    std::unique_ptr<FeatureSet> load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const;
+    void save(FeatureSet& featureSet) const;
 
   private:
     std::string selectionString(const std::string& recordingName) const;

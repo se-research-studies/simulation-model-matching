@@ -10,7 +10,7 @@ namespace Common {
 
   struct FeatureModel
   {
-    FeatureModel(const std::string& simulationName, const Correlation& correlation, uint16_t permutation);
+    FeatureModel(const std::string& simulationName, const Correlation& correlation, uint16_t permutation, std::unique_ptr<FeatureSet> featureSet);
     FeatureModel(FeatureModel&& other);
 
     FeatureModel(const FeatureModel&) = delete;
