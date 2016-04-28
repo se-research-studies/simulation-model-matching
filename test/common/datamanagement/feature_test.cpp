@@ -9,7 +9,7 @@ TEST(FeatureTest, toString) {
 
 TEST(FeatureTest, fromString) {
   Common::Feature feature = Common::Feature::fromString("{1,2,3}");
-  ASSERT_EQ(1, feature.coordinates.x);
-  ASSERT_EQ(2, feature.coordinates.y);
-  ASSERT_EQ(3, feature.radius);
+  ASSERT_EQ(1, feature.getX());
+  ASSERT_EQ(2, feature.getY());
+  ASSERT_EQ(3, feature.getRadius());
 }

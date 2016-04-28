@@ -8,17 +8,26 @@
 
 namespace Common {
 
-  struct FeatureModel
-  {
-    FeatureModel(const std::string& simulationName, const Correlation& correlation, uint16_t permutation, std::unique_ptr<FeatureSet> featureSet);
+  class FeatureModel {
+  public:
+    FeatureModel(const std::string& simulationName, const Correlation& correlation, uint16_t permutation, FeatureSet&& featureSet);
     FeatureModel(FeatureModel&& other);
 
+  public:
     FeatureModel(const FeatureModel&) = delete;
+    FeatureModel& operator=(const FeatureModel&) = delete;
 
-    std::string simulationName;
+  public:
+    std::string getSimulationName() const;
+    Correlation getCorrelation() const;
+    uint16_t getPermutation() const;
+    const FeatureSet& getFeatureSet() const;
+
+  private:
+    const std::string simulationName;
     const Correlation correlation;
     const uint16_t permutation = 0;
-    std::unique_ptr<FeatureSet> featureSet;
+    FeatureSet featureSet;
   };
 
 } // namespace FeatureExtraction

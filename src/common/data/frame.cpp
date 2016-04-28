@@ -6,12 +6,23 @@
 
 namespace Common {
 
-  Frame::Frame(Frame&& other)
-    : features(move(other.features)) {
+  Frame::Frame(std::vector<Feature>&& features)
+    : features(features) {
   }
 
-  std::string Frame::toString() const
-  {
+  const std::vector<Feature>& Frame::getFeatures() const {
+    return features;
+  }
+
+  uint32_t Frame::getFeatureCount() const {
+    return features.size();
+  }
+
+  void Frame::addFeature(Feature&& feature) {
+    features.push_back(feature);
+  }
+
+  std::string Frame::toString() const {
     std::string result;
     for (const Feature& feature : features) {
       result += feature.toString() + ";";
@@ -20,15 +31,14 @@ namespace Common {
     return result;
   }
 
-  std::unique_ptr<Frame> Frame::fromString(const std::string& stringFormatted)
-  {
-    std::unique_ptr<Frame> result = std::make_unique<Frame>();
+  Frame Frame::fromString(const std::string& stringFormatted) {
     std::stringstream stream(stringFormatted);
     std::string featureString;
+    std::vector<Feature> features;
     while (std::getline(stream, featureString, ';')) {
-      result->features.push_back(Feature::fromString(featureString));
+      features.push_back(Feature::fromString(featureString));
     }
-    return result;
+    return Frame(move(features));
   }
-
+  
 } // namespace FeatureExtraction

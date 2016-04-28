@@ -71,24 +71,24 @@ TEST_F(RoniDAOTest, load_GIVEN_valid_file_THEN_converts_content) {
   ASSERT_EQ(2, result.size());
 
   Common::Region firstRegion = result.at(0);
-  ASSERT_EQ(1, firstRegion.topLeft.x);
-  ASSERT_EQ(2, firstRegion.topLeft.y);
-  ASSERT_EQ(3, firstRegion.topRight.x);
-  ASSERT_EQ(4, firstRegion.topRight.y);
-  ASSERT_EQ(5, firstRegion.bottomLeft.x);
-  ASSERT_EQ(6, firstRegion.bottomLeft.y);
-  ASSERT_EQ(7, firstRegion.bottomRight.x);
-  ASSERT_EQ(8, firstRegion.bottomRight.y);
+  ASSERT_EQ(1, firstRegion.getTopLeft().getX());
+  ASSERT_EQ(2, firstRegion.getTopLeft().getY());
+  ASSERT_EQ(3, firstRegion.getTopRight().getX());
+  ASSERT_EQ(4, firstRegion.getTopRight().getY());
+  ASSERT_EQ(5, firstRegion.getBottomLeft().getX());
+  ASSERT_EQ(6, firstRegion.getBottomLeft().getY());
+  ASSERT_EQ(7, firstRegion.getBottomRight().getX());
+  ASSERT_EQ(8, firstRegion.getBottomRight().getY());
 
   Common::Region secondRegion = result.at(1);
-  ASSERT_EQ(9, secondRegion.topLeft.x);
-  ASSERT_EQ(10, secondRegion.topLeft.y);
-  ASSERT_EQ(11, secondRegion.topRight.x);
-  ASSERT_EQ(12, secondRegion.topRight.y);
-  ASSERT_EQ(13, secondRegion.bottomLeft.x);
-  ASSERT_EQ(14, secondRegion.bottomLeft.y);
-  ASSERT_EQ(15, secondRegion.bottomRight.x);
-  ASSERT_EQ(16, secondRegion.bottomRight.y);
+  ASSERT_EQ(9, secondRegion.getTopLeft().getX());
+  ASSERT_EQ(10, secondRegion.getTopLeft().getY());
+  ASSERT_EQ(11, secondRegion.getTopRight().getX());
+  ASSERT_EQ(12, secondRegion.getTopRight().getY());
+  ASSERT_EQ(13, secondRegion.getBottomLeft().getX());
+  ASSERT_EQ(14, secondRegion.getBottomLeft().getY());
+  ASSERT_EQ(15, secondRegion.getBottomRight().getX());
+  ASSERT_EQ(16, secondRegion.getBottomRight().getY());
 }
 
 TEST_F(RoniDAOTest, load_GIVEN_recording_filename_THEN_uses_same_base_name) {

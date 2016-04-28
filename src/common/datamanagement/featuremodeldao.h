@@ -32,13 +32,13 @@ namespace Common {
     virtual ~FeatureModelDAO();
 
   public:
-    std::vector<std::unique_ptr<FeatureModel>> load(const std::string& simulationName) const;
+    std::vector<FeatureModel> load(const std::string& simulationName) const;
     void save(const FeatureModel& featureModel) const;
 
   private:
     std::string selectionString(const std::string& simulationName) const;
-    std::vector<std::unique_ptr<FeatureModel>> toFeatureModels(const std::string& simulationName, Cursor& cursor) const;
-    std::unique_ptr<FeatureModel> currentRowToFeatureModel(const std::string& simulationName, const Cursor& cursor) const;
+    std::vector<FeatureModel> toFeatureModels(const std::string& simulationName, Cursor& cursor) const;
+    FeatureModel currentRowToFeatureModel(const std::string& simulationName, const Cursor& cursor) const;
     std::vector<TableField> toRow(const FeatureModel& featureModel) const;
 
   private:

@@ -12,10 +12,13 @@ namespace Common {
     Position(const Coordinates& coordinates, uint16_t theta);
 
   public:
+    uint32_t getX() const;
+    uint32_t getY() const;
+    uint16_t getTheta() const;
     std::string toString() const;
     static Position fromString(const std::string& stringFormatted);
 
-  public:
+  private:
     const Coordinates coordinates;
     const uint16_t theta = 0;
   };

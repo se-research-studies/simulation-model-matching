@@ -5,18 +5,18 @@
 
 TEST(FrameTest, toString) {
   Common::Frame frame;
-  frame.features.push_back(Common::Feature({1, 2}, 3));
-  frame.features.push_back(Common::Feature({4, 5}, 6));
+  frame.addFeature(Common::Feature({1, 2}, 3));
+  frame.addFeature(Common::Feature({4, 5}, 6));
   ASSERT_EQ("{1,2,3};{4,5,6}", frame.toString());
 }
 
 TEST(FrameTest, fromString) {
-  std::unique_ptr<Common::Frame> frame = Common::Frame::fromString("{1,2,3};{4,5,6}");
-  ASSERT_EQ(2, frame->features.size());
-  ASSERT_EQ(1, frame->features.at(0).coordinates.x);
-  ASSERT_EQ(2, frame->features.at(0).coordinates.y);
-  ASSERT_EQ(3, frame->features.at(0).radius);
-  ASSERT_EQ(4, frame->features.at(1).coordinates.x);
-  ASSERT_EQ(5, frame->features.at(1).coordinates.y);
-  ASSERT_EQ(6, frame->features.at(1).radius);
+  Common::Frame frame = Common::Frame::fromString("{1,2,3};{4,5,6}");
+  ASSERT_EQ(2, frame.getFeatureCount());
+  ASSERT_EQ(1, frame.getFeatures().at(0).getX());
+  ASSERT_EQ(2, frame.getFeatures().at(0).getY());
+  ASSERT_EQ(3, frame.getFeatures().at(0).getRadius());
+  ASSERT_EQ(4, frame.getFeatures().at(1).getX());
+  ASSERT_EQ(5, frame.getFeatures().at(1).getY());
+  ASSERT_EQ(6, frame.getFeatures().at(1).getRadius());
 }

@@ -10,8 +10,20 @@ namespace Common {
     : coordinates(coordinates), theta(theta) {
   }
 
+  uint32_t Position::getX() const {
+    return coordinates.getX();
+  }
+
+  uint32_t Position::getY() const {
+    return coordinates.getY();
+  }
+
+  uint16_t Position::getTheta() const {
+    return theta;
+  }
+
   std::string Position::toString() const {
-    return "{" + std::to_string(coordinates.x) + "," + std::to_string(coordinates.y) + "," + std::to_string(theta) + "}";
+    return "{" + std::to_string(coordinates.getX()) + "," + std::to_string(coordinates.getY()) + "," + std::to_string(theta) + "}";
   }
 
   Position Position::fromString(const std::string& stringFormatted) {

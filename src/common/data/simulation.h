@@ -7,15 +7,15 @@
 
 namespace Common {
 
-  struct Simulation
-  {
+  class Simulation {
+  public:
     Simulation(const std::string& filename);
-    Simulation(Simulation&& other);
 
     Simulation(const Simulation&) = delete;
 
+  private:
     const std::string filename;
-    std::vector<std::unique_ptr<FeatureModel>> featureModels;
+    std::vector<FeatureModel> featureModels;
   };
 
 } // namespace FeatureExtraction

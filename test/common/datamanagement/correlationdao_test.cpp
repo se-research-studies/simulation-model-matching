@@ -67,24 +67,24 @@ TEST_F(CorrelationDAOTest, load_GIVEN_valid_file_THEN_converts_content) {
   ASSERT_EQ(1, result.count("recFile2.rec"));
 
   Common::Correlation firstCorrelation = result.at("recFile1.rec");
-  ASSERT_EQ(4, firstCorrelation.startFrame);
-  ASSERT_EQ(15, firstCorrelation.endFrame);
-  ASSERT_EQ(123, firstCorrelation.startPosition.coordinates.x);
-  ASSERT_EQ(456, firstCorrelation.startPosition.coordinates.y);
-  ASSERT_EQ(78, firstCorrelation.startPosition.theta);
-  ASSERT_EQ(901, firstCorrelation.endPosition.coordinates.x);
-  ASSERT_EQ(234, firstCorrelation.endPosition.coordinates.y);
-  ASSERT_EQ(56, firstCorrelation.endPosition.theta);
+  ASSERT_EQ(4, firstCorrelation.getStartFrame());
+  ASSERT_EQ(15, firstCorrelation.getEndFrame());
+  ASSERT_EQ(123, firstCorrelation.getStartPosition().getX());
+  ASSERT_EQ(456, firstCorrelation.getStartPosition().getY());
+  ASSERT_EQ(78, firstCorrelation.getStartPosition().getTheta());
+  ASSERT_EQ(901, firstCorrelation.getEndPosition().getX());
+  ASSERT_EQ(234, firstCorrelation.getEndPosition().getY());
+  ASSERT_EQ(56, firstCorrelation.getEndPosition().getTheta());
 
   Common::Correlation secondCorrelation = result.at("recFile2.rec");
-  ASSERT_EQ(1, secondCorrelation.startFrame);
-  ASSERT_EQ(12, secondCorrelation.endFrame);
-  ASSERT_EQ(876, secondCorrelation.startPosition.coordinates.x);
-  ASSERT_EQ(543, secondCorrelation.startPosition.coordinates.y);
-  ASSERT_EQ(21, secondCorrelation.startPosition.theta);
-  ASSERT_EQ(111, secondCorrelation.endPosition.coordinates.x);
-  ASSERT_EQ(222, secondCorrelation.endPosition.coordinates.y);
-  ASSERT_EQ(333, secondCorrelation.endPosition.theta);
+  ASSERT_EQ(1, secondCorrelation.getStartFrame());
+  ASSERT_EQ(12, secondCorrelation.getEndFrame());
+  ASSERT_EQ(876, secondCorrelation.getStartPosition().getX());
+  ASSERT_EQ(543, secondCorrelation.getStartPosition().getY());
+  ASSERT_EQ(21, secondCorrelation.getStartPosition().getTheta());
+  ASSERT_EQ(111, secondCorrelation.getEndPosition().getX());
+  ASSERT_EQ(222, secondCorrelation.getEndPosition().getY());
+  ASSERT_EQ(333, secondCorrelation.getEndPosition().getTheta());
 }
 
 TEST_F(CorrelationDAOTest, load_GIVEN_simulation_filename_THEN_uses_same_base_name) {

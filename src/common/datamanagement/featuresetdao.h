@@ -22,15 +22,15 @@ namespace Common {
     virtual ~FeatureSetDAO();
 
   public:
-    std::unique_ptr<FeatureSet> load(const std::string& recordingName) const;
-    std::unique_ptr<FeatureSet> load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const;
-    void save(FeatureSet& featureSet) const;
+    FeatureSet load(const std::string& recordingName) const;
+    FeatureSet load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const;
+    void save(const FeatureSet& featureSet) const;
 
   private:
     std::string selectionString(const std::string& recordingName) const;
     std::string selectionString(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const;
-    std::unique_ptr<FeatureSet> toFeatureSet(const std::string& recordingName, Cursor& cursor) const;
-    std::vector<TableField> toRow(const std::string& recordingName, const std::pair<const uint32_t, std::unique_ptr<Frame>>& frame) const;
+    FeatureSet toFeatureSet(const std::string& recordingName, Cursor& cursor) const;
+    std::vector<TableField> toRow(const std::string& recordingName, const std::pair<const uint32_t, Frame>& frame) const;
   };
 
 } // namespace FeatureExtraction

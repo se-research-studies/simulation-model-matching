@@ -11,20 +11,22 @@ namespace Common {
   class FeatureSet {
   public:
     FeatureSet(const std::string recordingName);
-    FeatureSet(FeatureSet&& other);
+    FeatureSet(FeatureSet&& other) = default;
 
+  public:
     FeatureSet(const FeatureSet&) = delete;
+    Feature& operator=(const FeatureSet&) = delete;
 
   public:
     std::string getRecordingName() const;
     size_t getFrameCount() const;
-    Frame* getFrame(uint32_t index) const;
-    const std::map<uint32_t, std::unique_ptr<Frame>>& getFrames() const;
-    void addFrame(uint32_t index, std::unique_ptr<Frame> frame);
+    const Frame& getFrame(uint32_t index) const;
+    const std::map<uint32_t, Frame>& getFrames() const;
+    void addFrame(uint32_t index, Frame&& frame);
 
   private:
     const std::string recordingName;
-    std::map<uint32_t, std::unique_ptr<Frame>> frames;
+    std::map<uint32_t, Frame> frames;
     std::vector<Region> regionsOfNoInterest;
   };
 
