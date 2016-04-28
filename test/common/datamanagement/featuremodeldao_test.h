@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <FeatureSimulationCommon/DataManagement/FeatureModelDAO>
+#include <FeatureSimulation/Common/DataManagement/FeatureModelDAO>
 
 class FeatureModelDAOTest : public ::testing::Test {
 protected:

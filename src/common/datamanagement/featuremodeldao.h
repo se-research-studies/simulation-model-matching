@@ -1,9 +1,9 @@
 #pragma once
 
-#include <FeatureSimulationCommon/Data/FeatureModel>
-#include <FeatureSimulationCommon/DataManagement/Cursor>
-#include <FeatureSimulationCommon/DataManagement/FeatureSetDAO>
-#include <FeatureSimulationCommon/DataManagement/TableField>
+#include <FeatureSimulation/Common/Data/FeatureModel>
+#include <FeatureSimulation/Common/DataManagement/Cursor>
+#include <FeatureSimulation/Common/DataManagement/FeatureSetDAO>
+#include <FeatureSimulation/Common/DataManagement/TableField>
 
 namespace Common {
 

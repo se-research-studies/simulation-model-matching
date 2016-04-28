@@ -5,7 +5,7 @@
 
 #include <jsoncpp/json/json.h>
 
-#include <FeatureSimulationCommon/Data/Correlation>
+#include <FeatureSimulation/Common/Data/Correlation>
 
 namespace Common {
 

@@ -1,6 +1,6 @@
 #include "position_test.h"
 
-#include <FeatureSimulationCommon/Data/Position>
+#include <FeatureSimulation/Common/Data/Position>
 
 TEST(PositionTest, toString) {
   Common::Position position({1, 2}, 3);

@@ -3,8 +3,8 @@
 #include <memory>
 #include <map>
 
-#include <FeatureSimulationCommon/Data/Frame>
-#include <FeatureSimulationCommon/Data/Region>
+#include <FeatureSimulation/Common/Data/Frame>
+#include <FeatureSimulation/Common/Data/Region>
 
 namespace Common {
 

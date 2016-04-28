@@ -1,7 +1,7 @@
 #include "frame_test.h"
 
-#include <FeatureSimulationCommon/Data/Feature>
-#include <FeatureSimulationCommon/Data/Frame>
+#include <FeatureSimulation/Common/Data/Feature>
+#include <FeatureSimulation/Common/Data/Frame>
 
 TEST(FrameTest, toString) {
   Common::Frame frame;

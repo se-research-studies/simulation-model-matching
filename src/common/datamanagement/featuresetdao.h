@@ -1,8 +1,8 @@
 #pragma once
 
-#include <FeatureSimulationCommon/Data/FeatureSet>
-#include <FeatureSimulationCommon/DataManagement/Cursor>
-#include <FeatureSimulationCommon/DataManagement/TableField>
+#include <FeatureSimulation/Common/Data/FeatureSet>
+#include <FeatureSimulation/Common/DataManagement/Cursor>
+#include <FeatureSimulation/Common/DataManagement/TableField>
 
 namespace Common {
 

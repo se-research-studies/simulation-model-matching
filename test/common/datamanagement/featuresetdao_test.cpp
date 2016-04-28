@@ -1,6 +1,6 @@
 #include "featuresetdao_test.h"
 
-#include <FeatureSimulationCommon/DataManagement/Database>
+#include <FeatureSimulation/Common/DataManagement/Database>
 
 void FeatureSetDAOTest::SetUp() {
   Common::Database::getInstance().deleteRows(Common::FeatureSetsContract::TABLENAME, "");

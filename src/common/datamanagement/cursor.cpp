@@ -1,6 +1,6 @@
 #include "cursor.h"
 
-#include <FeatureSimulationCommon/DataManagement/Database>
+#include <FeatureSimulation/Common/DataManagement/Database>
 
 namespace Common {
 

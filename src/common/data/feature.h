@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 
-#include <FeatureSimulationCommon/Data/Coordinates>
+#include <FeatureSimulation/Common/Data/Coordinates>
 
 namespace Common {
 

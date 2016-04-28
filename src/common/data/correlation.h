@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <FeatureSimulationCommon/Data/Position>
+#include <FeatureSimulation/Common/Data/Position>
 
 namespace Common {
 

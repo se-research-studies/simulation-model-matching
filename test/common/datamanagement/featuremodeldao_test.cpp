@@ -1,7 +1,7 @@
 #include "featuremodeldao_test.h"
 
-#include <FeatureSimulationCommon/MakeUnique>
-#include <FeatureSimulationCommon/DataManagement/Database>
+#include <FeatureSimulation/Common/MakeUnique>
+#include <FeatureSimulation/Common/DataManagement/Database>
 
 void FeatureModelDAOTest::SetUp() {
   Common::Database::getInstance().deleteRows(Common::FeatureModelsContract::TABLENAME, "");

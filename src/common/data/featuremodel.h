@@ -3,8 +3,8 @@
 #include <cstdint>
 #include <memory>
 
-#include <FeatureSimulationCommon/Data/Correlation>
-#include <FeatureSimulationCommon/Data/FeatureSet>
+#include <FeatureSimulation/Common/Data/Correlation>
+#include <FeatureSimulation/Common/Data/FeatureSet>
 
 namespace Common {
 

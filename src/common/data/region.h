@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FeatureSimulationCommon/Data/Coordinates>
+#include <FeatureSimulation/Common/Data/Coordinates>
 
 namespace Common {
 

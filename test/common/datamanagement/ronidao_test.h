@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <FeatureSimulationCommon/DataManagement/RoniDAO>
+#include <FeatureSimulation/Common/DataManagement/RoniDAO>
 
 class RoniDAOTest : public ::testing::Test {
 protected:

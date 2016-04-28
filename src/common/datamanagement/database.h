@@ -5,8 +5,8 @@
 
 #include <sqlite3.h>
 
-#include <FeatureSimulationCommon/DataManagement/Cursor>
-#include <FeatureSimulationCommon/DataManagement/TableField>
+#include <FeatureSimulation/Common/DataManagement/Cursor>
+#include <FeatureSimulation/Common/DataManagement/TableField>
 
 namespace Common {
 

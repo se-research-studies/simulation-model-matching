@@ -1,6 +1,6 @@
 #include "feature_test.h"
 
-#include <FeatureSimulationCommon/Data/Feature>
+#include <FeatureSimulation/Common/Data/Feature>
 
 TEST(FeatureTest, toString) {
   Common::Feature feature({1, 2}, 3);

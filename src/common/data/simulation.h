@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include <FeatureSimulationCommon/Data/FeatureModel>
+#include <FeatureSimulation/Common/Data/FeatureModel>
 
 namespace Common {
 

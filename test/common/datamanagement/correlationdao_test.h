@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <FeatureSimulationCommon/DataManagement/CorrelationDAO>
+#include <FeatureSimulation/Common/DataManagement/CorrelationDAO>
 
 class CorrelationDAOTest : public ::testing::Test {
 protected:
