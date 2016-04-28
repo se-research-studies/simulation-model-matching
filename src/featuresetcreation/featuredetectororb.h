@@ -8,6 +8,9 @@ namespace FeatureSetCreation {
   public:
     FeatureDetectorORB();
     virtual ~FeatureDetectorORB();
+
+  public:
+    Common::Frame detectFeatures(const cv::Mat& image) override;
   };
 
 } // namespace FeatureSetCreation
