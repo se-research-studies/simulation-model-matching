@@ -35,7 +35,7 @@ namespace Common {
     std::string recordingName = cursor.getString(FeatureModelsContract::INDEX_RECORDINGNAME);
     uint32_t startFrame = cursor.getUInt(FeatureModelsContract::INDEX_STARTFRAME);
     uint32_t endFrame = cursor.getUInt(FeatureModelsContract::INDEX_ENDFRAME);
-    Correlation correlation(startFrame, endFrame, Position::fromString(startPosition), Position::fromString(endPosition));
+    Correlation correlation(startFrame, endFrame, Position::fromSqlString(startPosition), Position::fromSqlString(endPosition));
     FeatureSet featureSet = featureSetDao.load(recordingName, startFrame, endFrame);
     return FeatureModel(simulationName, correlation, permutation, std::move(featureSet));
   }
@@ -49,8 +49,8 @@ namespace Common {
     std::vector<TableField> result;
     result.push_back({FeatureModelsContract::COL_SIMULATIONNAME, featureModel.getSimulationName()});
     result.push_back({FeatureModelsContract::COL_PERMUTATION, std::to_string(featureModel.getPermutation())});
-    result.push_back({FeatureModelsContract::COL_STARTPOSITION, featureModel.getCorrelation().getStartPosition().toString()});
-    result.push_back({FeatureModelsContract::COL_ENDPOSITION, featureModel.getCorrelation().getEndPosition().toString()});
+    result.push_back({FeatureModelsContract::COL_STARTPOSITION, featureModel.getCorrelation().getStartPosition().toSqlString()});
+    result.push_back({FeatureModelsContract::COL_ENDPOSITION, featureModel.getCorrelation().getEndPosition().toSqlString()});
     result.push_back({FeatureModelsContract::COL_RECORDINGNAME, featureModel.getFeatureSet().getRecordingName()});
     result.push_back({FeatureModelsContract::COL_STARTFRAME, std::to_string(featureModel.getCorrelation().getStartFrame())});
     result.push_back({FeatureModelsContract::COL_ENDFRAME, std::to_string(featureModel.getCorrelation().getEndFrame())});

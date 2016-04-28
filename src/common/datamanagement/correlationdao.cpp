@@ -50,7 +50,7 @@ namespace Common {
     uint32_t x = value["x"].asUInt();
     uint32_t y = value["y"].asUInt();
     uint16_t theta = value["theta"].asUInt();
-    return Position({ x, y }, theta);
+    return Position(x, y, theta);
   }
 
 } // namespace FeatureExtraction

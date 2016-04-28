@@ -30,7 +30,7 @@ namespace Common {
     std::string selectionString(const std::string& recordingName) const;
     std::string selectionString(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const;
     FeatureSet toFeatureSet(const std::string& recordingName, Cursor& cursor) const;
-    std::vector<TableField> toRow(const std::string& recordingName, const std::pair<const uint32_t, Frame>& frame) const;
+    std::vector<TableField> toRow(const std::string& recordingName, const std::pair<const uint32_t, DirtyFrame>& frame) const;
   };
 
 } // namespace FeatureExtraction

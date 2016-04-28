@@ -14,18 +14,18 @@ namespace Common {
     return frames.size();
   }
 
-  const Frame& FeatureSet::getFrame(uint32_t index) const {
+  const DirtyFrame& FeatureSet::getFrame(uint32_t index) const {
     if (frames.count(index) == 0) {
       throw std::out_of_range("There is no frame with index " + std::to_string(index));
     }
     return frames.at(index);
   }
 
-  const std::map<uint32_t, Frame>& FeatureSet::getFrames() const {
+  const std::map<uint32_t, DirtyFrame>& FeatureSet::getFrames() const {
     return frames;
   }
 
-  void FeatureSet::addFrame(uint32_t index, Frame&& frame) {
+  void FeatureSet::addFrame(uint32_t index, DirtyFrame&& frame) {
     frames.insert(std::make_pair(index, std::move(frame)));
   }
 

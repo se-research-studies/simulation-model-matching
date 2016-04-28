@@ -34,7 +34,7 @@ namespace Common {
     FeatureSet result(recordingName);
     while (cursor.moveToNext()) {
       std::string features = cursor.getString(FeatureSetsContract::INDEX_FEATURES);
-      result.addFrame(cursor.getUShort(FeatureSetsContract::INDEX_FRAME), Frame::fromString(features));
+      result.addFrame(cursor.getUShort(FeatureSetsContract::INDEX_FRAME), DirtyFrame::fromSqlString(features));
     }
     return result;
   }
@@ -45,11 +45,11 @@ namespace Common {
     }
   }
 
-  std::vector<TableField> FeatureSetDAO::toRow(const std::string& recordingName, const std::pair<const uint32_t, Frame>& frame) const {
+  std::vector<TableField> FeatureSetDAO::toRow(const std::string& recordingName, const std::pair<const uint32_t, DirtyFrame>& frame) const {
     std::vector<TableField> result;
     result.push_back({FeatureSetsContract::COL_RECORDINGNAME, recordingName});
     result.push_back({FeatureSetsContract::COL_FRAME, std::to_string(frame.first)});
-    result.push_back({FeatureSetsContract::COL_FEATURES, frame.second.toString()});
+    result.push_back({FeatureSetsContract::COL_FEATURES, frame.second.toSqlString()});
     return result;
   }
 

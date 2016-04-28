@@ -26,7 +26,8 @@ HEADERS += \
     src/common/datamanagement/cursor.h \
     src/common/makeunique.h \
     src/common/datamanagement/tablefield.h \
-    src/common/utils.h
+    src/common/utils.h \
+    src/common/settings.h
 
 SOURCES += \
     src/common/data/coordinates.cpp \
@@ -45,4 +46,5 @@ SOURCES += \
     src/common/datamanagement/database.cpp \
     src/common/datamanagement/cursor.cpp \
     src/common/datamanagement/tablefield.cpp \
-    src/common/utils.cpp
+    src/common/utils.cpp \
+    src/common/settings.cpp

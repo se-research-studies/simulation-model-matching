@@ -1,7 +1,5 @@
 #include "utils.h"
 
-#include <stdexcept>
-
 namespace Common {
 
   std::string Utils::removeBraces(std::string from) {

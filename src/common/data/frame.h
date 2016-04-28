@@ -7,23 +7,23 @@
 
 namespace Common {
 
-  class Frame {
+  class DirtyFrame {
   public:
-    Frame(std::vector<Feature>&& features);
-    Frame() = default;
-    Frame(Frame&& other) = default;
+    DirtyFrame(std::vector<Feature>&& features);
+    DirtyFrame() = default;
+    DirtyFrame(DirtyFrame&& other) = default;
 
   public:
-    Frame(const Frame&) = delete;
-    Frame& operator=(const Frame&) = delete;
+    DirtyFrame(const DirtyFrame&) = delete;
+    DirtyFrame& operator=(const DirtyFrame&) = delete;
 
   public:    
     const std::vector<Feature>& getFeatures() const;
     uint32_t getFeatureCount() const;
     void addFeature(Feature&& feature);
 
-    std::string toString() const;
-    static Frame fromString(const std::string& stringFormatted);
+    std::string toSqlString() const;
+    static DirtyFrame fromSqlString(const std::string& stringFormatted);
 
   private:
     std::vector<Feature> features;
