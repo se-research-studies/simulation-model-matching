@@ -1,5 +1,7 @@
 #pragma once
 
+#include <opendavinci/odtools/player/Player.h>
+
 #include <FeatureSimulation/Common/Data/FeatureSet>
 #include <FeatureSimulation/Common/DataManagement/FeatureSetDAO>
 #include <FeatureSimulation/Common/DataManagement/RoniDAO>
@@ -25,6 +27,13 @@ namespace FeatureSetCreation {
 
   public:
     void createFeatureSet();
+
+  private:
+    cv::Mat createMaskFromRonis(odtools::player::Player& player) const;
+    std::vector<Common::Region> loadRonis() const;
+    cv::Size getImageSize(odtools::player::Player& player) const;
+    cv::Mat readNextImage(odcore::data::Container container) const;
+
 
   private:
     uint32_t PLAYER_MEMORYSEGMENT_SIZE = 2800000;
