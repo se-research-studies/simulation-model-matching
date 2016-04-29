@@ -27,7 +27,6 @@ namespace Common {
   private:
     const std::string recordingName;
     std::map<uint32_t, DirtyFrame> frames;
-    std::vector<Region> regionsOfNoInterest;
   };
 
 } // namespace FeatureExtraction
