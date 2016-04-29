@@ -8,6 +8,7 @@
 namespace FeatureSetCreation {
 
   struct OrbSettings {
+    bool guiEnabled = true;
     int nFeatures = 500;
     float scaleFactor = 1.2f;
     int nLevels = 8;
@@ -26,6 +27,14 @@ namespace FeatureSetCreation {
 
   public:
     Common::DirtyFrame detectFeaturesORB(const cv::Mat& image, const OrbSettings& settings);
+
+  private:
+    cv::Mat getAnalyzableImage(const cv::Mat& sourceImage) const;
+    bool isGrayscale(const cv::Mat& image) const;
+    std::vector<cv::KeyPoint> findKeyPointsWithORB
+    (const cv::Mat& image, const OrbSettings& settings) const;
+    void showKeyPoints(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const;
+    Common::DirtyFrame convertToDirtyFrame(const std::vector<cv::KeyPoint>& keyPoints) const;
   };
 
 } // namespace FeatureSetCreation

@@ -13,9 +13,9 @@ namespace Common {
     template<typename TargetInt, typename SourceInt>
     TargetInt to(SourceInt from) {
       TargetInt result = static_cast<TargetInt>(from);
-      if (result != from) {
-        throw std::out_of_range("Int type conversion error");
-      }
+//      if (result != from) {
+//        throw std::out_of_range("Type conversion error. From = " + std::to_string(from) + ", result = " + std::to_string(result));
+//      }
       return result;
     }
   }

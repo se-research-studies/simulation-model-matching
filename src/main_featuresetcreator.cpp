@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 
   try {
     FeatureSetCreation::FeatureSetCreator featureSetCreator;
-    featureSetCreator.createFeatureSet("/home/sebastian/Uni/Bachelorarbeit/Code/bin/straightroad.rec");
+    featureSetCreator.createFeatureSet("/home/sebastian/Uni/Bachelorarbeit/Code/resources/straightroad.rec");
   } catch (std::exception& e) {
     std::cerr << e.what();
   }

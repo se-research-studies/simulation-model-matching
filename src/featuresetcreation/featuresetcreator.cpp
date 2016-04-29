@@ -47,7 +47,7 @@ namespace FeatureSetCreation {
     }
 
     Common::FeatureSetDAO dao;
-    dao.save(result);
+    //dao.save(result);
   }
 
 } // namespace FeatureCreation
