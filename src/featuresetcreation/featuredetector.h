@@ -23,7 +23,7 @@ namespace FeatureSetCreation {
 
   private:
     void subtractLanes(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const;
-    void showKeyPoints(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const;
+    void showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints) const;
     Common::DirtyFrame convertToDirtyFrame(const std::vector<cv::KeyPoint>& keyPoints) const;
 
   private:

@@ -21,7 +21,7 @@ namespace FeatureSetCreation {
     std::vector<cv::KeyPoint> keyPoints = findKeyPoints(image, mask);
     subtractLanes(image, keyPoints);
     if (guiEnabled) {
-      showKeyPoints(image, keyPoints);
+      showResults(image, mask, keyPoints);
     }
     return convertToDirtyFrame(keyPoints);
   }
@@ -31,10 +31,12 @@ namespace FeatureSetCreation {
 
   }
 
-  void FeatureDetector::showKeyPoints(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const {
-    cv::Mat imageWithKeypoints;
-    cv::drawKeypoints(image, keyPoints, imageWithKeypoints, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
-    cv::imshow("Keypoints", imageWithKeypoints);
+  void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints) const {
+    cv::Mat completedImage;
+    cv::drawKeypoints(image, keyPoints, completedImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
+    if (!mask.empty()) {
+    }
+    cv::imshow("Keypoints", completedImage);
     cv::waitKey(50);
   }
 
