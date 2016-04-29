@@ -30,7 +30,7 @@ namespace FeatureSetCreation {
       odcore::data::Container container = player.getNextContainerToBeSent();
       if (container.getDataType() == odcore::data::image::SharedImage::ID()) {
         cv::Mat image = readNextImage(container);
-        result.addFrame(i, featureDetector->detectFeatures(image, cv::Mat()));
+        result.addFrame(i, featureDetector->detectFeatures(image, mask));
       }
     }
 
@@ -42,7 +42,7 @@ namespace FeatureSetCreation {
     std::vector<Common::Region> ronis = loadRonis();
     if (ronis.size() > 0) {
       cv::Size imageSize = getImageSize(player);
-      mask = cv::Mat(imageSize, CV_8U, cv::Scalar(255));
+      mask = cv::Mat(imageSize, CV_8U, cv::Scalar(255, 8, 0));
       for (const Common::Region& roni : ronis) {
         std::vector<cv::Point> vertices;
         std::vector<cv::Point> polygon;

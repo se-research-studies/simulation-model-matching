@@ -26,16 +26,17 @@ namespace FeatureSetCreation {
     return convertToDirtyFrame(keyPoints);
   }
 
-  void FeatureDetector::subtractLanes(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const
-  {
+  void FeatureDetector::subtractLanes(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const {
 
   }
 
   void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints) const {
     cv::Mat completedImage;
-    cv::drawKeypoints(image, keyPoints, completedImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
     if (!mask.empty()) {
+      cv::add(image, mask, completedImage);
+      //image.copyTo(completedImage, mask);
     }
+    cv::drawKeypoints(image, keyPoints, completedImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
     cv::imshow("Keypoints", completedImage);
     cv::waitKey(50);
   }
