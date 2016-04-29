@@ -10,6 +10,9 @@ namespace FeatureSetCreation {
                        int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold);
     virtual ~FeatureDetectorORB();
 
+  public:
+    void validateSettings() const override;
+
   protected:
     std::vector<cv::KeyPoint> findKeyPoints(const cv::Mat& image, const cv::Mat& mask) override;
 

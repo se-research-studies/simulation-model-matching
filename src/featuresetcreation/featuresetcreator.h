@@ -16,6 +16,7 @@ namespace FeatureSetCreation {
     template <typename... Settings> void init(const std::string detectionMethod, Settings&&... settings) {
       if (detectionMethod == "ORB") {
         featureDetector.reset(new FeatureDetectorORB(std::forward<Settings>(settings)...));
+        featureDetector->validateSettings();
       }
     }
 
