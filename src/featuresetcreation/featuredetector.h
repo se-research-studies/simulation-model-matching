@@ -7,34 +7,26 @@
 
 namespace FeatureSetCreation {
 
-  struct OrbSettings {
-    bool guiEnabled = true;
-    int nFeatures = 500;
-    float scaleFactor = 1.2f;
-    int nLevels = 8;
-    int edgeThreshold = 31;
-    int firstLevel = 0;
-    int WTA_K = 2;
-    int scoreType = cv::ORB::HARRIS_SCORE;
-    int patchSize = 31;
-    int fastThreshold = 20;
-  };
-
   class FeatureDetector {
+  protected:
+    FeatureDetector(bool guiEnabled);
+
   public:
-    FeatureDetector();
     virtual ~FeatureDetector();
 
   public:
-    Common::DirtyFrame detectFeaturesORB(const cv::Mat& image, const OrbSettings& settings);
+    Common::DirtyFrame detectFeatures(const cv::Mat& image, const cv::Mat& mask);
+
+  protected:
+    virtual std::vector<cv::KeyPoint> findKeyPoints(const cv::Mat& image, const cv::Mat& mask) = 0;
 
   private:
-    cv::Mat getAnalyzableImage(const cv::Mat& sourceImage) const;
-    bool isGrayscale(const cv::Mat& image) const;
-    std::vector<cv::KeyPoint> findKeyPointsWithORB
-    (const cv::Mat& image, const OrbSettings& settings) const;
+    void subtractLanes(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const;
     void showKeyPoints(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const;
     Common::DirtyFrame convertToDirtyFrame(const std::vector<cv::KeyPoint>& keyPoints) const;
+
+  private:
+    bool guiEnabled = true;
   };
 
 } // namespace FeatureSetCreation

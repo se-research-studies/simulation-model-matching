@@ -13,7 +13,6 @@ namespace Common {
 
   std::vector<Region> RoniDAO::load(const std::string recordingFilename) const {
     std::vector<Region> result;
-
     Json::Value root = readFile(toRoniFilename(recordingFilename));
     Json::Value regionArray = root["regions"];
     for (auto iterator = regionArray.begin(); iterator != regionArray.end(); ++iterator) {

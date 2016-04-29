@@ -13,10 +13,12 @@ LIBS += -lopendavinci -lopendlv -lautomotivedata
 SOURCES += \
     src/main_featuresetcreator.cpp \
     src/featuresetcreation/featuredetector.cpp \
-    src/featuresetcreation/featuresetcreator.cpp
+    src/featuresetcreation/featuresetcreator.cpp \
+    src/featuresetcreation/featuredetectororb.cpp
 
 HEADERS += \
     src/featuresetcreation/featuredetector.h \
-    src/featuresetcreation/featuresetcreator.h
+    src/featuresetcreation/featuresetcreator.h \
+    src/featuresetcreation/featuredetectororb.h
 
 

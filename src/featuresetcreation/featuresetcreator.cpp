@@ -22,10 +22,11 @@ namespace FeatureSetCreation {
   }
 
   void FeatureSetCreator::createFeatureSet(const std::string& recordingName) {
-    FeatureDetector detector;
     Common::FeatureSet result(recordingName);
     odcore::io::URL url("file://" + recordingName);
     odtools::player::Player player(url, false, PLAYER_MEMORYSEGMENT_SIZE, PLAYER_NUMBER_OF_MEMORY_SEGMENTS, false);
+
+    // TODO: Ronis laden und in Maske umwandeln
 
     for (int i = 0; player.hasMoreData(); ++i) {
       odcore::data::Container container = player.getNextContainerToBeSent();
@@ -40,14 +41,14 @@ namespace FeatureSetCreation {
 
         cv::Mat matrix = cv::cvarrToMat(iplImage, true, true, 0);
 
-        result.addFrame(i, detector.detectFeaturesORB(matrix, OrbSettings()));
+        result.addFrame(i, featureDetector->detectFeatures(matrix, cv::Mat()));
 
         cvReleaseImage(&iplImage);
       }
     }
 
     Common::FeatureSetDAO dao;
-    //dao.save(result);
+    dao.save(result);
   }
 
 } // namespace FeatureCreation
