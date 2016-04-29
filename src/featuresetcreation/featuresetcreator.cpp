@@ -21,7 +21,7 @@ namespace FeatureSetCreation {
   FeatureSetCreator::~FeatureSetCreator() {
   }
 
-  void FeatureSetCreator::createFeatureSet(const std::string& recordingName) {
+  void FeatureSetCreator::createFeatureSet() {
     Common::FeatureSet result(recordingName);
     odcore::io::URL url("file://" + recordingName);
     odtools::player::Player player(url, false, PLAYER_MEMORYSEGMENT_SIZE, PLAYER_NUMBER_OF_MEMORY_SEGMENTS, false);
@@ -47,8 +47,7 @@ namespace FeatureSetCreation {
       }
     }
 
-    Common::FeatureSetDAO dao;
-    dao.save(result);
+    featureSetDao.save(result);
   }
 
 } // namespace FeatureCreation

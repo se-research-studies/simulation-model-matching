@@ -95,8 +95,8 @@ int main(int argc, char *argv[]) {
   recordingFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/straightroad.rec";
   try {
     FeatureSetCreation::FeatureSetCreator featureSetCreator;
-    featureSetCreator.init("ORB", /*recordingFile,*/ guiEnabled, nFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold);
-    featureSetCreator.createFeatureSet(recordingFile);
+    featureSetCreator.init("ORB", recordingFile, guiEnabled, nFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold);
+    featureSetCreator.createFeatureSet();
   } catch (std::exception& e) {
     std::cerr << e.what() << std::endl;
   }
