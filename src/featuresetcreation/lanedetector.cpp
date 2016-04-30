@@ -34,13 +34,12 @@ namespace FeatureSetCreation {
 //    }
 
     std::vector<cv::Vec4i> lines;
-      cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 30, 20);
-      for( size_t i = 0; i < lines.size(); i++ )
-      {
-        cv::Vec4i l = lines[i];
-        cv::line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
-      }
-      return lines;
+    cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 30, 20);
+    for( size_t i = 0; i < lines.size(); i++ ) {
+      cv::Vec4i l = lines[i];
+      cv::line(cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+    }
+    return lines;
   }
 
 } // namespace FeatureSetCreation
