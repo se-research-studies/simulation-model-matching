@@ -71,25 +71,21 @@ INCLUDE_DIRECTORIES (${OPENDAVINCI_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES (${AUTOMOTIVEDATA_INCLUDE_DIRS})
 # Set header files from OpenDLV.
 INCLUDE_DIRECTORIES (${OPENDLV_INCLUDE_DIRS})
+# Header for jsoncpp and sqlite3
 INCLUDE_DIRECTORIES (${JSONCPP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES (${SQLITE3_INCLUDE_DIR})
+INCLUDE_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}/include)
 # Set include directory.
 INCLUDE_DIRECTORIES(include)
 
 ###########################################################################
 # Build this project.
-FILE(GLOB_RECURSE COMMON_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/common/*.cpp")
-ADD_LIBRARY (FeatureSimulationCommon STATIC ${COMMON_SOURCES})
-FILE(GLOB_RECURSE thisproject-sources "${CMAKE_CURRENT_SOURCE_DIR}/src/featuresetcreation/*.cpp")
-ADD_LIBRARY (${PROJECT_NAME}lib-static STATIC ${thisproject-sources})
+FILE(GLOB_RECURSE thisproject-sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+ADD_LIBRARY (${PROJECT_NAME}lib STATIC ${thisproject-sources})
 ADD_EXECUTABLE (${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/src/main_featuresetcreator.cpp")
-TARGET_LINK_LIBRARIES (${PROJECT_NAME}
-               ${OPENDAVINCI_LIBRARIES}
-               ${AUTOMOTIVEDATA_LIBRARIES}
-               ${OPENDLV_LIBRARIES}
-               ${OpenCV_LIBS}
+TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${PROJECT_NAME}lib ${LIBRARIES}
 	       ${JSONCPP_LIBRARY}
-               FeatureSimulationCommon)
+               ${SQLITE3_LIBRARY}) 
 
 ###########################################################################
 # This project will not be installed.
