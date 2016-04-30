@@ -1,5 +1,6 @@
 #pragma once
 
+#include <FeatureSimulation/Common/DataManagement/DataAccessObject>
 #include <FeatureSimulation/Common/Data/FeatureSet>
 #include <FeatureSimulation/Common/DataManagement/Cursor>
 #include <FeatureSimulation/Common/DataManagement/TableField>
@@ -16,7 +17,7 @@ namespace Common {
     static const uint8_t INDEX_FEATURES = 2;
   }
 
-  class FeatureSetDAO {
+  class FeatureSetDAO : public DataAccessObject {
   public:
     FeatureSetDAO();
     virtual ~FeatureSetDAO();
@@ -25,6 +26,7 @@ namespace Common {
     FeatureSet load(const std::string& recordingName) const;
     FeatureSet load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const;
     void save(const FeatureSet& featureSet) const;
+    void deleteAll(const std::string& recordingName) const;
 
   private:
     std::string selectionString(const std::string& recordingName) const;

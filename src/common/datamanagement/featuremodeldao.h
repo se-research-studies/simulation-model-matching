@@ -1,5 +1,6 @@
 #pragma once
 
+#include <FeatureSimulation/Common/DataManagement/DataAccessObject>
 #include <FeatureSimulation/Common/Data/FeatureModel>
 #include <FeatureSimulation/Common/DataManagement/Cursor>
 #include <FeatureSimulation/Common/DataManagement/FeatureSetDAO>
@@ -25,8 +26,7 @@ namespace Common {
     static const uint8_t INDEX_ENDFRAME = 6;
   }
 
-  class FeatureModelDAO
-  {
+  class FeatureModelDAO : public DataAccessObject {
   public:
     FeatureModelDAO();
     virtual ~FeatureModelDAO();

@@ -53,4 +53,8 @@ namespace Common {
     return result;
   }
 
+  void FeatureSetDAO::deleteAll(const std::string& recordingName) const {
+    Database::getInstance().deleteRows(FeatureSetsContract::TABLENAME, FeatureSetsContract::COL_RECORDINGNAME + "='" + recordingName + "'");
+  }
+
 } // namespace FeatureExtraction
