@@ -19,26 +19,26 @@ namespace FeatureSetCreation {
 
   Common::DirtyFrame FeatureDetector::detectFeatures(const cv::Mat& image, const cv::Mat& mask) {
     std::vector<cv::KeyPoint> keyPoints = findKeyPoints(image, mask);
-    subtractLanes(image, keyPoints);
+    std::vector<cv::Vec4i> lanes = laneDetector.detectLanes(image);
+    subtractLanes(keyPoints, lanes);
     if (guiEnabled) {
-      showResults(image, mask, keyPoints);
+      showResults(image, mask, keyPoints, lanes);
     }
     return convertToDirtyFrame(keyPoints);
   }
 
-  void FeatureDetector::subtractLanes(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints) const {
-
+  void FeatureDetector::subtractLanes(const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const {
   }
 
-  void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints) const {
-    cv::Mat completedImage;
-    if (!mask.empty()) {
-      cv::add(image, mask, completedImage);
-      //image.copyTo(completedImage, mask);
+  void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const {
+    cv::Mat completedImage(image.size(), image.type(), cv::Scalar(255, 255, 255));
+    image.copyTo(completedImage, mask);
+    cv::drawKeypoints(completedImage, keyPoints, completedImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
+    for (const cv::Vec4i& line : lanes) {
+      cv::line(completedImage, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0,0,255), 3, CV_AA);
     }
-    cv::drawKeypoints(image, keyPoints, completedImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
-    cv::imshow("Keypoints", completedImage);
-    cv::waitKey(50);
+    cv::imshow("Analyzed Image", completedImage);
+    cv::waitKey(40);
   }
 
   Common::DirtyFrame FeatureDetector::convertToDirtyFrame(const std::vector<cv::KeyPoint>& keyPoints) const {
