@@ -33,7 +33,7 @@ namespace FeatureSetCreation {
     std::vector<Common::Region> loadRonis() const;
     cv::Size getImageSize(odtools::player::Player& player) const;
     cv::Mat readNextImage(odcore::data::Container container) const;
-
+    void saveFeatureSet(const Common::FeatureSet& featureSet) const;
 
   private:
     uint32_t PLAYER_MEMORYSEGMENT_SIZE = 2800000;

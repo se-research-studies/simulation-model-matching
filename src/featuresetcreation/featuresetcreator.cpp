@@ -24,15 +24,15 @@ namespace FeatureSetCreation {
     odtools::player::Player player(url, false, PLAYER_MEMORYSEGMENT_SIZE, PLAYER_NUMBER_OF_MEMORY_SEGMENTS, false);
     cv::Mat mask = createMaskFromRonis(player);
     Common::FeatureSet result(recordingName);
-    for (int i = 0; player.hasMoreData(); ++i) {
+    int frameNumber = 0;
+    while (player.hasMoreData()) {
       odcore::data::Container container = player.getNextContainerToBeSent();
       if (container.getDataType() == odcore::data::image::SharedImage::ID()) {
         cv::Mat image = readNextImage(container);
-        result.addFrame(i, featureDetector->detectFeatures(image, mask));
+        result.addFrame(frameNumber++, featureDetector->detectFeatures(image, mask));
       }
     }
-
-    featureSetDao.save(result);
+    saveFeatureSet(result);
   }
 
   cv::Mat FeatureSetCreator::createMaskFromRonis(odtools::player::Player& player) const {
@@ -84,6 +84,13 @@ namespace FeatureSetCreation {
     cv::Mat image = cv::cvarrToMat(iplImage, true, true, 0);
     cvReleaseImage(&iplImage);
     return image;
+  }
+
+  void FeatureSetCreator::saveFeatureSet(const Common::FeatureSet& featureSet) const {
+    featureSetDao.beginTransaction();
+    featureSetDao.deleteAll(recordingName);
+    featureSetDao.save(featureSet);
+    featureSetDao.endTransaction();
   }
 
 } // namespace FeatureCreation
