@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
-PROJECT (FeatureSimulationCommon)
+PROJECT (FeatureSetCreator)
 
 ###########################################################################
 
@@ -45,11 +45,24 @@ SET(OPENDLV_DIR "${CMAKE_INSTALL_PREFIX}")
 FIND_PACKAGE (OpenDLV)
 
 ###########################################################################
-# Set linking libraries to successfully link simulations.
-SET (LIBRARIES ${OPENDAVINCI_LIBRARIES}
-               ${AUTOMOTIVEDATA_LIBRARIES}
-               ${OPENDLV_LIBRARIES}
-               ${OpenCV_LIBS})
+FIND_PATH(JSONCPP_INCLUDE_DIR NAMES NAMES json/features.h PATH_SUFFIXES jsoncpp PATHS ${Jsoncpp_PKGCONF_INCLUDE_DIRS})
+FIND_LIBRARY(JSONCPP_LIBRARY NAMES jsoncpp PATHS ${Jsoncpp_PKGCONF_LIBRARY_DIRS})
+if(NOT JSONCPP_INCLUDE_DIR)
+  message(SEND_ERROR "Failed to find json/features.h")
+endif()
+if(NOT JSONCPP_LIBRARY)
+  message(SEND_ERROR "Failed to find the jsoncpp library")
+endif()
+
+FIND_PATH(SQLITE3_INCLUDE_DIR sqlite3.h)
+FIND_LIBRARY(SQLITE3_LIBRARY sqlite3)
+if(NOT SQLITE3_INCLUDE_DIR)
+  message(SEND_ERROR "Failed to find sqlite3.h")
+endif()
+if(NOT SQLITE3_LIBRARY)
+  message(SEND_ERROR "Failed to find the sqlite3 library")
+endif()
+
 
 ###########################################################################
 # Set header files from OpenDaVINCI.
@@ -58,20 +71,25 @@ INCLUDE_DIRECTORIES (${OPENDAVINCI_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES (${AUTOMOTIVEDATA_INCLUDE_DIRS})
 # Set header files from OpenDLV.
 INCLUDE_DIRECTORIES (${OPENDLV_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES (${JSONCPP_INCLUDE_DIR})
+INCLUDE_DIRECTORIES (${SQLITE3_INCLUDE_DIR})
 # Set include directory.
 INCLUDE_DIRECTORIES(include)
 
-##############
-TARGET_LINK_LIBRARIES(jsoncpp)
-##############
-
 ###########################################################################
 # Build this project.
-FILE(GLOB_RECURSE thisproject-sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+FILE(GLOB_RECURSE COMMON_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/common/*.cpp")
+ADD_LIBRARY (FeatureSimulationCommon STATIC ${COMMON_SOURCES})
+FILE(GLOB_RECURSE thisproject-sources "${CMAKE_CURRENT_SOURCE_DIR}/src/featuresetcreation/*.cpp")
 ADD_LIBRARY (${PROJECT_NAME}lib-static STATIC ${thisproject-sources})
-#ADD_EXECUTABLE (${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/apps/${PROJECT_NAME}.cpp")
 ADD_EXECUTABLE (${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/src/main_featuresetcreator.cpp")
-TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${PROJECT_NAME}lib-static ${LIBRARIES}) 
+TARGET_LINK_LIBRARIES (${PROJECT_NAME}
+               ${OPENDAVINCI_LIBRARIES}
+               ${AUTOMOTIVEDATA_LIBRARIES}
+               ${OPENDLV_LIBRARIES}
+               ${OpenCV_LIBS}
+	       ${JSONCPP_LIBRARY}
+               FeatureSimulationCommon)
 
 ###########################################################################
 # This project will not be installed.
