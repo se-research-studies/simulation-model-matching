@@ -1,4 +1,4 @@
-#include "frame.h"
+#include "dirtyframe.h"
 
 #include <sstream>
 
