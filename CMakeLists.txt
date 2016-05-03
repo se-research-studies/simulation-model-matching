@@ -95,10 +95,38 @@ ADD_LIBRARY(FeatureSetCreationLib ${FEATURESETCREATION_SOURCES} ${FEATURESETCREA
 TARGET_LINK_LIBRARIES (FeatureSetCreationLib CommonLib) 
 
 ###########################################################################
+# Build the FeatureModelCreator sources as library
+#message(STATUS "FeatureModelCreationLib base path: " ${PROJECT_SOURCE_DIR}/src/featuremodelcreation/)
+#FILE(GLOB_RECURSE FEATUREMODELCREATION_SOURCES ${PROJECT_SOURCE_DIR}/src/featuremodelcreation/*.cpp)
+#FILE(GLOB_RECURSE FEATUREMODELCREATION_HEADERS ${PROJECT_SOURCE_DIR}/src/featuremodelcreation/*.h)
+#ADD_LIBRARY(FeatureModelCreationLib ${FEATUREMODELCREATION_SOURCES} ${FEATUREMODELCREATION_HEADERS})
+#TARGET_LINK_LIBRARIES (FeatureModelCreationLib CommonLib) 
+
+###########################################################################
+# Build the SimulationGame sources as library
+#message(STATUS "SimulationGameLib base path: " ${PROJECT_SOURCE_DIR}/src/simulationgame/)
+#FILE(GLOB_RECURSE SIMULATIONGAME_SOURCES ${PROJECT_SOURCE_DIR}/src/simulationgame/*.cpp)
+#FILE(GLOB_RECURSE SIMULATIONGAME_HEADERS ${PROJECT_SOURCE_DIR}/src/simulationgame/*.h)
+#ADD_LIBRARY(SimulationGameLib ${SIMULATIONGAME_SOURCES} ${SIMULATIONGAME_HEADERS})
+#TARGET_LINK_LIBRARIES (SimulationGameLib CommonLib) 
+
+###########################################################################
 # Build createFeatureSet executable.
 message(STATUS "Main file for createFeatureSet: " ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
 ADD_EXECUTABLE (createFeatureSet ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
 TARGET_LINK_LIBRARIES (createFeatureSet FeatureSetCreationLib) 
+
+###########################################################################
+# Build createFeatureModel executable.
+#message(STATUS "Main file for createFeatureModel: " ${PROJECT_SOURCE_DIR}/src/main_featuremodelcreator.cpp)
+#ADD_EXECUTABLE (createFeatureModel ${PROJECT_SOURCE_DIR}/src/main_featuremodelcreator.cpp)
+#TARGET_LINK_LIBRARIES (createFeatureModel FeatureModelCreationLib) 
+
+###########################################################################
+# Build simulationGame executable.
+#message(STATUS "Main file for simulationGame: " ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
+#ADD_EXECUTABLE (simulationGame ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
+#TARGET_LINK_LIBRARIES (simulationGame SimulationGameLib) 
 
 ###########################################################################
 # This project will not be installed.
