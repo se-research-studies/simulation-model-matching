@@ -74,18 +74,31 @@ INCLUDE_DIRECTORIES (${OPENDLV_INCLUDE_DIRS})
 # Header for jsoncpp and sqlite3
 INCLUDE_DIRECTORIES (${JSONCPP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES (${SQLITE3_INCLUDE_DIR})
-INCLUDE_DIRECTORIES (${CMAKE_CURRENT_SOURCE_DIR}/include)
 # Set include directory.
-INCLUDE_DIRECTORIES(include)
+INCLUDE_DIRECTORIES (${PROJECT_SOURCE_DIR}/include)
+message(STATUS "Include Dir: " ${PROJECT_SOURCE_DIR}/include)
 
 ###########################################################################
-# Build this project.
-FILE(GLOB_RECURSE thisproject-sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-ADD_LIBRARY (${PROJECT_NAME}lib STATIC ${thisproject-sources})
-ADD_EXECUTABLE (${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/src/main_featuresetcreator.cpp")
-TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${PROJECT_NAME}lib ${LIBRARIES}
-	       ${JSONCPP_LIBRARY}
-               ${SQLITE3_LIBRARY}) 
+# Build the common sources as library
+message(STATUS "CommonLib base path: " ${PROJECT_SOURCE_DIR}/src/common/)
+FILE(GLOB_RECURSE COMMON_SOURCES ${PROJECT_SOURCE_DIR}/src/common/*.cpp)
+FILE(GLOB_RECURSE COMMON_HEADERS ${PROJECT_SOURCE_DIR}/src/common/*.h)
+ADD_LIBRARY(CommonLib ${COMMON_SOURCES} ${COMMON_HEADERS})
+TARGET_LINK_LIBRARIES (CommonLib ${OPENDAVINCI_LIBRARIES} ${AUTOMOTIVEDATA_LIBRARIES} ${OPENDLV_LIBRARIES} ${OpenCV_LIBS} ${JSONCPP_LIBRARY} ${SQLITE3_LIBRARY}) 
+
+###########################################################################
+# Build the FeatureSetCreator sources as library
+message(STATUS "FeatureSetCreationLib base path: " ${PROJECT_SOURCE_DIR}/src/featuresetcreation/)
+FILE(GLOB_RECURSE FEATURESETCREATION_SOURCES ${PROJECT_SOURCE_DIR}/src/featuresetcreation/*.cpp)
+FILE(GLOB_RECURSE FEATURESETCREATION_HEADERS ${PROJECT_SOURCE_DIR}/src/featuresetcreation/*.h)
+ADD_LIBRARY(FeatureSetCreationLib ${FEATURESETCREATION_SOURCES} ${FEATURESETCREATION_HEADERS})
+TARGET_LINK_LIBRARIES (FeatureSetCreationLib CommonLib) 
+
+###########################################################################
+# Build createFeatureSet executable.
+message(STATUS "Main file for createFeatureSet: " ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
+ADD_EXECUTABLE (createFeatureSet ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
+TARGET_LINK_LIBRARIES (createFeatureSet FeatureSetCreationLib) 
 
 ###########################################################################
 # This project will not be installed.
