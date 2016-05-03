@@ -20,7 +20,7 @@ HEADERS += \
 
 SOURCES += \
     test/common/datamanagement/correlationdao_test.cpp \
-    test/test_main.cpp \
+    test/main_common_test.cpp \
     test/common/datamanagement/ronidao_test.cpp \
     test/common/datamanagement/featuresetdao_test.cpp \
     test/common/datamanagement/feature_test.cpp \

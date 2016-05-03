@@ -14,7 +14,7 @@ HEADERS += \
     src/common/data/feature.h \
     src/common/data/featuremodel.h \
     src/common/data/featureset.h \
-    src/common/data/frame.h \
+    src/common/data/dirtyframe.h \
     src/common/data/position.h \
     src/common/data/region.h \
     src/common/data/simulation.h \
@@ -36,7 +36,7 @@ SOURCES += \
     src/common/data/feature.cpp \
     src/common/data/featuremodel.cpp \
     src/common/data/featureset.cpp \
-    src/common/data/frame.cpp \
+    src/common/data/dirtyframe.cpp \
     src/common/data/position.cpp \
     src/common/data/region.cpp \
     src/common/data/simulation.cpp \
