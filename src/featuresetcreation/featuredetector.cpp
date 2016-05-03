@@ -10,8 +10,8 @@
 
 namespace FeatureSetCreation {
 
-  FeatureDetector::FeatureDetector(bool guiEnabled)
-    : guiEnabled(guiEnabled) {
+  FeatureDetector::FeatureDetector(const Settings& settings)
+    : guiEnabled(settings.guiEnabled), laneDetector(settings.laneDetectionSettings) {
   }
 
   FeatureDetector::~FeatureDetector() {

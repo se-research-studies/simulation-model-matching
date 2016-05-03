@@ -10,14 +10,13 @@ namespace FeatureSetCreation {
 
   class FeatureDetector {
   protected:
-    FeatureDetector(bool guiEnabled);
+    FeatureDetector(const Settings& settings);
 
   public:
     virtual ~FeatureDetector();
 
   public:
     Common::DirtyFrame detectFeatures(const cv::Mat& image, const cv::Mat& mask);
-    virtual void validateSettings() const = 0;
 
   protected:
     virtual std::vector<cv::KeyPoint> findKeyPoints(const cv::Mat& image, const cv::Mat& mask) = 0;

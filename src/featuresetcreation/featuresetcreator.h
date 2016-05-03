@@ -13,17 +13,8 @@ namespace FeatureSetCreation {
 
   class FeatureSetCreator {
   public:
-    FeatureSetCreator();
+    FeatureSetCreator(const Settings& settings);
     virtual ~FeatureSetCreator();
-
-  public:
-    template <typename... Settings> void init(const std::string detectionMethod, const std::string& recordingName, Settings&&... settings) {
-      this->recordingName = recordingName;
-      if (detectionMethod == "ORB") {
-        featureDetector.reset(new FeatureDetectorORB(std::forward<Settings>(settings)...));
-        featureDetector->validateSettings();
-      }
-    }
 
   public:
     void createFeatureSet();
@@ -40,7 +31,7 @@ namespace FeatureSetCreation {
     uint32_t PLAYER_NUMBER_OF_MEMORY_SEGMENTS = 20;
 
   private:
-    std::string recordingName;
+    std::string recordingFile;
 
     std::unique_ptr<FeatureDetector> featureDetector;
     Common::FeatureSetDAO featureSetDao;

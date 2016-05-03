@@ -13,17 +13,21 @@
 
 namespace FeatureSetCreation {
 
-  FeatureSetCreator::FeatureSetCreator() {
+  FeatureSetCreator::FeatureSetCreator(const Settings& settings) {
+    recordingFile = settings.recordingFile;
+    if (settings.detectionAlg == "ORB") {
+      featureDetector.reset(new FeatureDetectorORB(settings));
+    }
   }
 
   FeatureSetCreator::~FeatureSetCreator() {
   }
 
   void FeatureSetCreator::createFeatureSet() {
-    odcore::io::URL url("file://" + recordingName);
+    odcore::io::URL url("file://" + recordingFile);
     odtools::player::Player player(url, false, PLAYER_MEMORYSEGMENT_SIZE, PLAYER_NUMBER_OF_MEMORY_SEGMENTS, false);
     cv::Mat mask = createMaskFromRonis(player);
-    Common::FeatureSet result(recordingName);
+    Common::FeatureSet result(recordingFile);
     int frameNumber = 0;
     while (player.hasMoreData()) {
       odcore::data::Container container = player.getNextContainerToBeSent();
@@ -58,7 +62,7 @@ namespace FeatureSetCreation {
 
   std::vector<Common::Region> FeatureSetCreator::loadRonis() const {
     try {
-      return roniDao.load(recordingName);
+      return roniDao.load(recordingFile);
     } catch (std::exception& e) {
       std::cerr << e.what() << std::endl;
       std::cerr << "Proceeding without Regions of no Interest." << std::endl;
@@ -88,7 +92,7 @@ namespace FeatureSetCreation {
 
   void FeatureSetCreator::saveFeatureSet(const Common::FeatureSet& featureSet) const {
     featureSetDao.beginTransaction();
-    featureSetDao.deleteAll(recordingName);
+    featureSetDao.deleteAll(recordingFile);
     featureSetDao.save(featureSet);
     featureSetDao.endTransaction();
   }

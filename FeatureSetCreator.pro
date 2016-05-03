@@ -15,12 +15,16 @@ SOURCES += \
     src/featuresetcreation/featuredetector.cpp \
     src/featuresetcreation/featuresetcreator.cpp \
     src/featuresetcreation/featuredetectororb.cpp \
-    src/featuresetcreation/lanedetector.cpp
+    src/featuresetcreation/lanedetector.cpp \
+    src/featuresetcreation/settings.cpp \
+    src/featuresetcreation/settingsvalidator.cpp
 
 HEADERS += \
     src/featuresetcreation/featuredetector.h \
     src/featuresetcreation/featuresetcreator.h \
     src/featuresetcreation/featuredetectororb.h \
-    src/featuresetcreation/lanedetector.h
+    src/featuresetcreation/lanedetector.h \
+    src/featuresetcreation/settings.h \
+    src/featuresetcreation/settingsvalidator.h
 
 
