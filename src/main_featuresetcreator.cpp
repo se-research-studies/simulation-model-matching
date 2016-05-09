@@ -34,27 +34,63 @@ static const struct option longopts[] = {
 void printUsage(char* programName) {
   fprintf(stderr, "Usage: %s -rec='file' [-options]\n", programName);
   fprintf(stderr,
-          "  -rec             Recording file.\n"
-          "  -detector        Optional. Feature Detection Algorithm. Supported are: ORB. Default is ORB.\n"
-          "  -guiEnabled      Optional. Default is true\n"
-          "  -nFeatures       Optional ORB parameter. Default is 500.\n"
-          "  -scaleFactor     Optional ORB parameter. Default is 1.2\n"
-          "  -nLevels         Optional ORB parameter. Default is 8\n"
-          "  -edgeThreshold   Optional ORB parameter. Default is 31\n"
-          "  -firstLevel      Optional ORB parameter. Default is 0\n"
-          "  -WTA_K           Optional ORB parameter. Default is 2\n"
-          "  -scoreType       Optional ORB parameter. Default is 0 (HARRIS_SCORE)\n"
-          "  -patchSize       Optional ORB parameter. Default is 31\n"
-          "  -fastThreshold   Optional ORB parameter. Default is 20\n"
-          "  -firstThreshold  Optional Lane Detection parameter. Default is 100\n"
-          "  -secondThreshold Optional Lane Detection parameter. Default is 400\n"
-          "  -apertureSize    Optional Lane Detection parameter. Default is 3\n"
-          "  -rho             Optional Lane Detection parameter. Default is 1\n"
-          "  -theta           Optional Lane Detection parameter. Default is Pi/180\n"
-          "  -voteThreshold   Optional Lane Detection parameter. Default is 50\n"
-          "  -minLineLength   Optional Lane Detection parameter. Default is 30\n"
-          "  -maxLineGap      Optional Lane Detection parameter. Default is 20\n");
+          "  -rec               Recording file.\n"
+          "  -detector          Optional. Feature Detection Algorithm. Supported are: ORB. Default is ORB.\n"
+          "  -guiEnabled        Optional. Default is true\n"
+          "  -nFeatures         Optional ORB parameter. Default is 500.\n"
+          "  -scaleFactor       Optional ORB parameter. Default is 1.2\n"
+          "  -nLevels           Optional ORB parameter. Default is 8\n"
+          "  -edgeThreshold     Optional ORB parameter. Default is 31\n"
+          "  -firstLevel        Optional ORB parameter. Default is 0\n"
+          "  -WTA_K             Optional ORB parameter. Default is 2\n"
+          "  -scoreType         Optional ORB parameter. Default is 0 (HARRIS_SCORE)\n"
+          "  -patchSize         Optional ORB parameter. Default is 31\n"
+          "  -fastThreshold     Optional ORB parameter. Default is 20\n"
+          "  -firstThreshold    Optional Lane Detection parameter. Default is 100\n"
+          "  -secondThreshold   Optional Lane Detection parameter. Default is 400\n"
+          "  -apertureSize      Optional Lane Detection parameter. Default is 3\n"
+          "  -rho               Optional Lane Detection parameter. Default is 1\n"
+          "  -theta             Optional Lane Detection parameter. Default is Pi/180\n"
+          "  -voteThreshold     Optional Lane Detection parameter. Default is 50\n"
+          "  -minLineLength     Optional Lane Detection parameter. Default is 30\n"
+          "  -maxLineGap        Optional Lane Detection parameter. Default is 20\n"
+          "  -maxCorners        Optional ShiTomasi int parameter. Default is 100.\n"
+          "  -qualityLevel      Optional ShiTomasi double parameter. Default is 0.5.\n"
+          "  -minDistance       Optional ShiTomasi double parameter. Default is 0.5.\n"
+          "  -blockSize         Optional ShiTomasi in parameter. Default is 3.\n"
+          "  -useHarrisDetector Optional ShiTomasi boolean parameter. Default is F (false).\n"
+          "  -kFree             Optional ShiTomasi double parameter. Default is 0.4.\n"
+          );
 }
+
+enum Argument {
+    REC_FILE,
+    DETECTOR,
+    USE_GUI,
+    ORB_N_FEATURES,
+    ORB_SCALE_FACTOR,
+    ORB_N_LEVELS,
+    ORB_EDGE_THRESHOLD,
+    ORB_FIRST_LEVEL,
+    ORB_WTA_K,
+    ORB_SCORE_TYPE,
+    ORB_PATCH_SIZE,
+    ORB_FAST_THRESHOLD,
+    LANE_FIRST_THRESHOLD,
+    LANE_SECOND_THRESHOLD,
+    LANE_APERTURE_SIZE,
+    LANE_RHO,
+    LANE_THETA,
+    LANE_VOTE_THRESHOLD,
+    LANE_MIN_LINE_LENGTH,
+    LANE_MAX_LINE_GAP,
+    SHI_MAX_CORNERS,
+    SHI_QUALITY_LEVEL,
+    SHI_MIN_DISTANCE,
+    SHI_BLOCK_SIZE,
+    SHI_USE_HARRIS,
+    SHI_K_FREE
+};
 
 int main(int argc, char *argv[]) {
 
@@ -64,65 +100,86 @@ int main(int argc, char *argv[]) {
 
   while ((optIndex = getopt_long_only(argc, argv, "", longopts, nullptr)) != -1) {
     switch (optIndex) {
-    case 0:
+    case Argument::REC_FILE:
       settings.recordingFile = std::string(optarg);
       break;
-    case 1:
+    case DETECTOR:
       settings.detectionAlg = std::string(optarg);
       break;
-    case 2:
+    case USE_GUI:
       settings.guiEnabled = optarg;
       break;
-    case 3:
+    case ORB_N_FEATURES:
       settings.orbSettings.nFeatures = atoi(optarg);
       break;
-    case 4:
+    case ORB_SCALE_FACTOR:
       settings.orbSettings.scaleFactor = atof(optarg);
       break;
-    case 5:
+    case ORB_N_LEVELS:
       settings.orbSettings.nLevels = atoi(optarg);
       break;
-    case 6:
+    case ORB_EDGE_THRESHOLD:
       settings.orbSettings.edgeThreshold = atoi(optarg);
       break;
-    case 7:
+    case ORB_FIRST_LEVEL:
       settings.orbSettings.firstLevel = atoi(optarg);
       break;
-    case 8:
+    case ORB_WTA_K:
       settings.orbSettings.WTA_K = atoi(optarg);
       break;
-    case 9:
+    case ORB_SCORE_TYPE:
       settings.orbSettings.scoreType = atoi(optarg);
       break;
-    case 10:
+    case ORB_PATCH_SIZE:
       settings.orbSettings.patchSize = atoi(optarg);
       break;
-    case 11:
+    case ORB_FAST_THRESHOLD:
       settings.orbSettings.fastThreshold = atoi(optarg);
       break;
-    case 12:
+    case LANE_FIRST_THRESHOLD:
       settings.laneDetectionSettings.firstThreshold = atoi(optarg);
       break;
-    case 13:
+    case  LANE_SECOND_THRESHOLD:
       settings.laneDetectionSettings.secondThreshold = atoi(optarg);
       break;
-    case 14:
+    case LANE_APERTURE_SIZE:
       settings.laneDetectionSettings.apertureSize = atoi(optarg);
       break;
-    case 15:
+    case LANE_RHO:
       settings.laneDetectionSettings.rho = atoi(optarg);
       break;
-    case 16:
+    case LANE_THETA:
       settings.laneDetectionSettings.theta = atoi(optarg);
       break;
-    case 17:
+    case LANE_VOTE_THRESHOLD:
       settings.laneDetectionSettings.voteThreshold = atoi(optarg);
       break;
-    case 18:
+    case LANE_MIN_LINE_LENGTH:
       settings.laneDetectionSettings.minLineLength = atoi(optarg);
       break;
-    case 19:
+    case LANE_MAX_LINE_GAP:
       settings.laneDetectionSettings.maxLineGap = atoi(optarg);
+      break;
+    case SHI_MAX_CORNERS:
+      settings.shiTomasiSettings.maxCorners = atoi(optarg);
+      break;
+    case SHI_QUALITY_LEVEL:
+      settings.shiTomasiSettings.qualityLevel = atoi(optarg);
+      break;
+    case SHI_MIN_DISTANCE:
+      settings.shiTomasiSettings.minDistance = atoi(optarg);
+      break;
+    case SHI_BLOCK_SIZE:
+      settings.shiTomasiSettings.blockSize = atoi(optarg);
+      break;
+    case SHI_USE_HARRIS:
+      if (atoi(optarg) != 0 && atoi(optarg) != 1) {
+          printUsage(argv[0]);
+          exit(EXIT_FAILURE);
+      }
+      settings.shiTomasiSettings.useHarris = (atoi(optarg) == 1);
+    case SHI_K_FREE:
+      settings.shiTomasiSettings.kFree = atoi(optarg);
       break;
     default:
       printUsage(argv[0]);
@@ -130,7 +187,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  settings.recordingFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/straightroad.rec";
+  settings.recordingFile = "/home/ubuntu/Workspace/simulation-model-matching/resources/straightroad.rec";
   try {
     FeatureSetCreation::SettingsValidator validator;
     validator.validate(settings);

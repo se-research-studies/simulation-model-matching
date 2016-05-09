@@ -112,11 +112,11 @@ TARGET_LINK_LIBRARIES (FeatureSetCreationLib CommonLib)
 
 ###########################################################################
 # Build the CommonTest sources as library
-message(STATUS "CommonTestsLib base path: " ${PROJECT_SOURCE_DIR}/test/common/)
-FILE(GLOB_RECURSE COMMON_TESTS_SOURCES ${PROJECT_SOURCE_DIR}/test/common/*.cpp)
-FILE(GLOB_RECURSE COMMON_TESTS_HEADERS ${PROJECT_SOURCE_DIR}/test/common/*.h)
-ADD_LIBRARY(CommonTestsLib ${COMMON_TESTS_SOURCES} ${COMMON_TESTS_HEADERS})
-TARGET_LINK_LIBRARIES (CommonTestsLib CommonLib) 
+#message(STATUS "CommonTestsLib base path: " ${PROJECT_SOURCE_DIR}/test/common/)
+#FILE(GLOB_RECURSE COMMON_TESTS_SOURCES ${PROJECT_SOURCE_DIR}/test/common/*.cpp)
+#FILE(GLOB_RECURSE COMMON_TESTS_HEADERS ${PROJECT_SOURCE_DIR}/test/common/*.h)
+#ADD_LIBRARY(CommonTestsLib ${COMMON_TESTS_SOURCES} ${COMMON_TESTS_HEADERS})
+#TARGET_LINK_LIBRARIES (CommonTestsLib CommonLib) 
 
 ###########################################################################
 # Build createFeatureSet executable.
@@ -138,9 +138,9 @@ TARGET_LINK_LIBRARIES (createFeatureSet FeatureSetCreationLib)
 
 ###########################################################################
 # Build commonTests executable.
-message(STATUS "Main file for commonTests: " ${PROJECT_SOURCE_DIR}/test/main_common_test.cpp)
-ADD_EXECUTABLE (commonTests ${PROJECT_SOURCE_DIR}/test/main_common_test.cpp)
-TARGET_LINK_LIBRARIES (commonTests CommonTestsLib) 
+#message(STATUS "Main file for commonTests: " ${PROJECT_SOURCE_DIR}/test/main_common_test.cpp)
+#ADD_EXECUTABLE (commonTests ${PROJECT_SOURCE_DIR}/test/main_common_test.cpp)
+#TARGET_LINK_LIBRARIES (commonTests CommonTestsLib) 
 
 ###########################################################################
 # This project will not be installed.

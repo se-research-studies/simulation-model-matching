@@ -27,12 +27,22 @@ namespace FeatureSetCreation {
     double maxLineGap = 20;
   };
 
+  struct ShiTomasiSettings {
+      int maxCorners = 100;
+      double qualityLevel = 0.5;
+      double minDistance = 0.5;
+      int blockSize = 3;
+      bool useHarris = false;
+      double kFree = 0.4;
+  };
+
   struct Settings {
     std::string recordingFile;
     std::string detectionAlg = "ORB";
     bool guiEnabled = true;
     OrbSettings orbSettings;
     LaneDetectionSettings laneDetectionSettings;
+    ShiTomasiSettings shiTomasiSettings;
   };
 
 } // namespace FeatureSetCreation
