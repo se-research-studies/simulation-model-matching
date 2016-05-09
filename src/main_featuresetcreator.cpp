@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 
   while ((optIndex = getopt_long_only(argc, argv, "", longopts, nullptr)) != -1) {
     switch (optIndex) {
-    case Argument::REC_FILE:
+    case REC_FILE:
       settings.recordingFile = std::string(optarg);
       break;
     case DETECTOR:

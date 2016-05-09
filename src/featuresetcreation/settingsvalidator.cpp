@@ -10,7 +10,7 @@ namespace FeatureSetCreation {
 
   void SettingsValidator::validate(const Settings& settings) const {
     std::string errors;
-    if (settings.detectionAlg != "ORB") {
+    if (settings.detectionAlg != "ORB" && settings.detectionAlg != "ShiTomasi") {
       errors += settings.detectionAlg + " is not a supported feature detection algorithm.\n";
     }
     errors += validateOrbSettings(settings.orbSettings);

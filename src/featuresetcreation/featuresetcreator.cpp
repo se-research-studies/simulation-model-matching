@@ -18,6 +18,9 @@ namespace FeatureSetCreation {
     if (settings.detectionAlg == "ORB") {
       featureDetector.reset(new FeatureDetectorORB(settings));
     }
+    else if (settings.detectionAlg == "ShiTomasi") {
+        featureDetector.reset(new FeatureDetectorShiTomasi(settings));
+      }
   }
 
   FeatureSetCreator::~FeatureSetCreator() {

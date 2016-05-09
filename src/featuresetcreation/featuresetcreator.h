@@ -8,6 +8,7 @@
 
 #include <FeatureSimulation/FeatureSetCreation/FeatureDetector>
 #include <FeatureSimulation/FeatureSetCreation/FeatureDetectorORB>
+#include <FeatureSimulation/FeatureSetCreation/FeatureDetectorShiTomasi>
 
 namespace FeatureSetCreation {
 
