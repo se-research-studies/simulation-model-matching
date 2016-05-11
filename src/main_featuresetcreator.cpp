@@ -7,10 +7,12 @@
 #include <FeatureSimulation/FeatureSetCreation/SettingsValidator>
 
 static const struct option longopts[] = {
+  // Operation arguments
   {"rec", required_argument, nullptr, 0},
   {"detector", optional_argument, nullptr, 1},
   {"guiEnabled", optional_argument, nullptr, 2},
-  {"detector", required_argument, nullptr, 2},
+  {"detector", required_argument, nullptr, 2}, //XXX Why is detector included twice?
+  // ORB arguments
   {"nFeatures", optional_argument, nullptr, 3},
   {"scaleFactor", optional_argument, nullptr, 4},
   {"nLevels", optional_argument, nullptr, 5},
@@ -20,6 +22,7 @@ static const struct option longopts[] = {
   {"scoreType", optional_argument, nullptr, 9},
   {"patchSize", optional_argument, nullptr, 10},
   {"fastThreshold", optional_argument, nullptr, 11},
+  // Lane detection arguments
   {"firstThreshold", optional_argument, nullptr, 12},
   {"secondThreshold", optional_argument, nullptr, 13},
   {"apertureSize", optional_argument, nullptr, 14},
@@ -28,7 +31,14 @@ static const struct option longopts[] = {
   {"voteThreshold", optional_argument, nullptr, 17},
   {"minLineLength", optional_argument, nullptr, 18},
   {"maxLineGap", optional_argument, nullptr, 19},
-  {0, 0, 0 ,0}
+  // ShiTomasi arguments
+  {"maxCorners", optional_argument, nullptr, 20},
+  {"qualityLevel", optional_argument, nullptr, 21},
+  {"minDistance", optional_argument, nullptr, 22},
+  {"blockSize", optional_argument, nullptr, 23},
+  {"useHarrisDetector", optional_argument, nullptr, 24},
+  {"kFree", optional_argument, nullptr, 25},
+  {0, 0, 0 ,0} //XXX What is this used for?
 };
 
 void printUsage(char* programName) {
@@ -101,15 +111,19 @@ int main(int argc, char *argv[]) {
   while ((optIndex = getopt_long_only(argc, argv, "", longopts, nullptr)) != -1) {
     switch (optIndex) {
     case REC_FILE:
+      std::cout << "Found argument REC_FILE =" << std::string(optarg) << std::endl;
       settings.recordingFile = std::string(optarg);
       break;
     case DETECTOR:
+      std::cout << "Found argument DETECTOR =" << std::string(optarg) << std::endl;
       settings.detectionAlg = std::string(optarg);
       break;
     case USE_GUI:
+      std::cout << "Found argument USE_GUI =" << std::string(optarg) << std::endl;
       settings.guiEnabled = optarg;
       break;
     case ORB_N_FEATURES:
+      std::cout << "Found argument USE_GUI =" << std::string(optarg) << std::endl;
       settings.orbSettings.nFeatures = atoi(optarg);
       break;
     case ORB_SCALE_FACTOR:
