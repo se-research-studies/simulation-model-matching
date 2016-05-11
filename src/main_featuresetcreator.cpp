@@ -111,19 +111,15 @@ int main(int argc, char *argv[]) {
   while ((optIndex = getopt_long_only(argc, argv, "", longopts, nullptr)) != -1) {
     switch (optIndex) {
     case REC_FILE:
-      std::cout << "Found argument REC_FILE =" << std::string(optarg) << std::endl;
       settings.recordingFile = std::string(optarg);
       break;
     case DETECTOR:
-      std::cout << "Found argument DETECTOR =" << std::string(optarg) << std::endl;
       settings.detectionAlg = std::string(optarg);
       break;
     case USE_GUI:
-      std::cout << "Found argument USE_GUI =" << std::string(optarg) << std::endl;
       settings.guiEnabled = optarg;
       break;
     case ORB_N_FEATURES:
-      std::cout << "Found argument ORB_N_FEATURES =" << std::string(optarg) << std::endl;
       settings.orbSettings.nFeatures = atoi(optarg);
       break;
     case ORB_SCALE_FACTOR:
