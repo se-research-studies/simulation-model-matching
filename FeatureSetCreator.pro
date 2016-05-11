@@ -18,7 +18,7 @@ SOURCES += \
     src/featuresetcreation/lanedetector.cpp \
     src/featuresetcreation/settings.cpp \
     src/featuresetcreation/settingsvalidator.cpp \
-    src/featuresetcreation/featuredetectorshittomasi.cpp
+    src/featuresetcreation/featuredetectorshitomasi.cpp
 
 HEADERS += \
     src/featuresetcreation/featuredetector.h \

@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
       settings.guiEnabled = optarg;
       break;
     case ORB_N_FEATURES:
-      std::cout << "Found argument USE_GUI =" << std::string(optarg) << std::endl;
+      std::cout << "Found argument ORB_N_FEATURES =" << std::string(optarg) << std::endl;
       settings.orbSettings.nFeatures = atoi(optarg);
       break;
     case ORB_SCALE_FACTOR:
