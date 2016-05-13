@@ -1,5 +1,7 @@
 #include "tablefield.h"
 
-TableField::TableField(const std::string& field, const std::string& value)
-  : field(field), value(value) {
+namespace Common {
+  TableField::TableField(const std::string& field, const std::string& value)
+    : field(field), value(value) {
+  }
 }

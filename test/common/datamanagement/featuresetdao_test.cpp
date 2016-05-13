@@ -3,6 +3,7 @@
 #include <FeatureSimulation/Common/DataManagement/Database>
 
 void FeatureSetDAOTest::SetUp() {
+  dao.ensureTable();
   Common::Database::getInstance().deleteRows(Common::FeatureSetsContract::TABLENAME, "");
 }
 

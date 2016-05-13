@@ -11,6 +11,14 @@ namespace Common {
   FeatureSetDAO::~FeatureSetDAO() {
   }
 
+  void FeatureSetDAO::ensureTable() const {
+    std::vector<TableColumn> columns;
+    columns.push_back({FeatureSetsContract::COL_RECORDINGNAME, "TEXT"});
+    columns.push_back({FeatureSetsContract::COL_FRAME, "INTEGER"});
+    columns.push_back({FeatureSetsContract::COL_FEATURES, "TEXT"});
+    Database::getInstance().createTable(FeatureSetsContract::TABLENAME, columns);
+  }
+
   FeatureSet FeatureSetDAO::load(const std::string& recordingName) const {
     Cursor cursor = Database::getInstance().query(FeatureSetsContract::TABLENAME, {"*"}, selectionString(recordingName));
     return toFeatureSet(recordingName, cursor);

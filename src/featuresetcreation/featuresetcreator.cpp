@@ -17,10 +17,9 @@ namespace FeatureSetCreation {
     recordingFile = settings.recordingFile;
     if (settings.detectionAlg == "ORB") {
       featureDetector.reset(new FeatureDetectorORB(settings));
+    } else if (settings.detectionAlg == "ShiTomasi") {
+      featureDetector.reset(new FeatureDetectorShiTomasi(settings));
     }
-    else if (settings.detectionAlg == "ShiTomasi") {
-        featureDetector.reset(new FeatureDetectorShiTomasi(settings));
-      }
   }
 
   FeatureSetCreator::~FeatureSetCreator() {
@@ -95,6 +94,7 @@ namespace FeatureSetCreation {
 
   void FeatureSetCreator::saveFeatureSet(const Common::FeatureSet& featureSet) const {
     featureSetDao.beginTransaction();
+    featureSetDao.ensureTable();
     featureSetDao.deleteAll(recordingFile);
     featureSetDao.save(featureSet);
     featureSetDao.endTransaction();

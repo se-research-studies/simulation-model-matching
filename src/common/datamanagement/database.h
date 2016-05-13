@@ -6,6 +6,7 @@
 #include <sqlite3.h>
 
 #include <FeatureSimulation/Common/DataManagement/Cursor>
+#include <FeatureSimulation/Common/DataManagement/TableColumn>
 #include <FeatureSimulation/Common/DataManagement/TableField>
 
 namespace Common {
@@ -27,6 +28,7 @@ namespace Common {
   public:
     void beginTransaction();
     void endTransaction();
+    void createTable(const std::string& table, const std::vector<TableColumn>& columns);
     Cursor query(const std::string& table, const std::vector<std::string>& columns, const std::string& selection);
     void insert(const std::string& table, const std::vector<TableField>& content);
     void deleteRows(const std::string& table, const std::string& selection);
@@ -34,8 +36,9 @@ namespace Common {
   private:
     void open();
     void execSql(const std::string& sql);
-    std::string buildColumnsString(const std::vector<std::string>& columns) const;
-    std::pair<std::string, std::string> buildContentStrings(const std::vector<TableField>& content) const;
+    std::string buildCreateTableColumnsString(const std::vector<TableColumn>& columns) const;
+    std::string buildSelectColumnsString(const std::vector<std::string>& columns) const;
+    std::pair<std::string, std::string> buildInsertContentStrings(const std::vector<TableField>& content) const;
 
   private:
     std::string DB_FILENAME = "data.sqlite";

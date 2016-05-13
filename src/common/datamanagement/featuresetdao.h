@@ -23,6 +23,7 @@ namespace Common {
     virtual ~FeatureSetDAO();
 
   public:
+    void ensureTable() const;
     FeatureSet load(const std::string& recordingName) const;
     FeatureSet load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const;
     void save(const FeatureSet& featureSet) const;

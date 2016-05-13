@@ -1,5 +1,6 @@
 TARGET = FeatureSimulationCommon
 TEMPLATE = lib
+CONFIG += c++11
 CONFIG -= qt
 
 INCLUDEPATH += $$_PRO_FILE_PWD_/include/
@@ -28,7 +29,8 @@ HEADERS += \
     src/common/datamanagement/tablefield.h \
     src/common/utils.h \
     src/common/settings.h \
-    src/common/datamanagement/dataaccessobject.h
+    src/common/datamanagement/dataaccessobject.h \
+    src/common/datamanagement/tablecolumn.h
 
 SOURCES += \
     src/common/data/coordinates.cpp \
@@ -49,4 +51,5 @@ SOURCES += \
     src/common/datamanagement/tablefield.cpp \
     src/common/utils.cpp \
     src/common/settings.cpp \
-    src/common/datamanagement/dataaccessobject.cpp
+    src/common/datamanagement/dataaccessobject.cpp \
+    src/common/datamanagement/tablecolumn.cpp
