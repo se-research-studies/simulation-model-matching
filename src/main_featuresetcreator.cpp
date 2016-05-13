@@ -6,39 +6,67 @@
 #include <FeatureSimulation/FeatureSetCreation/Settings>
 #include <FeatureSimulation/FeatureSetCreation/SettingsValidator>
 
+enum Argument {
+    REC_FILE,
+    DETECTOR,
+    USE_GUI,
+    ORB_N_FEATURES,
+    ORB_SCALE_FACTOR,
+    ORB_N_LEVELS,
+    ORB_EDGE_THRESHOLD,
+    ORB_FIRST_LEVEL,
+    ORB_WTA_K,
+    ORB_SCORE_TYPE,
+    ORB_PATCH_SIZE,
+    ORB_FAST_THRESHOLD,
+    LANE_FIRST_THRESHOLD,
+    LANE_SECOND_THRESHOLD,
+    LANE_APERTURE_SIZE,
+    LANE_RHO,
+    LANE_THETA,
+    LANE_VOTE_THRESHOLD,
+    LANE_MIN_LINE_LENGTH,
+    LANE_MAX_LINE_GAP,
+    SHI_MAX_CORNERS,
+    SHI_QUALITY_LEVEL,
+    SHI_MIN_DISTANCE,
+    SHI_BLOCK_SIZE,
+    SHI_USE_HARRIS,
+    SHI_K_FREE
+};
+
 static const struct option longopts[] = {
   // Operation arguments
-  {"rec", required_argument, nullptr, 0},
-  {"detector", optional_argument, nullptr, 1},
-  {"guiEnabled", optional_argument, nullptr, 2},
-  {"detector", required_argument, nullptr, 2}, //XXX Why is detector included twice?
+  {"rec", required_argument, nullptr, REC_FILE},
+  {"detector", optional_argument, nullptr, DETECTOR},
+  {"guiEnabled", optional_argument, nullptr, USE_GUI},
   // ORB arguments
-  {"nFeatures", optional_argument, nullptr, 3},
-  {"scaleFactor", optional_argument, nullptr, 4},
-  {"nLevels", optional_argument, nullptr, 5},
-  {"edgeThreshold", optional_argument, nullptr, 6},
-  {"firstLevel", optional_argument, nullptr, 7},
-  {"WTA_K", optional_argument, nullptr, 8},
-  {"scoreType", optional_argument, nullptr, 9},
-  {"patchSize", optional_argument, nullptr, 10},
-  {"fastThreshold", optional_argument, nullptr, 11},
+  {"nFeatures", optional_argument, nullptr, ORB_N_FEATURES},
+  {"scaleFactor", optional_argument, nullptr, ORB_SCALE_FACTOR},
+  {"nLevels", optional_argument, nullptr, ORB_N_LEVELS},
+  {"edgeThreshold", optional_argument, nullptr, ORB_EDGE_THRESHOLD},
+  {"firstLevel", optional_argument, nullptr, ORB_FIRST_LEVEL},
+  {"WTA_K", optional_argument, nullptr, ORB_WTA_K},
+  {"scoreType", optional_argument, nullptr, ORB_SCORE_TYPE},
+  {"patchSize", optional_argument, nullptr, ORB_PATCH_SIZE},
+  {"fastThreshold", optional_argument, nullptr, ORB_FAST_THRESHOLD},
   // Lane detection arguments
-  {"firstThreshold", optional_argument, nullptr, 12},
-  {"secondThreshold", optional_argument, nullptr, 13},
-  {"apertureSize", optional_argument, nullptr, 14},
-  {"rho", optional_argument, nullptr, 15},
-  {"theta", optional_argument, nullptr, 16},
-  {"voteThreshold", optional_argument, nullptr, 17},
-  {"minLineLength", optional_argument, nullptr, 18},
-  {"maxLineGap", optional_argument, nullptr, 19},
+  {"firstThreshold", optional_argument, nullptr, LANE_FIRST_THRESHOLD},
+  {"secondThreshold", optional_argument, nullptr, LANE_SECOND_THRESHOLD},
+  {"apertureSize", optional_argument, nullptr, LANE_APERTURE_SIZE},
+  {"rho", optional_argument, nullptr, LANE_RHO},
+  {"theta", optional_argument, nullptr, LANE_THETA},
+  {"voteThreshold", optional_argument, nullptr, LANE_VOTE_THRESHOLD},
+  {"minLineLength", optional_argument, nullptr, LANE_MIN_LINE_LENGTH},
+  {"maxLineGap", optional_argument, nullptr, LANE_MAX_LINE_GAP},
   // ShiTomasi arguments
-  {"maxCorners", optional_argument, nullptr, 20},
-  {"qualityLevel", optional_argument, nullptr, 21},
-  {"minDistance", optional_argument, nullptr, 22},
-  {"blockSize", optional_argument, nullptr, 23},
-  {"useHarrisDetector", optional_argument, nullptr, 24},
-  {"kFree", optional_argument, nullptr, 25},
-  {0, 0, 0 ,0} //XXX What is this used for?
+  {"maxCorners", optional_argument, nullptr, SHI_MAX_CORNERS},
+  {"qualityLevel", optional_argument, nullptr, SHI_QUALITY_LEVEL},
+  {"minDistance", optional_argument, nullptr, SHI_MIN_DISTANCE},
+  {"blockSize", optional_argument, nullptr, SHI_BLOCK_SIZE},
+  {"useHarrisDetector", optional_argument, nullptr, SHI_USE_HARRIS},
+  {"kFree", optional_argument, nullptr, SHI_K_FREE},
+  {0, 0, 0, 0} //Required by getopt_long_only to mark the end of the arrays
 };
 
 void printUsage(char* programName) {
@@ -72,35 +100,6 @@ void printUsage(char* programName) {
           "  -kFree             Optional ShiTomasi double parameter. Default is 0.4.\n"
           );
 }
-
-enum Argument {
-    REC_FILE,
-    DETECTOR,
-    USE_GUI,
-    ORB_N_FEATURES,
-    ORB_SCALE_FACTOR,
-    ORB_N_LEVELS,
-    ORB_EDGE_THRESHOLD,
-    ORB_FIRST_LEVEL,
-    ORB_WTA_K,
-    ORB_SCORE_TYPE,
-    ORB_PATCH_SIZE,
-    ORB_FAST_THRESHOLD,
-    LANE_FIRST_THRESHOLD,
-    LANE_SECOND_THRESHOLD,
-    LANE_APERTURE_SIZE,
-    LANE_RHO,
-    LANE_THETA,
-    LANE_VOTE_THRESHOLD,
-    LANE_MIN_LINE_LENGTH,
-    LANE_MAX_LINE_GAP,
-    SHI_MAX_CORNERS,
-    SHI_QUALITY_LEVEL,
-    SHI_MIN_DISTANCE,
-    SHI_BLOCK_SIZE,
-    SHI_USE_HARRIS,
-    SHI_K_FREE
-};
 
 int main(int argc, char *argv[]) {
 
@@ -197,7 +196,10 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  settings.recordingFile = "/home/ubuntu/Workspace/simulation-model-matching/resources/straightroad.rec";
+  // Hardcoded settings for debugging purposes
+  //settings.recordingFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/straightroad.rec";
+  //settings.guiEnabled = false;
+
   try {
     FeatureSetCreation::SettingsValidator validator;
     validator.validate(settings);
