@@ -7,17 +7,17 @@
 
 namespace FeatureSetCreation {
 
-  class LaneDetector {
-  public:
+class LaneDetector {
+public:
     LaneDetector(const LaneDetectionSettings& settings);
     virtual ~LaneDetector();
 
-  public:
+public:
     std::vector<cv::Vec4i> detectLanes(const cv::Mat& image);
 
-  private:
+private:
     const LaneDetectionSettings settings;
-  };
+};
 
 } // namespace FeatureSetCreation
 

@@ -8,21 +8,21 @@
 
 namespace Common {
 
-  class RoniDAO
-  {
-  public:
+class RoniDAO
+{
+public:
     RoniDAO();
     virtual ~RoniDAO();
 
-  public:
+public:
     std::vector<Region> load(const std::string recordingFilename) const;
 
-  private:
+private:
     std::string toRoniFilename(const std::string& recordingFilename) const;
     Json::Value readFile(const std::string& roniFilename) const;
     Region toRegion(const Json::Value& value) const;
     Coordinates toCoordinates(const Json::Value& value) const;
-  };
+};
 
 } // namespace FeatureExtraction
 

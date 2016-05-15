@@ -6,10 +6,10 @@
 
 class FeatureSetDAOTest : public ::testing::Test {
 protected:
-  void SetUp() override;
-  void TearDown() override;
+    void SetUp() override;
+    void TearDown() override;
 
 protected:
-  Common::FeatureSetDAO dao;
+    Common::FeatureSetDAO dao;
 };
 

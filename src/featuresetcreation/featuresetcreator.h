@@ -12,32 +12,32 @@
 
 namespace FeatureSetCreation {
 
-  class FeatureSetCreator {
-  public:
+class FeatureSetCreator {
+public:
     FeatureSetCreator(const Settings& settings);
     virtual ~FeatureSetCreator();
 
-  public:
+public:
     void createFeatureSet();
 
-  private:
+private:
     cv::Mat createMaskFromRonis(odtools::player::Player& player) const;
     std::vector<Common::Region> loadRonis() const;
     cv::Size getImageSize(odtools::player::Player& player) const;
     cv::Mat readNextImage(odcore::data::Container container) const;
     void saveFeatureSet(const Common::FeatureSet& featureSet) const;
 
-  private:
+private:
     uint32_t PLAYER_MEMORYSEGMENT_SIZE = 2800000;
     uint32_t PLAYER_NUMBER_OF_MEMORY_SEGMENTS = 20;
 
-  private:
+private:
     std::string recordingFile;
 
     std::unique_ptr<FeatureDetector> featureDetector;
     Common::FeatureSetDAO featureSetDao;
     Common::RoniDAO roniDao;
-  };
+};
 
 } // namespace FeatureCreation
 

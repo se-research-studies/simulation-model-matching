@@ -5,14 +5,14 @@
 
 namespace FeatureSetCreation {
 
-  LaneDetector::LaneDetector(const LaneDetectionSettings& settings)
+LaneDetector::LaneDetector(const LaneDetectionSettings& settings)
     : settings(settings) {
-  }
+}
 
-  LaneDetector::~LaneDetector() {
-  }
+LaneDetector::~LaneDetector() {
+}
 
-  std::vector<cv::Vec4i> LaneDetector::detectLanes(const cv::Mat& image) {
+std::vector<cv::Vec4i> LaneDetector::detectLanes(const cv::Mat& image) {
     cv::Mat cannyImage;
     cv::Canny(image, cannyImage, settings.firstThreshold, settings.secondThreshold, settings.apertureSize);
 
@@ -22,6 +22,6 @@ namespace FeatureSetCreation {
     std::vector<cv::Vec4i> lines;
     cv::HoughLinesP(cannyImage, lines, settings.rho, settings.theta, settings.voteThreshold, settings.minLineLength, settings.maxLineGap);
     return lines;
-  }
+}
 
 } // namespace FeatureSetCreation

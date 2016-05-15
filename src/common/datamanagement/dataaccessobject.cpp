@@ -4,18 +4,18 @@
 
 namespace Common {
 
-  DataAccessObject::DataAccessObject() {
-  }
+DataAccessObject::DataAccessObject() {
+}
 
-  DataAccessObject::~DataAccessObject() {
-  }
+DataAccessObject::~DataAccessObject() {
+}
 
-  void DataAccessObject::beginTransaction() const {
+void DataAccessObject::beginTransaction() const {
     Database::getInstance().beginTransaction();
-  }
+}
 
-  void DataAccessObject::endTransaction() const {
+void DataAccessObject::endTransaction() const {
     Database::getInstance().endTransaction();
-  }
+}
 
 } // namespace Common

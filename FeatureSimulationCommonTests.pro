@@ -14,7 +14,6 @@ HEADERS += \
     test/common/datamanagement/featuresetdao_test.h \
     test/common/datamanagement/feature_test.h \
     test/common/datamanagement/frame_test.h \
-    test/common/datamanagement/featuremodeldao_test.h \
     test/common/datamanagement/position_test.h \
     test/common/datamanagement/featureset_test.h
 
@@ -25,7 +24,6 @@ SOURCES += \
     test/common/datamanagement/featuresetdao_test.cpp \
     test/common/datamanagement/feature_test.cpp \
     test/common/datamanagement/frame_test.cpp \
-    test/common/datamanagement/featuremodeldao_test.cpp \
     test/common/datamanagement/position_test.cpp \
     test/common/datamanagement/featureset_test.cpp
 

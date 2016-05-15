@@ -4,18 +4,18 @@
 
 namespace FeatureSetCreation {
 
-  class SettingsValidator {
-  public:
+class SettingsValidator {
+public:
     SettingsValidator();
     virtual ~SettingsValidator();
 
-  public:
+public:
     void validate(const Settings& settings) const;
 
-  private:
+private:
     std::string validateOrbSettings(const OrbSettings& settings) const;
     std::string validateLaneDetectionSettings(const LaneDetectionSettings& settings) const;
-  };
+};
 
 } // namespace FeatureSetCreation
 

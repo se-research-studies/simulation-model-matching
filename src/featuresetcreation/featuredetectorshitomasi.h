@@ -5,17 +5,17 @@
 
 namespace FeatureSetCreation {
 
-  class FeatureDetectorShiTomasi : public FeatureDetector {
-  public:
+class FeatureDetectorShiTomasi : public FeatureDetector {
+public:
     FeatureDetectorShiTomasi(const Settings& settings);
     virtual ~FeatureDetectorShiTomasi();
 
-  protected:
+protected:
     std::vector<cv::KeyPoint> findKeyPoints(const cv::Mat& image, const cv::Mat& mask) override;
 
-  private:
+private:
     const ShiTomasiSettings settings;
-  };
+};
 
 } // namespace FeatureSetCreation
 

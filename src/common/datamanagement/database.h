@@ -11,21 +11,21 @@
 
 namespace Common {
 
-  class Database {
-  public:
+class Database {
+public:
     virtual ~Database();
 
-  public:
+public:
     Database(const Database&) = delete;
     Database& operator=(const Database&) = delete;
 
-  private:
+private:
     Database();
 
-  public:
+public:
     static Database& getInstance();
 
-  public:
+public:
     void beginTransaction();
     void endTransaction();
     void createTable(const std::string& table, const std::vector<TableColumn>& columns);
@@ -33,20 +33,20 @@ namespace Common {
     void insert(const std::string& table, const std::vector<TableField>& content);
     void deleteRows(const std::string& table, const std::string& selection);
 
-  private:
+private:
     void open();
     void execSql(const std::string& sql);
     std::string buildCreateTableColumnsString(const std::vector<TableColumn>& columns) const;
     std::string buildSelectColumnsString(const std::vector<std::string>& columns) const;
     std::pair<std::string, std::string> buildInsertContentStrings(const std::vector<TableField>& content) const;
 
-  private:
+private:
     std::string DB_FILENAME = "data.sqlite";
 
-  private:
+private:
     sqlite3* db;
     bool isOpen = false;
-  };
+};
 
 } // namespace Common
 

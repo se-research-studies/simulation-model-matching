@@ -4,18 +4,18 @@
 
 namespace Common {
 
-  class Coordinates {
-  public:
+class Coordinates {
+public:
     Coordinates(uint32_t x, uint32_t y);
 
-  public:
+public:
     uint32_t getX() const;
     uint32_t getY() const;
 
-  private:
+private:
     const uint32_t x = 0;
     const uint32_t y = 0;
-  };
+};
 
 } // namespace FeatureExtraction
 

@@ -11,16 +11,12 @@ LIBS += -ljsoncpp -lsqlite3
 
 HEADERS += \
     src/common/data/coordinates.h \
-    src/common/data/correlation.h \
     src/common/data/feature.h \
-    src/common/data/featuremodel.h \
     src/common/data/featureset.h \
     src/common/data/dirtyframe.h \
     src/common/data/position.h \
     src/common/data/region.h \
-    src/common/data/simulation.h \
     src/common/datamanagement/correlationdao.h \
-    src/common/datamanagement/featuremodeldao.h \
     src/common/datamanagement/featuresetdao.h \
     src/common/datamanagement/ronidao.h \
     src/common/datamanagement/database.h \
@@ -33,16 +29,12 @@ HEADERS += \
 
 SOURCES += \
     src/common/data/coordinates.cpp \
-    src/common/data/correlation.cpp \
     src/common/data/feature.cpp \
-    src/common/data/featuremodel.cpp \
     src/common/data/featureset.cpp \
     src/common/data/dirtyframe.cpp \
     src/common/data/position.cpp \
     src/common/data/region.cpp \
-    src/common/data/simulation.cpp \
     src/common/datamanagement/correlationdao.cpp \
-    src/common/datamanagement/featuremodeldao.cpp \
     src/common/datamanagement/featuresetdao.cpp \
     src/common/datamanagement/ronidao.cpp \
     src/common/datamanagement/database.cpp \

@@ -8,20 +8,20 @@
 
 namespace FeatureSetCreation {
 
-  class FeatureDetector {
-  protected:
+class FeatureDetector {
+protected:
     FeatureDetector(const Settings& settings);
 
-  public:
+public:
     virtual ~FeatureDetector();
 
-  public:
+public:
     Common::DirtyFrame detectFeatures(const cv::Mat& image, const cv::Mat& mask);
 
-  protected:
+protected:
     virtual std::vector<cv::KeyPoint> findKeyPoints(const cv::Mat& image, const cv::Mat& mask) = 0;
 
-  private:
+private:
     std::vector<cv::KeyPoint> subtractLanes(const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const;
     float pointDistanceSquared(float a1, float a2, float b1, float b2) const;
     float pointDistance(float a1, float a2, float b1, float b2) const;
@@ -29,13 +29,13 @@ namespace FeatureSetCreation {
     void showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const;
     Common::DirtyFrame convertToDirtyFrame(const std::vector<cv::KeyPoint>& keyPoints) const;
 
-  private:
+private:
     bool guiEnabled = true;
     float fuzzinessFactor;
 
-  private:
+private:
     LaneDetector laneDetector;
-  };
+};
 
 } // namespace FeatureSetCreation
 

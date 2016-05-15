@@ -6,12 +6,12 @@
 
 class RoniDAOTest : public ::testing::Test {
 protected:
-  void SetUp() override;
-  void TearDown() override;
+    void SetUp() override;
+    void TearDown() override;
 
 protected:
-  Common::RoniDAO dao;
-  std::string testRoniFilenameBase = "test";
-  std::string testRoniFilename = testRoniFilenameBase + ".roni";
+    Common::RoniDAO dao;
+    std::string testRoniFilenameBase = "test";
+    std::string testRoniFilename = testRoniFilenameBase + ".roni";
 };
 
