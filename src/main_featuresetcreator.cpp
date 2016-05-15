@@ -19,6 +19,7 @@ enum Argument {
     ORB_SCORE_TYPE,
     ORB_PATCH_SIZE,
     ORB_FAST_THRESHOLD,
+    LANE_FUZZINESS_FACTOR,
     LANE_FIRST_THRESHOLD,
     LANE_SECOND_THRESHOLD,
     LANE_APERTURE_SIZE,
@@ -51,6 +52,7 @@ static const struct option longopts[] = {
   {"patchSize", optional_argument, nullptr, ORB_PATCH_SIZE},
   {"fastThreshold", optional_argument, nullptr, ORB_FAST_THRESHOLD},
   // Lane detection arguments
+  {"fuzzinessFactor", optional_argument, nullptr, LANE_FUZZINESS_FACTOR},
   {"firstThreshold", optional_argument, nullptr, LANE_FIRST_THRESHOLD},
   {"secondThreshold", optional_argument, nullptr, LANE_SECOND_THRESHOLD},
   {"apertureSize", optional_argument, nullptr, LANE_APERTURE_SIZE},
@@ -84,6 +86,7 @@ void printUsage(char* programName) {
           "  -scoreType         Optional ORB parameter. Default is 0 (HARRIS_SCORE)\n"
           "  -patchSize         Optional ORB parameter. Default is 31\n"
           "  -fastThreshold     Optional ORB parameter. Default is 20\n"
+          "  -fuzzinessFactor   Optional Lane Detection parameter. Default is 1.0\n"
           "  -firstThreshold    Optional Lane Detection parameter. Default is 100\n"
           "  -secondThreshold   Optional Lane Detection parameter. Default is 400\n"
           "  -apertureSize      Optional Lane Detection parameter. Default is 3\n"
@@ -145,6 +148,9 @@ int main(int argc, char *argv[]) {
     case ORB_FAST_THRESHOLD:
       settings.orbSettings.fastThreshold = atoi(optarg);
       break;
+    case LANE_FUZZINESS_FACTOR:
+      settings.laneDetectionSettings.fuzzinessFactor = atoi(optarg);
+      break;
     case LANE_FIRST_THRESHOLD:
       settings.laneDetectionSettings.firstThreshold = atoi(optarg);
       break;
@@ -197,8 +203,9 @@ int main(int argc, char *argv[]) {
   }
 
   // Hardcoded settings for debugging purposes
-  //settings.recordingFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/straightroad.rec";
+  settings.recordingFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/straightroad.rec";
   //settings.guiEnabled = false;
+  settings.laneDetectionSettings.fuzzinessFactor = 1.5;
 
   try {
     FeatureSetCreation::SettingsValidator validator;

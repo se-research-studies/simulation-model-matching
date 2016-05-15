@@ -17,6 +17,7 @@ namespace FeatureSetCreation {
   };
 
   struct LaneDetectionSettings {
+    float fuzzinessFactor = 1.0f;
     double firstThreshold = 100;
     double secondThreshold = 400;
     int apertureSize = 3;

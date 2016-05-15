@@ -1,5 +1,6 @@
 #include "featuredetector.h"
 
+#include <algorithm>
 #include <iostream>
 
 #include <opencv2/imgproc/imgproc.hpp>
@@ -11,7 +12,7 @@
 namespace FeatureSetCreation {
 
   FeatureDetector::FeatureDetector(const Settings& settings)
-    : guiEnabled(settings.guiEnabled), laneDetector(settings.laneDetectionSettings) {
+    : guiEnabled(settings.guiEnabled), fuzzinessFactor(settings.laneDetectionSettings.fuzzinessFactor), laneDetector(settings.laneDetectionSettings) {
   }
 
   FeatureDetector::~FeatureDetector() {
@@ -31,17 +32,30 @@ namespace FeatureSetCreation {
     std::vector<cv::KeyPoint> features;
     for (int i = 0; i < keyPoints.size(); ++i) {
       bool hitByLane = false;
-      for (const cv::Vec4i& lane : lanes) {
-        cv::Vec4i keyPointToLane(lane[0], lane[1], keyPoints.at(i).pt.x, keyPoints.at(i).pt.y);
-        cv::Vec4i doubleKeyPointToLane = 2 * keyPointToLane;
-        float radiusSquared = (keyPoints.at(i).size / 2);
-        radiusSquared *= radiusSquared;
-        float a = lane.dot(lane);
-        float b = doubleKeyPointToLane.dot(lane);
-        float c = keyPointToLane.dot(keyPointToLane) - radiusSquared;
-        float discriminant = b*b-4*a*c;
-        if (discriminant >= 0) {
-          hitByLane = true;
+      for (const cv::Vec4i& line : lanes) {
+        const float p1 = keyPoints.at(i).pt.x;
+        const float p2 = keyPoints.at(i).pt.y;
+        const float fuzzySize = keyPoints.at(i).size * fuzzinessFactor;
+        const float v1 = line[0];
+        const float v2 = line[1];
+        const float w1 = line[2];
+        const float w2 = line[3];
+        float distance;
+
+        float lineLengthSquared = pointDistanceSquared(v1, v2, w1, w2);
+        if (lineLengthSquared == 0.0) { // Line is a point
+          distance = pointDistance(p1, p2, v1, v2);
+        } else {
+          const float t = dotProduct(p1 - v1, p2 - v2, w1 - v1, w2 - v2);
+          const float clampedT = std::max(0.0f, std::min(1.0f, t));
+          const float projectedX = v1 + clampedT * (w1 - v1);
+          const float projectedY = v2 + clampedT * (w2 - v2);
+          distance = pointDistance(p1, p2, projectedX, projectedY);
+        }
+
+        hitByLane = distance < fuzzySize;
+        if (hitByLane) {
+          break;
         }
       }
       if (!hitByLane) {
@@ -49,6 +63,18 @@ namespace FeatureSetCreation {
       }
     }
     return features;
+  }
+
+  float FeatureDetector::pointDistanceSquared(float a1, float a2, float b1, float b2) const {
+    return pow(a1-b1, 2) + pow(a2-b2, 2);
+  }
+
+  float FeatureDetector::pointDistance(float a1, float a2, float b1, float b2) const {
+    return sqrt(pointDistanceSquared(a1, a2, b1, b2));
+  }
+
+  float FeatureDetector::dotProduct(float a1, float a2, float b1, float b2) const {
+    return a1 * b1 + a2 * b2;
   }
 
   void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const {
