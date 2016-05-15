@@ -28,7 +28,6 @@ HEADERS += \
     src/common/makeunique.h \
     src/common/datamanagement/tablefield.h \
     src/common/utils.h \
-    src/common/settings.h \
     src/common/datamanagement/dataaccessobject.h \
     src/common/datamanagement/tablecolumn.h
 
@@ -50,6 +49,5 @@ SOURCES += \
     src/common/datamanagement/cursor.cpp \
     src/common/datamanagement/tablefield.cpp \
     src/common/utils.cpp \
-    src/common/settings.cpp \
     src/common/datamanagement/dataaccessobject.cpp \
     src/common/datamanagement/tablecolumn.cpp
