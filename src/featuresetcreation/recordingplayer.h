@@ -12,11 +12,18 @@ namespace FeatureSetCreation {
         virtual ~RecordingPlayer();
 
     public:
-        cv::Size imageSize();
+        cv::Size imageSize() const;
         bool hasNext();
         cv::Mat next();
 
     private:
+        void initMetaData();
+        std::shared_ptr<odcore::wrapper::SharedMemory> extractSharedMemoryFromContainer();
+
+    private:
+        int imageWidth = 0;
+        int imageHeight = 0;
+        int bytesPerPixel = 0;
         odtools::player::Player player;
         odcore::data::Container currentContainer;
 
