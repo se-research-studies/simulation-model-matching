@@ -3,13 +3,15 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include <opendavinci/odcore/data/Container.h>
 #include <opendavinci/generated/odcore/data/image/SharedImage.h>
+#include <opendavinci/odcore/data/Container.h>
 #include <opendavinci/odcore/wrapper/SharedMemoryFactory.h>
+#include <opendavinci/odtools/player/Player.h>
 
 #include <FeatureSimulation/Common/Utils>
 #include <FeatureSimulation/Common/DataManagement/FeatureSetDAO>
 #include <FeatureSimulation/FeatureSetCreation/FeatureDetector>
+#include <FeatureSimulation/FeatureSetCreation/RecordingPlayer>
 
 namespace FeatureSetCreation {
 
@@ -26,26 +28,22 @@ FeatureSetCreator::~FeatureSetCreator() {
 }
 
 void FeatureSetCreator::createFeatureSet() {
-    odcore::io::URL url("file://" + recordingFile);
-    odtools::player::Player player(url, false, PLAYER_MEMORYSEGMENT_SIZE, PLAYER_NUMBER_OF_MEMORY_SEGMENTS, false);
-    cv::Mat mask = createMaskFromRonis(player);
     Common::FeatureSet result(recordingFile);
     int frameNumber = 0;
-    while (player.hasMoreData()) {
-        odcore::data::Container container = player.getNextContainerToBeSent();
-        if (container.getDataType() == odcore::data::image::SharedImage::ID()) {
-            cv::Mat image = readNextImage(container);
-            result.addFrame(frameNumber++, featureDetector->detectFeatures(image, mask));
-        }
+    RecordingPlayer player(recordingFile);
+    cv::Mat mask = createMaskFromRonis(player.imageSize());
+    while (player.hasNext()) {
+        cv::Mat image = player.next();
+        result.addFrame(frameNumber, featureDetector->detectFeatures(image, mask));
+        ++frameNumber;
     }
     saveFeatureSet(result);
 }
 
-cv::Mat FeatureSetCreator::createMaskFromRonis(odtools::player::Player& player) const {
+cv::Mat FeatureSetCreator::createMaskFromRonis(const cv::Size& imageSize) const {
     cv::Mat mask;
     std::vector<Common::Region> ronis = loadRonis();
     if (ronis.size() > 0) {
-        cv::Size imageSize = getImageSize(player);
         mask = cv::Mat(imageSize, CV_8U, cv::Scalar(255, 255, 255));
         for (const Common::Region& roni : ronis) {
             std::vector<cv::Point> vertices;
@@ -72,25 +70,6 @@ std::vector<Common::Region> FeatureSetCreator::loadRonis() const {
     }
 }
 
-cv::Size FeatureSetCreator::getImageSize(odtools::player::Player& player) const {
-    odcore::data::Container container = player.getNextContainerToBeSent();
-    while (container.getDataType() != odcore::data::image::SharedImage::ID()) {
-        container = player.getNextContainerToBeSent();
-    }
-    cv::Mat firstImage = readNextImage(container);
-    player.rewind();
-    return firstImage.size();
-}
-
-cv::Mat FeatureSetCreator::readNextImage(odcore::data::Container container) const {
-    odcore::data::image::SharedImage sharedImage = container.getData<odcore::data::image::SharedImage>();
-    std::shared_ptr<odcore::wrapper::SharedMemory> memory = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(sharedImage.getName());
-    IplImage* iplImage = cvCreateImage(cvSize(Common::Utils::to<int>(sharedImage.getWidth()), Common::Utils::to<int>(sharedImage.getHeight())), IPL_DEPTH_8U, sharedImage.getBytesPerPixel());
-    memcpy(iplImage->imageData, memory->getSharedMemory(), sharedImage.getWidth() * sharedImage.getHeight() * sharedImage.getBytesPerPixel());
-    cv::Mat image = cv::cvarrToMat(iplImage, true, true, 0);
-    cvReleaseImage(&iplImage);
-    return image;
-}
 
 void FeatureSetCreator::saveFeatureSet(const Common::FeatureSet& featureSet) const {
     featureSetDao.beginTransaction();
