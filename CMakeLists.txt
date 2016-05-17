@@ -96,11 +96,11 @@ TARGET_LINK_LIBRARIES (FeatureSetCreationLib CommonLib)
 
 ###########################################################################
 # Build the SimulationGame sources as library
-#message(STATUS "SimulationGameLib base path: " ${PROJECT_SOURCE_DIR}/src/simulationgame/)
-#FILE(GLOB_RECURSE SIMULATIONGAME_SOURCES ${PROJECT_SOURCE_DIR}/src/simulationgame/*.cpp)
-#FILE(GLOB_RECURSE SIMULATIONGAME_HEADERS ${PROJECT_SOURCE_DIR}/src/simulationgame/*.h)
-#ADD_LIBRARY(SimulationGameLib ${SIMULATIONGAME_SOURCES} ${SIMULATIONGAME_HEADERS})
-#TARGET_LINK_LIBRARIES (SimulationGameLib CommonLib) 
+message(STATUS "SimulationGameLib base path: " ${PROJECT_SOURCE_DIR}/src/simulationgame/)
+FILE(GLOB_RECURSE SIMULATIONGAME_SOURCES ${PROJECT_SOURCE_DIR}/src/simulationgame/*.cpp)
+FILE(GLOB_RECURSE SIMULATIONGAME_HEADERS ${PROJECT_SOURCE_DIR}/src/simulationgame/*.h)
+ADD_LIBRARY(SimulationGameLib ${SIMULATIONGAME_SOURCES} ${SIMULATIONGAME_HEADERS})
+TARGET_LINK_LIBRARIES (SimulationGameLib CommonLib) 
 
 ###########################################################################
 # Build the CommonTest sources as library
@@ -118,9 +118,9 @@ TARGET_LINK_LIBRARIES (createFeatureSet FeatureSetCreationLib)
 
 ###########################################################################
 # Build simulationGame executable.
-#message(STATUS "Main file for simulationGame: " ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
-#ADD_EXECUTABLE (simulationGame ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
-#TARGET_LINK_LIBRARIES (simulationGame SimulationGameLib) 
+message(STATUS "Main file for simulationGame: " ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
+ADD_EXECUTABLE (simulationGame ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
+TARGET_LINK_LIBRARIES (simulationGame SimulationGameLib) 
 
 ###########################################################################
 # Build commonTests executable.

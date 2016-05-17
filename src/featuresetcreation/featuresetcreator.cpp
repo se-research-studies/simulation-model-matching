@@ -29,7 +29,7 @@ FeatureSetCreator::~FeatureSetCreator() {
 
 void FeatureSetCreator::createFeatureSet() {
     Common::FeatureSet result(recordingFile);
-    int frameNumber = 0;
+    uint32_t frameNumber = 0;
     RecordingPlayer player(recordingFile);
     cv::Mat mask = createMaskFromRonis(player.imageSize());
     while (player.hasNext()) {

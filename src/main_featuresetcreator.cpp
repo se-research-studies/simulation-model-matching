@@ -104,7 +104,11 @@ void printUsage(char* programName) {
            );
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {    
+//    if (argc == 1) {
+//        printUsage(argv[0]);
+//        exit(EXIT_FAILURE);
+//    }
 
     int optIndex = 0;
 
@@ -203,7 +207,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Hardcoded settings for debugging purposes
-    settings.recordingFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/straightroad.rec";
+    settings.recordingFile = "../resources/straightroad.rec";
     //settings.guiEnabled = false;
     //settings.laneDetectionSettings.fuzzinessFactor = 1.5;
 //  settings.laneDetectionSettings.minLineLength = 5;
