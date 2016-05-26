@@ -278,9 +278,7 @@ namespace automotive {
             measurementTaker.start();
 
             // Overall state machine handler.
-            int index = 0;
-            while (index < 100 && getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING) {
-                ++index;
+            while (getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING) {
                 bool has_next_frame = false;
 
                 // Get the most recent available container for a SharedImage.
