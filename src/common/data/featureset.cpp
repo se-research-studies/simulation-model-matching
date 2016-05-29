@@ -2,7 +2,7 @@
 
 namespace Common {
 
-FeatureSet::FeatureSet(const std::string recordingName)
+FeatureSet::FeatureSet(const std::string& recordingName)
     : recordingName(recordingName) {
 }
 

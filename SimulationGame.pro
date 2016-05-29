@@ -10,10 +10,10 @@ LIBS += -L$$PWD/bin/ -lFeatureSimulationCommon
 
 SOURCES += \
     src/main_simulationgame.cpp \
-    src/simulationgame/gamestarter.cpp
+    src/simulationgame/measurementtaker.cpp
 
 HEADERS += \
     gamestarter.h \
-    src/simulationgame/gamestarter.h
+    src/simulationgame/measurementtaker.h
 
 

@@ -9,7 +9,12 @@ namespace Common {
 class Cursor {
 public:
     Cursor(sqlite3_stmt* statement);
+    Cursor(Cursor&& other);
     virtual ~Cursor();
+
+public:
+    Cursor(const Cursor&) = delete;
+    Cursor& operator=(const Cursor&) = delete;
 
 public:
     bool moveToNext();

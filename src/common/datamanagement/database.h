@@ -44,7 +44,7 @@ private:
     std::string DB_FILENAME = "data.sqlite";
 
 private:
-    sqlite3* db;
+    sqlite3* db = nullptr;
     bool isOpen = false;
 };
 

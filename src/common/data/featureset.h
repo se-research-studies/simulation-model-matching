@@ -10,12 +10,12 @@ namespace Common {
 
 class FeatureSet {
 public:
-    FeatureSet(const std::string recordingName);
+    FeatureSet(const std::string& recordingName);
     FeatureSet(FeatureSet&& other) = default;
 
 public:
     FeatureSet(const FeatureSet&) = delete;
-    Feature& operator=(const FeatureSet&) = delete;
+    FeatureSet& operator=(const FeatureSet&) = delete;
 
 public:
     std::string getRecordingName() const;

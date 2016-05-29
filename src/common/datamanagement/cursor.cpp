@@ -1,11 +1,13 @@
 #include "cursor.h"
 
-#include <FeatureSimulation/Common/DataManagement/Database>
-
 namespace Common {
 
 Cursor::Cursor(sqlite3_stmt* statement)
     : statement(statement) {
+}
+
+Cursor::Cursor(Cursor&& other)
+    : statement(std::move(other.statement)) {
 }
 
 Cursor::~Cursor() {

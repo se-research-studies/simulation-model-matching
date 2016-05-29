@@ -1,15 +1,8 @@
 #include "featuresetdao.h"
 
-#include <FeatureSimulation/Common/MakeUnique>
 #include <FeatureSimulation/Common/DataManagement/Database>
 
 namespace Common {
-
-FeatureSetDAO::FeatureSetDAO() {
-}
-
-FeatureSetDAO::~FeatureSetDAO() {
-}
 
 void FeatureSetDAO::ensureTable() const {
     std::vector<TableColumn> columns;

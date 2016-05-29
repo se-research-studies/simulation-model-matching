@@ -25,7 +25,9 @@ HEADERS += \
     src/common/datamanagement/tablefield.h \
     src/common/utils.h \
     src/common/datamanagement/dataaccessobject.h \
-    src/common/datamanagement/tablecolumn.h
+    src/common/datamanagement/tablecolumn.h \
+    src/common/data/measurements.h \
+    src/common/datamanagement/measurementsdao.h
 
 SOURCES += \
     src/common/data/coordinates.cpp \
@@ -42,4 +44,6 @@ SOURCES += \
     src/common/datamanagement/tablefield.cpp \
     src/common/utils.cpp \
     src/common/datamanagement/dataaccessobject.cpp \
-    src/common/datamanagement/tablecolumn.cpp
+    src/common/datamanagement/tablecolumn.cpp \
+    src/common/data/measurements.cpp \
+    src/common/datamanagement/measurementsdao.cpp
