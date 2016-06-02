@@ -3,7 +3,7 @@
 #include <vector>
 #include <opencv2/core/core.hpp>
 
-#include <FeatureSimulation/FeatureSetCreation/Settings>
+#include <FeatureSimulation/FeatureSetCreation/settings.h>
 
 namespace FeatureSetCreation {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FeatureSimulation/FeatureSetCreation/Settings>
+#include <FeatureSimulation/FeatureSetCreation/settings.h>
 
 namespace FeatureSetCreation {
 

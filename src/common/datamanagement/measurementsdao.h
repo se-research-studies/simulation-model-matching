@@ -2,10 +2,9 @@
 
 #include <vector>
 
-#include <FeatureSimulation/Common/DataManagement/DataAccessObject>
-#include <FeatureSimulation/Common/DataManagement/TableField>
-
-#include <FeatureSimulation/Common/Data/Measurements>
+#include <FeatureSimulation/Common/DataManagement/dataaccessobject.h>
+#include <FeatureSimulation/Common/DataManagement/tablefield.h>
+#include <FeatureSimulation/Common/Data/measurements.h>
 
 namespace Common {
 

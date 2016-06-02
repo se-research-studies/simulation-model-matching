@@ -3,8 +3,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d/features2d.hpp>
 
-#include <FeatureSimulation/Common/Data/DirtyFrame>
-#include <FeatureSimulation/FeatureSetCreation/LaneDetector>
+#include <FeatureSimulation/Common/Data/dirtyframe.h>
+#include <FeatureSimulation/FeatureSetCreation/lanedetector.h>
 
 namespace FeatureSetCreation {
 

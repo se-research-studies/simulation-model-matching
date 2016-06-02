@@ -3,8 +3,8 @@
 #include <memory>
 #include <map>
 
-#include <FeatureSimulation/Common/Data/DirtyFrame>
-#include <FeatureSimulation/Common/Data/Region>
+#include <FeatureSimulation/Common/Data/dirtyframe.h>
+#include <FeatureSimulation/Common/Data/region.h>
 
 namespace Common {
 

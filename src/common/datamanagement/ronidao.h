@@ -4,7 +4,7 @@
 
 #include <jsoncpp/json/json.h>
 
-#include <FeatureSimulation/Common/Data/Region>
+#include <FeatureSimulation/Common/Data/region.h>
 
 namespace Common {
 

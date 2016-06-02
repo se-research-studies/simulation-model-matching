@@ -1,6 +1,6 @@
 #include "dataaccessobject.h"
 
-#include <FeatureSimulation/Common/DataManagement/Database>
+#include <FeatureSimulation/Common/DataManagement/database.h>
 
 namespace Common {
 

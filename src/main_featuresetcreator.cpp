@@ -2,9 +2,9 @@
 
 #include <getopt.h>
 
-#include <FeatureSimulation/FeatureSetCreation/FeatureSetCreator>
-#include <FeatureSimulation/FeatureSetCreation/Settings>
-#include <FeatureSimulation/FeatureSetCreation/SettingsValidator>
+#include <FeatureSimulation/FeatureSetCreation/featuresetcreator.h>
+#include <FeatureSimulation/FeatureSetCreation/settings.h>
+#include <FeatureSimulation/FeatureSetCreation/settingsvalidator.h>
 
 enum Argument {
     REC_FILE,

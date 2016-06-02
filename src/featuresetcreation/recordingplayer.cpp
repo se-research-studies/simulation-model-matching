@@ -6,8 +6,8 @@
 #include <opendavinci/odcore/data/Container.h>
 #include <opendavinci/odcore/wrapper/SharedMemoryFactory.h>
 
-#include <FeatureSimulation/Common/MakeUnique>
-#include <FeatureSimulation/Common/Utils>
+#include <FeatureSimulation/Common/makeunique.h>
+#include <FeatureSimulation/Common/utils.h>
 
 namespace FeatureSetCreation {
 

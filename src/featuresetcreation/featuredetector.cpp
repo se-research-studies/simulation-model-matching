@@ -6,8 +6,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include <FeatureSimulation/Common/Utils>
-#include <FeatureSimulation/Common/Data/Feature>
+#include <FeatureSimulation/Common/utils.h>
+#include <FeatureSimulation/Common/Data/feature.h>
 
 namespace FeatureSetCreation {
 

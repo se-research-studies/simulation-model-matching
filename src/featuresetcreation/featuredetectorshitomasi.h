@@ -1,7 +1,7 @@
 #pragma once
 
-#include <FeatureSimulation/FeatureSetCreation/FeatureDetector>
-#include <FeatureSimulation/FeatureSetCreation/Settings>
+#include <FeatureSimulation/FeatureSetCreation/featuredetector.h>
+#include <FeatureSimulation/FeatureSetCreation/settings.h>
 
 namespace FeatureSetCreation {
 

@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include <FeatureSimulation/Common/MakeUnique>
+#include <FeatureSimulation/Common/makeunique.h>
 
 namespace Common {
 

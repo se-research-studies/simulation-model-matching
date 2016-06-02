@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include <FeatureSimulation/Common/Utils>
+#include <FeatureSimulation/Common/utils.h>
 
 namespace Common {
 

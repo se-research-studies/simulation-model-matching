@@ -1,12 +1,12 @@
 #pragma once
 
-#include <FeatureSimulation/Common/Data/FeatureSet>
-#include <FeatureSimulation/Common/DataManagement/FeatureSetDAO>
-#include <FeatureSimulation/Common/DataManagement/RoniDAO>
+#include <FeatureSimulation/Common/Data/featureset.h>
+#include <FeatureSimulation/Common/DataManagement/featuresetdao.h>
+#include <FeatureSimulation/Common/DataManagement/ronidao.h>
 
-#include <FeatureSimulation/FeatureSetCreation/FeatureDetector>
-#include <FeatureSimulation/FeatureSetCreation/FeatureDetectorORB>
-#include <FeatureSimulation/FeatureSetCreation/FeatureDetectorShiTomasi>
+#include <FeatureSimulation/FeatureSetCreation/featuredetector.h>
+#include <FeatureSimulation/FeatureSetCreation/featuredetectororb.h>
+#include <FeatureSimulation/FeatureSetCreation/featuredetectorshitomasi.h>
 
 namespace FeatureSetCreation {
 

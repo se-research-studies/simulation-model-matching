@@ -1,9 +1,9 @@
 #pragma once
 
-#include <FeatureSimulation/Common/DataManagement/DataAccessObject>
-#include <FeatureSimulation/Common/Data/FeatureSet>
-#include <FeatureSimulation/Common/DataManagement/Cursor>
-#include <FeatureSimulation/Common/DataManagement/TableField>
+#include <FeatureSimulation/Common/DataManagement/dataaccessobject.h>
+#include <FeatureSimulation/Common/Data/featureset.h>
+#include <FeatureSimulation/Common/DataManagement/cursor.h>
+#include <FeatureSimulation/Common/DataManagement/tablefield.h>
 
 namespace Common {
 

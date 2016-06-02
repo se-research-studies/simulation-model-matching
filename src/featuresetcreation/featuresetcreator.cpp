@@ -8,10 +8,10 @@
 #include <opendavinci/odcore/wrapper/SharedMemoryFactory.h>
 #include <opendavinci/odtools/player/Player.h>
 
-#include <FeatureSimulation/Common/Utils>
-#include <FeatureSimulation/Common/DataManagement/FeatureSetDAO>
-#include <FeatureSimulation/FeatureSetCreation/FeatureDetector>
-#include <FeatureSimulation/FeatureSetCreation/RecordingPlayer>
+#include <FeatureSimulation/Common/utils.h>
+#include <FeatureSimulation/Common/DataManagement/featuresetdao.h>
+#include <FeatureSimulation/FeatureSetCreation/featuredetector.h>
+#include <FeatureSimulation/FeatureSetCreation/recordingplayer.h>
 
 namespace FeatureSetCreation {
 

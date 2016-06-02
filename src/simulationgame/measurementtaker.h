@@ -3,7 +3,7 @@
 #include <chrono>
 #include <string>
 
-#include <FeatureSimulation/Common/DataManagement/MeasurementsDAO>
+#include <FeatureSimulation/Common/DataManagement/measurementsdao.h>
 
 using namespace Common;
 
