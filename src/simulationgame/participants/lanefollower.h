@@ -12,6 +12,11 @@ namespace SimulationGame {
 
     private:
         void processImage(const cv::Mat& image) override;
+
+    private:
+        odcore::data::TimeStamp m_previousTime;
+        double m_eSum;
+        double m_eOld;
     };
 
 } // namespace SimulationGame

@@ -31,17 +31,6 @@ namespace SimulationGame {
     private:
         bool guiEnabled;
 
-        // Members from LaneFollower.h:
-//        bool m_hasAttachedToSharedImageMemory;
-//        std::shared_ptr<odcore::wrapper::SharedMemory> m_sharedImageMemory;
-//        IplImage *m_image;
-//        bool m_debug;
-//        CvFont m_font;
-
-//        odcore::data::TimeStamp m_previousTime;
-//        double m_eSum;
-//        double m_eOld;
-
 //        automotive::VehicleControl m_vehicleControl;
     };
 
