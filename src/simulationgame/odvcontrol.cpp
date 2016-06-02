@@ -30,12 +30,12 @@ namespace SimulationGame {
 
     void OdvControl::startProcess(const char* command) {
         pid_t pid = vfork();
-        if (pid == 0) {
+        if (pid == 0) { // We are the child process
             if (execlp("xterm", "xterm", "-e", command, (char*)0) == -1) {
                 perror("execlp");
             }
             exit(EXIT_SUCCESS);
-        } else {
+        } else { // We are the parent process
             runningProcesses.push(pid);
             std::cout << "Running " << command << " with PID " << pid << std::endl;
         }
@@ -43,6 +43,19 @@ namespace SimulationGame {
 
     void OdvControl::stopProcess(pid_t pid) {
         kill(pid, SIGTERM);
+        if (!waitForProcessToStop(pid, 5)) {
+            kill(pid, SIGKILL);
+        }
+    }
+
+    bool OdvControl::waitForProcessToStop(pid_t pid, uint8_t seconds) {
+        for (int i = 0; i < seconds; i++) {
+            sleep(1);
+            if (waitpid(pid, nullptr, WNOHANG) == pid) {
+                return true;
+            }
+        }
+        return false;
     }
 
 } // namespace SimulationGame
