@@ -85,7 +85,7 @@ void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, con
         cv::line(completedImage, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0,0,255), 1, CV_AA);
     }
     cv::imshow("Analyzed Image", completedImage);
-    cv::waitKey(50);
+    cv::waitKey(/*50*/);
 }
 
 Common::DirtyFrame FeatureDetector::convertToDirtyFrame(const std::vector<cv::KeyPoint>& keyPoints) const {

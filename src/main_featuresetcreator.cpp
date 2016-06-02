@@ -104,12 +104,7 @@ void printUsage(char* programName) {
            );
 }
 
-int main(int argc, char *argv[]) {    
-//    if (argc == 1) {
-//        printUsage(argv[0]);
-//        exit(EXIT_FAILURE);
-//    }
-
+int main(int argc, char *argv[]) {
     int optIndex = 0;
 
     FeatureSetCreation::Settings settings;

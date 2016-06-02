@@ -1,6 +1,6 @@
 #include "measurementtaker.h"
 
-#include <FeatureSimulation/Common/Data/Measurements>
+#include <FeatureSimulation/Common/Data/measurements.h>
 
 using namespace Common;
 
