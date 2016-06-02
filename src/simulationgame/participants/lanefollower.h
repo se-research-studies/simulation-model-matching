@@ -9,6 +9,9 @@ namespace SimulationGame {
     public:
         LaneFollower(int argc, char** argv);
         virtual ~LaneFollower();
+
+    private:
+        void processImage(const cv::Mat& image) override;
     };
 
 } // namespace SimulationGame
