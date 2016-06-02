@@ -1,5 +1,7 @@
 #include "abstractparticipant.h"
 
+#include <iostream>
+
 #include <opendavinci/generated/odcore/data/image/SharedImage.h>
 #include <opendavinci/odcore/data/Container.h>
 #include <opendavinci/odcore/wrapper/SharedMemoryFactory.h>
@@ -39,6 +41,7 @@ namespace SimulationGame {
 
     odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::body()
     {
+        std::cout << "Entering body" << std::endl;
         while (getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING) {
             odcore::data::Container container = getKeyValueDataStore().get(odcore::data::image::SharedImage::ID());
             if (container.getDataType() == odcore::data::image::SharedImage::ID()) {

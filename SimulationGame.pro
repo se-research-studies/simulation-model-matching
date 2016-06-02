@@ -7,7 +7,7 @@ CONFIG -= qt
 INCLUDEPATH += $$_PRO_FILE_PWD_/include/
 
 LIBS += -L$$PWD/bin/ -lFeatureSimulationCommon
-LIBS += -lopencv_highgui -lopencv_imgproc
+LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc
 LIBS += -lopendavinci -lopendlv -lautomotivedata
 
 SOURCES += \

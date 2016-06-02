@@ -23,7 +23,6 @@ namespace SimulationGame {
         const int32_t CONTROL_SCANLINE = 462; // calibrated length to right: 280px
         const int32_t distance = 280;
 
-        odcore::data::TimeStamp beforeImageProcessing;
         for (int32_t y = image.rows - 8; y > image.rows * .6; y -= 10) {
             // Search from middle to the left:
             cv::Scalar pixelLeft;
