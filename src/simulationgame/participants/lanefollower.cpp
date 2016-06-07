@@ -4,8 +4,8 @@
 
 namespace SimulationGame {
 
-    LaneFollower::LaneFollower(int argc, char** argv)
-        : AbstractParticipant(argc, argv, "LaneFollower")
+    LaneFollower::LaneFollower(int argc, char** argv, uint32_t frameLimit)
+        : AbstractParticipant(argc, argv, "LaneFollower", frameLimit)
     {
     }
 
@@ -15,8 +15,6 @@ namespace SimulationGame {
 
     void LaneFollower::processImage(const cv::Mat& image)
     {
-        // Code from LaneFollower.cpp:
-
         static bool useRightLaneMarking = true;
         double e = 0;
 
@@ -99,14 +97,6 @@ namespace SimulationGame {
             }
         }
 
-        // Show resulting features.
-//        if (m_debug) {
-//            if (image != NULL) {
-//                cvShowImage("WindowShowImage", image);
-//                cvWaitKey(10);
-//            }
-//        }
-
         odcore::data::TimeStamp currentTime;
         double timeStep = (currentTime.toMicroseconds() - m_previousTime.toMicroseconds()) / (1000.0 * 1000.0);
         m_previousTime = currentTime;
@@ -144,10 +134,7 @@ namespace SimulationGame {
         }
         std::cerr << "PID: " << "e = " << e << ", eSum = " << m_eSum << ", desiredSteering = " << desiredSteering << ", y = " << y << std::endl;
 
-
-//                    // Go forward.
-//                    m_vehicleControl.setSpeed(2);
-//                    m_vehicleControl.setSteeringWheelAngle(desiredSteering);
+        setControls(2, desiredSteering);
     }
 
 

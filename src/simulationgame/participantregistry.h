@@ -11,7 +11,7 @@ namespace SimulationGame {
     class ParticipantRegistry
     {
     public:
-        ParticipantRegistry(std::string&& cid, std::string&& freq);
+        ParticipantRegistry(const std::string& cid, const std::string& freq, uint32_t frameLimit);
         virtual ~ParticipantRegistry();
 
     public:
@@ -20,18 +20,19 @@ namespace SimulationGame {
             participants[name] = &AbstractParticipant::createInstance<T>;
         }
 
-        AbstractParticipant&& getParticipant(std::string name) {
+        std::unique_ptr<AbstractParticipant> getParticipant(std::string name) {
             const int argc = 3;
             std::string cidArg = "--cid=" + cid;
             std::string freqArg = "--freq=" + freq;
             char* argv[] = { &name[0], &cidArg[0], &freqArg[0], nullptr };
-            return participants.at(name)(argc, argv);
+            return participants.at(name)(argc, argv, frameLimit);
         }
 
     private:
         std::string cid;
         std::string freq;
-        std::map<std::string, std::function<AbstractParticipant&&(int, char*[])>> participants;
+        uint32_t frameLimit;
+        std::map<std::string, std::function<std::unique_ptr<AbstractParticipant>(int, char*[], uint32_t)>> participants;
     };
 
 } // namespace SimulationGame

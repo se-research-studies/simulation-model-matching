@@ -7,7 +7,7 @@ namespace SimulationGame {
     class LaneFollower : public AbstractParticipant
     {
     public:
-        LaneFollower(int argc, char** argv);
+        LaneFollower(int argc, char** argv, uint32_t frameLimit);
         virtual ~LaneFollower();
 
     private:

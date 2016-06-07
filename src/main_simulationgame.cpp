@@ -9,25 +9,30 @@
 // cid und freq als Argument mit defaults
 
 int main(int argc, char *argv[]) {
-    SimulationGame::OdvControl control;
+
+    // Hardcoded settings for tests
+    std::string cid = "111";
+    std::string freq = "10";
+    std::string configurationFile = "../resources/configuration";
+    std::string participant = "LaneFollower";
+    uint32_t frameLimit = 10;
+
+    SimulationGame::OdvControl control(cid, freq, configurationFile);
 
     std::cout << "Press ENTER to start... " << std::endl;
     std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
 
     control.start();
 
-    std::cout << "Press ENTER to stop... " << std::endl;
-    std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
+    SimulationGame::ParticipantRegistry registry(cid, freq, frameLimit);
+    registry.registerParticipant<SimulationGame::LaneFollower>(participant);
 
-    SimulationGame::LaneFollower lf(argc, argv);
-    int exitCode = lf.runModule();
+    sleep(10);
+
+    std::unique_ptr<SimulationGame::AbstractParticipant> laneFollower = registry.getParticipant("LaneFollower");
+    int exitCode = laneFollower->runModule();
 
     control.stop();
 
-//    SimulationGame::ParticipantRegistry registry("111", "10");
-//    registry.registerParticipant<SimulationGame::LaneFollower>("LaneFollower");
-
-//    SimulationGame::AbstractParticipant&& laneFollower = std::move(registry.getParticipant("LaneFollower"));
-
-    exit(EXIT_SUCCESS);
+    exit(exitCode);
 }

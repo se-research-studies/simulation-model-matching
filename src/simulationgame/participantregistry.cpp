@@ -2,8 +2,8 @@
 
 namespace SimulationGame {
 
-    ParticipantRegistry::ParticipantRegistry(std::string&& cid, std::string&& freq)
-        : cid(cid), freq(freq)
+    ParticipantRegistry::ParticipantRegistry(const std::string& cid, const std::string& freq, uint32_t frameLimit)
+        : cid(cid), freq(freq), frameLimit(frameLimit)
     {
     }
 
