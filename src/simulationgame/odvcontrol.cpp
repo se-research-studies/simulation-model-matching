@@ -31,7 +31,7 @@ namespace SimulationGame {
     void OdvControl::startProcess(const char* command) {
         pid_t pid = vfork();
         if (pid == 0) { // We are the child process
-            if (execlp("xterm", "xterm", "-e", command, (char*)0) == -1) {
+            if (execlp("xterm", "xterm", "-e", command, static_cast<char*>(nullptr)) == -1) {
                 perror("execlp");
             }
             exit(EXIT_SUCCESS);
