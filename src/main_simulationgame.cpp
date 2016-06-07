@@ -13,9 +13,9 @@ int main(int argc, char *argv[]) {
     // Hardcoded settings for tests
     std::string cid = "111";
     std::string freq = "10";
-    std::string configurationFile = "../resources/configuration";
+    std::string configurationFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/configuration";
     std::string participant = "LaneFollower";
-    uint32_t frameLimit = 10;
+    uint32_t frameLimit = 100;
 
     SimulationGame::OdvControl control(cid, freq, configurationFile);
 
@@ -26,8 +26,6 @@ int main(int argc, char *argv[]) {
 
     SimulationGame::ParticipantRegistry registry(cid, freq, frameLimit);
     registry.registerParticipant<SimulationGame::LaneFollower>(participant);
-
-    sleep(10);
 
     std::unique_ptr<SimulationGame::AbstractParticipant> laneFollower = registry.getParticipant("LaneFollower");
     int exitCode = laneFollower->runModule();

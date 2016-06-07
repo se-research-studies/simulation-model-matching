@@ -55,11 +55,11 @@ namespace SimulationGame {
                 if (sharedImageMemory->isValid()) {                    
                     std::cout << "Image read from memory" << std::endl;
                     odcore::base::Lock l(sharedImageMemory);
-                    cv::Mat image(sharedImage.getWidth(), sharedImage.getHeight(), CV_MAKETYPE(CV_8U, sharedImage.getBytesPerPixel()), sharedImageMemory->getSharedMemory());
+                    cv::Mat image(cv::Size(sharedImage.getWidth(), sharedImage.getHeight()), CV_MAKETYPE(CV_8U, sharedImage.getBytesPerPixel()), sharedImageMemory->getSharedMemory());
                     cv::flip(image, image, -1);
-                    std::cout << "Processing image" << std::endl;
                     cv::imshow("Image", image);
-                    cv::waitKey(/*50*/);
+                    cv::waitKey(10);
+                    std::cout << "Processing image" << std::endl;
                     processImage(image);                    
                     std::cout << "Image processed" << std::endl;
                 }
