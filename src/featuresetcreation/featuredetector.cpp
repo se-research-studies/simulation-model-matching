@@ -29,7 +29,6 @@ Common::DirtyFrame FeatureDetector::detectFeatures(const cv::Mat& image, const c
 }
 
 std::vector<cv::KeyPoint> FeatureDetector::subtractLanes(const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) {
-    discardedKeypoints.clear();
     std::vector<cv::KeyPoint> features;
     for (const cv::KeyPoint& keyPoint : keyPoints) {
         bool hitByLane = false;
@@ -42,16 +41,16 @@ std::vector<cv::KeyPoint> FeatureDetector::subtractLanes(const std::vector<cv::K
             const float w1 = line[2];
             const float w2 = line[3];
             float distance;
-            if (p1 == 229 && p2 == 172 && ((std::abs(v1 - 228) < 10 && std::abs(v2 - 176) < 10) || (std::abs(w1 - 228) < 10 && std::abs(w2 - 176) < 10))) {
-                bool found = true;
-                std::cout << found;
-            }
-
             float lineLengthSquared = pointDistanceSquared(v1, v2, w1, w2);
             if (lineLengthSquared == 0.0) { // Line is a point
                 distance = pointDistance(p1, p2, v1, v2);
             } else {
-                const float t = dotProduct(p1 - v1, p2 - v2, w1 - v1, w2 - v2);
+                const float scaleFactor = 1.0f / sqrt(lineLengthSquared);
+                const float pv1Scaled = (p1 - v1) * scaleFactor;
+                const float pv2Scaled = (p2 - v2) * scaleFactor;
+                const float vw1Scaled = (w1 - v1) * scaleFactor;
+                const float vw2Scaled = (w2 - v2) * scaleFactor;
+                const float t = dotProduct(pv1Scaled, pv2Scaled, vw1Scaled, vw2Scaled);
                 const float clampedT = std::max(0.0f, std::min(1.0f, t));
                 const float projectedX = v1 + clampedT * (w1 - v1);
                 const float projectedY = v2 + clampedT * (w2 - v2);
@@ -65,8 +64,6 @@ std::vector<cv::KeyPoint> FeatureDetector::subtractLanes(const std::vector<cv::K
         }
         if (!hitByLane) {
             features.push_back(keyPoint);
-        } else {
-            discardedKeypoints.push_back(keyPoint);
         }
     }
     return features;
@@ -95,19 +92,6 @@ void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, con
         cv::line(completedImage, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0, 0, 255), 2, CV_AA);
     }
     cv::imshow("Analyzed Image", completedImage);
-    //cv::waitKey(/*50*/);
-
-
-    cv::Mat discardedMat(image.size(), image.type(), cv::Scalar(255, 255, 255));
-    image.copyTo(discardedMat);
-    cv::drawKeypoints(discardedMat, discardedKeypoints, discardedMat, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
-    for (const cv::KeyPoint& keyPoint : discardedKeypoints) {
-        cv::circle(discardedMat, cv::Point(keyPoint.pt.x, keyPoint.pt.y), keyPoint.size / 2, cv::Scalar(0, 255, 0));
-    }
-    for (const cv::Vec4i& line : lanes) {
-        cv::line(discardedMat, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0, 0, 255), 2, CV_AA);
-    }
-    cv::imshow("Discarded Keypoints", discardedMat);
     cv::waitKey(/*50*/);
 }
 

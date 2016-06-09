@@ -35,7 +35,6 @@ private:
 
 private:
     LaneDetector laneDetector;
-    std::vector<cv::KeyPoint> discardedKeypoints;
 };
 
 } // namespace FeatureSetCreation
