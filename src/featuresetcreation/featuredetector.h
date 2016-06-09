@@ -22,7 +22,7 @@ protected:
     virtual std::vector<cv::KeyPoint> findKeyPoints(const cv::Mat& image, const cv::Mat& mask) = 0;
 
 private:
-    std::vector<cv::KeyPoint> subtractLanes(const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const;
+    std::vector<cv::KeyPoint> subtractLanes(const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes);
     float pointDistanceSquared(float a1, float a2, float b1, float b2) const;
     float pointDistance(float a1, float a2, float b1, float b2) const;
     float dotProduct(float a1, float a2, float b1, float b2) const;
@@ -35,6 +35,7 @@ private:
 
 private:
     LaneDetector laneDetector;
+    std::vector<cv::KeyPoint> discardedKeypoints;
 };
 
 } // namespace FeatureSetCreation

@@ -29,18 +29,6 @@ namespace SimulationGame {
 
     void AbstractParticipant::setUp()
     {
-        //        // Initialize fonts.
-        //        const double hscale = 0.4;
-        //        const double vscale = 0.3;
-        //        const double shear = 0.2;
-        //        const int thickness = 1;
-        //        const int lineType = 6;
-
-        //        cvInitFont(&m_font, CV_FONT_HERSHEY_DUPLEX, hscale, vscale, shear, thickness, lineType);
-
-        //        // Get configuration data.
-        //        KeyValueConfiguration kv = getKeyValueConfiguration();
-        //        m_debug = kv.getValue<int32_t> ("lanefollower.debug") == 1;
     }
 
     void AbstractParticipant::tearDown()
@@ -51,27 +39,20 @@ namespace SimulationGame {
     odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::body()
     {
         uint32_t frame = 0;
-
-        std::cout << "Entering body" << std::endl;
         while (getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING && frame < frameLimit) {
             ++frame;
-            std::cout << "Still running" << std::endl;
             odcore::data::Container container = getKeyValueDataStore().get(odcore::data::image::SharedImage::ID());
             if (container.getDataType() == odcore::data::image::SharedImage::ID()) {
-                std::cout << "Got next image..." << std::endl;
                 odcore::data::image::SharedImage sharedImage = container.getData<odcore::data::image::SharedImage>();
                 std::shared_ptr<odcore::wrapper::SharedMemory> sharedImageMemory = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(sharedImage.getName());
-                if (sharedImageMemory->isValid()) {                    
-                    std::cout << "Image read from memory" << std::endl;
+                if (sharedImageMemory->isValid()) {
                     odcore::base::Lock l(sharedImageMemory);
                     cv::Mat image(cv::Size(sharedImage.getWidth(), sharedImage.getHeight()), CV_MAKETYPE(CV_8U, sharedImage.getBytesPerPixel()), sharedImageMemory->getSharedMemory());
                     cv::flip(image, image, -1);
                     addFeatures(image, frame);
+                    processImage(image);
                     cv::imshow("Image", image);
                     cv::waitKey(10);
-                    std::cout << "Processing image" << std::endl;
-                    processImage(image);                    
-                    std::cout << "Image processed" << std::endl;
                 }
             } else {
                 std::cout << "Container does not contain image" << std::endl;
@@ -83,7 +64,14 @@ namespace SimulationGame {
 
     void AbstractParticipant::setControls(double speed, double steeringWheelAngle)
     {
-        std::cout << "Setting speed " << speed << ", angle " << steeringWheelAngle << std::endl;
+        if (steeringWheelAngle != lastSteeringWheelAngle) {
+            // add steering action;
+        }
+        lastSteeringWheelAngle = steeringWheelAngle;
+        if (speed != lastSpeed) {
+            // add speed change
+        }
+        lastSpeed = speed;
         vehicleControl.setSpeed(speed);
         vehicleControl.setSteeringWheelAngle(steeringWheelAngle);
         odcore::data::Container container(vehicleControl);
@@ -95,7 +83,7 @@ namespace SimulationGame {
         if (featureSet != nullptr) {
             const Common::DirtyFrame& dirtyFrame = featureSet->getFrame(frame % featureSet->getFrameCount());
             for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
-                cv::circle(image, cv::Point(feature.getX(), feature.getY()), feature.getDiameter() / 10, cv::Scalar(255, 255, 255), -1);
+                cv::circle(image, cv::Point(feature.getX(), feature.getY()), 5, cv::Scalar(255, 255, 255), -1);
             }
         }
     }

@@ -18,7 +18,9 @@ namespace SimulationGame {
         virtual ~AbstractParticipant();
 
     public:
-        template <typename SubClass> static std::unique_ptr<AbstractParticipant> createInstance(int argc, char** argv) {
+        template <typename SubClass>
+        static std::unique_ptr<AbstractParticipant> createInstance(int argc, char** argv) {
+            static_assert(std::is_base_of<AbstractParticipant, SubClass>(), "Only use createInstance with AbstractParticipant subclasses");
             return std::make_unique<SubClass>(argc, argv);
         }
 
@@ -40,6 +42,8 @@ namespace SimulationGame {
         Common::FeatureSetDAO featureSetDao;
         std::unique_ptr<Common::FeatureSet> featureSet;
         automotive::VehicleControl vehicleControl;
+        double lastSteeringWheelAngle = 0;
+        double lastSpeed = 0;
     };
 
 } // namespace SimulationGame

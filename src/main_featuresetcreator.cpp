@@ -203,6 +203,7 @@ int main(int argc, char *argv[]) {
 
     // Hardcoded settings for debugging purposes
     settings.recordingFile = "../resources/straightroad.rec";
+    //settings.detectionAlg = "ShiTomasi";
     //settings.guiEnabled = false;
     //settings.laneDetectionSettings.fuzzinessFactor = 1.5;
 //  settings.laneDetectionSettings.minLineLength = 5;

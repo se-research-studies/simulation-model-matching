@@ -28,19 +28,24 @@ Common::DirtyFrame FeatureDetector::detectFeatures(const cv::Mat& image, const c
     return convertToDirtyFrame(keyPoints);
 }
 
-std::vector<cv::KeyPoint> FeatureDetector::subtractLanes(const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const {
+std::vector<cv::KeyPoint> FeatureDetector::subtractLanes(const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) {
+    discardedKeypoints.clear();
     std::vector<cv::KeyPoint> features;
-    for (int i = 0; i < keyPoints.size(); ++i) {
+    for (const cv::KeyPoint& keyPoint : keyPoints) {
         bool hitByLane = false;
+        const float p1 = keyPoint.pt.x;
+        const float p2 = keyPoint.pt.y;
+        const float fuzzySize = keyPoint.size * fuzzinessFactor;
         for (const cv::Vec4i& line : lanes) {
-            const float p1 = keyPoints.at(i).pt.x;
-            const float p2 = keyPoints.at(i).pt.y;
-            const float fuzzySize = keyPoints.at(i).size * fuzzinessFactor;
             const float v1 = line[0];
             const float v2 = line[1];
             const float w1 = line[2];
             const float w2 = line[3];
             float distance;
+            if (p1 == 229 && p2 == 172 && ((std::abs(v1 - 228) < 10 && std::abs(v2 - 176) < 10) || (std::abs(w1 - 228) < 10 && std::abs(w2 - 176) < 10))) {
+                bool found = true;
+                std::cout << found;
+            }
 
             float lineLengthSquared = pointDistanceSquared(v1, v2, w1, w2);
             if (lineLengthSquared == 0.0) { // Line is a point
@@ -59,7 +64,9 @@ std::vector<cv::KeyPoint> FeatureDetector::subtractLanes(const std::vector<cv::K
             }
         }
         if (!hitByLane) {
-            features.push_back(keyPoints.at(i));
+            features.push_back(keyPoint);
+        } else {
+            discardedKeypoints.push_back(keyPoint);
         }
     }
     return features;
@@ -80,14 +87,27 @@ float FeatureDetector::dotProduct(float a1, float a2, float b1, float b2) const 
 void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const {
     cv::Mat completedImage(image.size(), image.type(), cv::Scalar(255, 255, 255));
     image.copyTo(completedImage, mask);
+    cv::drawKeypoints(completedImage, keyPoints, completedImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
     for (const cv::KeyPoint& keyPoint : keyPoints) {
         cv::circle(completedImage, cv::Point(keyPoint.pt.x, keyPoint.pt.y), keyPoint.size / 2, cv::Scalar(255, 255, 255));
     }
-    cv::drawKeypoints(completedImage, keyPoints, completedImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
     for (const cv::Vec4i& line : lanes) {
-        cv::line(completedImage, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0, 0, 255), 1, CV_AA);
+        cv::line(completedImage, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0, 0, 255), 2, CV_AA);
     }
     cv::imshow("Analyzed Image", completedImage);
+    //cv::waitKey(/*50*/);
+
+
+    cv::Mat discardedMat(image.size(), image.type(), cv::Scalar(255, 255, 255));
+    image.copyTo(discardedMat);
+    cv::drawKeypoints(discardedMat, discardedKeypoints, discardedMat, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
+    for (const cv::KeyPoint& keyPoint : discardedKeypoints) {
+        cv::circle(discardedMat, cv::Point(keyPoint.pt.x, keyPoint.pt.y), keyPoint.size / 2, cv::Scalar(0, 255, 0));
+    }
+    for (const cv::Vec4i& line : lanes) {
+        cv::line(discardedMat, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0, 0, 255), 2, CV_AA);
+    }
+    cv::imshow("Discarded Keypoints", discardedMat);
     cv::waitKey(/*50*/);
 }
 

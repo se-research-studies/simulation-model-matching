@@ -5,17 +5,17 @@
 #include "simulationgame/participants/lanefollower.h"
 #include <FeatureSimulation/SimulationGame/participantregistry.h>
 
-
-// cid und freq als Argument mit defaults
-
 int main(int argc, char *argv[]) {
 
+    // Ausgeben welche Participants es gibt
     // Hardcoded settings for tests
     std::string cid = "111";
     std::string freq = "10";
     std::string configurationFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/configuration";
     std::string participant = "LaneFollower";
-    uint32_t frameLimit = 200;
+    uint32_t frameLimit = 300;
+    //int featureScale;
+    //int featureSize;
     std::string featureSource = "../resources/straightroad.rec";
 
     SimulationGame::OdvControl control(cid, freq, configurationFile);
@@ -26,9 +26,9 @@ int main(int argc, char *argv[]) {
     control.start();
 
     SimulationGame::ParticipantRegistry registry(cid, freq);
-    registry.registerParticipant<SimulationGame::LaneFollower>(participant);
+    registry.registerParticipant<SimulationGame::LaneFollower>("LaneFollower");
 
-    std::unique_ptr<SimulationGame::AbstractParticipant> laneFollower = registry.getParticipant("LaneFollower");
+    std::unique_ptr<SimulationGame::AbstractParticipant> laneFollower = registry.getParticipant(participant);
     int exitCode = laneFollower->runModule(frameLimit, featureSource);
 
     control.stop();
