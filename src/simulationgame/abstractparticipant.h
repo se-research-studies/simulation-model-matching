@@ -7,19 +7,22 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include <FeatureSimulation/Common/makeunique.h>
+#include <FeatureSimulation/Common/DataManagement/featuresetdao.h>
 
 namespace SimulationGame {
 
     class AbstractParticipant : public odcore::base::module::TimeTriggeredConferenceClientModule
     {
     public:
-        AbstractParticipant(int argc, char** argv, const std::string& name, uint32_t frameLimit);
+        AbstractParticipant(int argc, char** argv, const std::string& name);
         virtual ~AbstractParticipant();
 
     public:
-        template <typename SubClass> static std::unique_ptr<AbstractParticipant> createInstance(int argc, char** argv, uint32_t frameLimit) {
-            return std::make_unique<SubClass>(argc, argv, frameLimit);
+        template <typename SubClass> static std::unique_ptr<AbstractParticipant> createInstance(int argc, char** argv) {
+            return std::make_unique<SubClass>(argc, argv);
         }
+
+        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(uint32_t frameLimit, const std::string& featureSource);
 
         void setUp() override;
         void tearDown() override;
@@ -30,11 +33,12 @@ namespace SimulationGame {
         void setControls(double speed, double steeringWheelAngle);
 
     private:
-        bool readSharedImage(odcore::data::Container& container);
+        void addFeatures(cv::Mat& image, uint32_t frame) const;
 
     private:
         uint32_t frameLimit = 0;
-
+        Common::FeatureSetDAO featureSetDao;
+        std::unique_ptr<Common::FeatureSet> featureSet;
         automotive::VehicleControl vehicleControl;
     };
 

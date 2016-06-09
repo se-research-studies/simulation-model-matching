@@ -21,11 +21,11 @@ FeatureDetector::~FeatureDetector() {
 Common::DirtyFrame FeatureDetector::detectFeatures(const cv::Mat& image, const cv::Mat& mask) {
     std::vector<cv::KeyPoint> keyPoints = findKeyPoints(image, mask);
     std::vector<cv::Vec4i> lanes = laneDetector.detectLanes(image);
-    std::vector<cv::KeyPoint> featureKeyPoints = subtractLanes(keyPoints, lanes);
+    keyPoints = subtractLanes(keyPoints, lanes);
     if (guiEnabled) {
-        showResults(image, mask, featureKeyPoints, lanes);
+        showResults(image, mask, keyPoints, lanes);
     }
-    return convertToDirtyFrame(featureKeyPoints);
+    return convertToDirtyFrame(keyPoints);
 }
 
 std::vector<cv::KeyPoint> FeatureDetector::subtractLanes(const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const {
@@ -80,9 +80,12 @@ float FeatureDetector::dotProduct(float a1, float a2, float b1, float b2) const 
 void FeatureDetector::showResults(const cv::Mat& image, const cv::Mat& mask, const std::vector<cv::KeyPoint>& keyPoints, const std::vector<cv::Vec4i>& lanes) const {
     cv::Mat completedImage(image.size(), image.type(), cv::Scalar(255, 255, 255));
     image.copyTo(completedImage, mask);
+    for (const cv::KeyPoint& keyPoint : keyPoints) {
+        cv::circle(completedImage, cv::Point(keyPoint.pt.x, keyPoint.pt.y), keyPoint.size / 2, cv::Scalar(255, 255, 255));
+    }
     cv::drawKeypoints(completedImage, keyPoints, completedImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DEFAULT);
     for (const cv::Vec4i& line : lanes) {
-        cv::line(completedImage, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0,0,255), 1, CV_AA);
+        cv::line(completedImage, cv::Point(line[0], line[1]), cv::Point(line[2], line[3]), cv::Scalar(0, 0, 255), 1, CV_AA);
     }
     cv::imshow("Analyzed Image", completedImage);
     cv::waitKey(/*50*/);

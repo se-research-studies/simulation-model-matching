@@ -9,13 +9,22 @@
 
 namespace SimulationGame {
 
-    AbstractParticipant::AbstractParticipant(int argc, char** argv, const std::string& name, uint32_t frameLimit)
-        : odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, name), frameLimit(frameLimit)
+    AbstractParticipant::AbstractParticipant(int argc, char** argv, const std::string& name)
+        : odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, name)
     {
     }
 
     AbstractParticipant::~AbstractParticipant()
     {
+    }
+
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::runModule(uint32_t frameLimit, const std::string& featureSource)
+    {
+        this->frameLimit = frameLimit;
+        if (featureSource.size() > 0) {
+            featureSet = featureSetDao.load(featureSource);
+        }
+        return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
 
     void AbstractParticipant::setUp()
@@ -57,6 +66,7 @@ namespace SimulationGame {
                     odcore::base::Lock l(sharedImageMemory);
                     cv::Mat image(cv::Size(sharedImage.getWidth(), sharedImage.getHeight()), CV_MAKETYPE(CV_8U, sharedImage.getBytesPerPixel()), sharedImageMemory->getSharedMemory());
                     cv::flip(image, image, -1);
+                    addFeatures(image, frame);
                     cv::imshow("Image", image);
                     cv::waitKey(10);
                     std::cout << "Processing image" << std::endl;
@@ -78,6 +88,16 @@ namespace SimulationGame {
         vehicleControl.setSteeringWheelAngle(steeringWheelAngle);
         odcore::data::Container container(vehicleControl);
         getConference().send(container);
+    }
+
+    void AbstractParticipant::addFeatures(cv::Mat& image, uint32_t frame) const
+    {
+        if (featureSet != nullptr) {
+            const Common::DirtyFrame& dirtyFrame = featureSet->getFrame(frame % featureSet->getFrameCount());
+            for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
+                cv::circle(image, cv::Point(feature.getX(), feature.getY()), feature.getDiameter() / 10, cv::Scalar(255, 255, 255), -1);
+            }
+        }
     }
 
 } // namespace SimulationGame

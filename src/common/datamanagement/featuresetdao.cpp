@@ -1,5 +1,6 @@
 #include "featuresetdao.h"
 
+#include <FeatureSimulation/Common/makeunique.h>
 #include <FeatureSimulation/Common/DataManagement/database.h>
 
 namespace Common {
@@ -12,12 +13,12 @@ void FeatureSetDAO::ensureTable() const {
     Database::getInstance().createTable(FeatureSetsContract::TABLENAME, columns);
 }
 
-FeatureSet FeatureSetDAO::load(const std::string& recordingName) const {
+std::unique_ptr<FeatureSet> FeatureSetDAO::load(const std::string& recordingName) const {
     Cursor cursor = Database::getInstance().query(FeatureSetsContract::TABLENAME, {"*"}, selectionString(recordingName));
     return toFeatureSet(recordingName, cursor);
 }
 
-FeatureSet FeatureSetDAO::load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const {
+std::unique_ptr<FeatureSet> FeatureSetDAO::load(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame) const {
     Cursor cursor = Database::getInstance().query(FeatureSetsContract::TABLENAME, {"*"}, selectionString(recordingName, startFrame, endFrame));
     return toFeatureSet(recordingName, cursor);
 }
@@ -31,11 +32,11 @@ std::string FeatureSetDAO::selectionString(const std::string& recordingName, uin
            "AND " + FeatureSetsContract::COL_FRAME + " BETWEEN " + std::to_string(startFrame) + " AND " + std::to_string(endFrame);
 }
 
-FeatureSet FeatureSetDAO::toFeatureSet(const std::string& recordingName, Cursor& cursor) const {
-    FeatureSet result(recordingName);
+std::unique_ptr<FeatureSet> FeatureSetDAO::toFeatureSet(const std::string& recordingName, Cursor& cursor) const {
+    std::unique_ptr<FeatureSet> result = std::make_unique<FeatureSet>(recordingName);
     while (cursor.moveToNext()) {
         std::string features = cursor.getString(FeatureSetsContract::INDEX_FEATURES);
-        result.addFrame(cursor.getUShort(FeatureSetsContract::INDEX_FRAME), DirtyFrame::fromSqlString(features));
+        result->addFrame(cursor.getUShort(FeatureSetsContract::INDEX_FRAME), DirtyFrame::fromSqlString(features));
     }
     return result;
 }
