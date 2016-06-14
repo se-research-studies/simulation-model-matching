@@ -20,7 +20,8 @@ SOURCES += \
     src/featuresetcreation/settingsvalidator.cpp \
     src/featuresetcreation/featuredetectorshitomasi.cpp \
     src/featuresetcreation/ronimasker.cpp \
-    src/featuresetcreation/recordingplayer.cpp
+    src/featuresetcreation/recordingplayer.cpp \
+    src/featuresetcreation/guicontroler.cpp
 
 HEADERS += \
     src/featuresetcreation/featuredetector.h \
@@ -31,6 +32,7 @@ HEADERS += \
     src/featuresetcreation/settingsvalidator.h \
     src/featuresetcreation/featuredetectorshitomasi.h \
     src/featuresetcreation/ronimasker.h \
-    src/featuresetcreation/recordingplayer.h
+    src/featuresetcreation/recordingplayer.h \
+    src/featuresetcreation/guicontroler.h
 
 

@@ -3,6 +3,7 @@
 #include <getopt.h>
 
 #include <FeatureSimulation/FeatureSetCreation/featuresetcreator.h>
+#include <FeatureSimulation/FeatureSetCreation/guicontroler.h>
 #include <FeatureSimulation/FeatureSetCreation/settings.h>
 #include <FeatureSimulation/FeatureSetCreation/settingsvalidator.h>
 
@@ -19,7 +20,7 @@ enum Argument {
     ORB_SCORE_TYPE,
     ORB_PATCH_SIZE,
     ORB_FAST_THRESHOLD,
-    LANE_FUZZINESS_FACTOR,
+    LANE_MAX_DISTANCE,
     LANE_FIRST_THRESHOLD,
     LANE_SECOND_THRESHOLD,
     LANE_APERTURE_SIZE,
@@ -52,7 +53,7 @@ static const struct option longopts[] = {
     {"patchSize", optional_argument, nullptr, ORB_PATCH_SIZE},
     {"fastThreshold", optional_argument, nullptr, ORB_FAST_THRESHOLD},
     // Lane detection arguments
-    {"fuzzinessFactor", optional_argument, nullptr, LANE_FUZZINESS_FACTOR},
+    {"maxDistance", optional_argument, nullptr, LANE_MAX_DISTANCE},
     {"firstThreshold", optional_argument, nullptr, LANE_FIRST_THRESHOLD},
     {"secondThreshold", optional_argument, nullptr, LANE_SECOND_THRESHOLD},
     {"apertureSize", optional_argument, nullptr, LANE_APERTURE_SIZE},
@@ -86,7 +87,7 @@ void printUsage(char* programName) {
             "  -scoreType         Optional ORB parameter. Default is 0 (HARRIS_SCORE)\n"
             "  -patchSize         Optional ORB parameter. Default is 31\n"
             "  -fastThreshold     Optional ORB parameter. Default is 20\n"
-            "  -fuzzinessFactor   Optional Lane Detection parameter. Default is 1.0\n"
+            "  -maxDistance       Optional Lane Detection parameter. Default is 25\n"
             "  -firstThreshold    Optional Lane Detection parameter. Default is 100\n"
             "  -secondThreshold   Optional Lane Detection parameter. Default is 400\n"
             "  -apertureSize      Optional Lane Detection parameter. Default is 3\n"
@@ -147,8 +148,8 @@ int main(int argc, char *argv[]) {
         case ORB_FAST_THRESHOLD:
             settings.orbSettings.fastThreshold = atoi(optarg);
             break;
-        case LANE_FUZZINESS_FACTOR:
-            settings.laneDetectionSettings.fuzzinessFactor = atoi(optarg);
+        case LANE_MAX_DISTANCE:
+            settings.laneDetectionSettings.maxDistance = atoi(optarg);
             break;
         case LANE_FIRST_THRESHOLD:
             settings.laneDetectionSettings.firstThreshold = atoi(optarg);
@@ -211,6 +212,7 @@ int main(int argc, char *argv[]) {
 //  settings.laneDetectionSettings.secondThreshold = 275;
 
     try {
+        FeatureSetCreation::GuiControler::instance().setEnabled(settings.guiEnabled);
         FeatureSetCreation::SettingsValidator validator;
         validator.validate(settings);
         FeatureSetCreation::FeatureSetCreator featureSetCreator(settings);

@@ -11,6 +11,7 @@
 #include <FeatureSimulation/Common/utils.h>
 #include <FeatureSimulation/Common/DataManagement/featuresetdao.h>
 #include <FeatureSimulation/FeatureSetCreation/featuredetector.h>
+#include <FeatureSimulation/FeatureSetCreation/guicontroler.h>
 #include <FeatureSimulation/FeatureSetCreation/recordingplayer.h>
 
 namespace FeatureSetCreation {
@@ -34,7 +35,9 @@ void FeatureSetCreator::createFeatureSet() {
     cv::Mat mask = createMaskFromRonis(player.imageSize());
     while (player.hasNext()) {
         cv::Mat image = player.next();
+        GuiControler::instance().setImage(image, mask);
         result.addFrame(frameNumber, featureDetector->detectFeatures(image, mask));
+        GuiControler::instance().show();
         ++frameNumber;
     }
     saveFeatureSet(result);
