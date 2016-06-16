@@ -22,13 +22,13 @@ namespace Common {
 
     std::vector<TableField> MeasurementsDAO::toRow(const Measurements& measurements) const {
         std::vector<TableField> result;
-        result.push_back({MeasurementsContract::COL_SIMULATIONNAME, measurements.getSimulationName()});
-        result.push_back({MeasurementsContract::COL_RECORDINGNAME, measurements.getRecordingName()});
-        result.push_back({MeasurementsContract::COL_STEPS, std::to_string(measurements.getSteps())});
-        result.push_back({MeasurementsContract::COL_COMPUTATIONTIME, std::to_string(measurements.getComputationTime())});
-        result.push_back({MeasurementsContract::COL_LAPTIME, std::to_string(measurements.getLapTime())});
-        result.push_back({MeasurementsContract::COL_STEERINGACTIONS, std::to_string(measurements.getSteeringActions())});
-        result.push_back({MeasurementsContract::COL_MEMORY, std::to_string(measurements.getMemory())});
+//        result.push_back({MeasurementsContract::COL_SIMULATIONNAME, measurements.getSimulationName()});
+//        result.push_back({MeasurementsContract::COL_RECORDINGNAME, measurements.getRecordingName()});
+//        result.push_back({MeasurementsContract::COL_STEPS, std::to_string(measurements.getFrames())});
+//        result.push_back({MeasurementsContract::COL_COMPUTATIONTIME, std::to_string(measurements.getComputationTime())});
+//        result.push_back({MeasurementsContract::COL_LAPTIME, std::to_string(measurements.getLapTime())});
+//        result.push_back({MeasurementsContract::COL_STEERINGACTIONS, std::to_string(measurements.getSteeringActions())});
+//        result.push_back({MeasurementsContract::COL_MEMORY, std::to_string(measurements.getAverageMemory())});
         return result;
     }
 

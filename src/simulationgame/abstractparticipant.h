@@ -2,12 +2,16 @@
 
 #include <opendavinci/odcore/base/module/TimeTriggeredConferenceClientModule.h>
 #include <automotivedata/generated/automotive/VehicleControl.h>
+#include <opendavinci/generated/odcore/data/image/SharedImage.h>
+#include <opendavinci/odcore/wrapper/SharedMemory.h>
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #include <FeatureSimulation/Common/makeunique.h>
 #include <FeatureSimulation/Common/DataManagement/featuresetdao.h>
+
+#include <FeatureSimulation/SimulationGame/datagatherer.h>
 
 namespace SimulationGame {
 
@@ -35,13 +39,24 @@ namespace SimulationGame {
         void setControls(double speed, double steeringWheelAngle);
 
     private:
+        void processFrame(const odcore::data::image::SharedImage& sharedImage);
+        cv::Mat prepareImage(const odcore::data::image::SharedImage& sharedImage, const std::shared_ptr<odcore::wrapper::SharedMemory>& sharedImageMemory);
+        void gatherDataBeforeFrame();
+        void gatherDataDuringFrame(double speed, double steeringWheelAngle);
+        void gatherDataAfterFrame();
         void addFeatures(cv::Mat& image, uint32_t frame) const;
 
     private:
         uint32_t frameLimit = 0;
+        uint32_t currentFrame = 0;
+
+        DataGatherer dataGatherer;
+
         Common::FeatureSetDAO featureSetDao;
         std::unique_ptr<Common::FeatureSet> featureSet;
+
         automotive::VehicleControl vehicleControl;
+
         double lastSteeringWheelAngle = 0;
         double lastSpeed = 0;
     };

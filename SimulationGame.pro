@@ -12,18 +12,22 @@ LIBS += -lopendavinci -lopendlv -lautomotivedata
 
 SOURCES += \
     src/main_simulationgame.cpp \
-    src/simulationgame/measurementtaker.cpp \
     src/simulationgame/odvcontrol.cpp \
     src/simulationgame/participantregistry.cpp \
     src/simulationgame/abstractparticipant.cpp \
-    src/simulationgame/participants/lanefollower.cpp
+    src/simulationgame/participants/lanefollower.cpp \
+    src/simulationgame/datagatherer.cpp \
+    src/simulationgame/settings.cpp \
+    src/simulationgame/gamerunner.cpp
 
 HEADERS += \
     gamestarter.h \
-    src/simulationgame/measurementtaker.h \
     src/simulationgame/odvcontrol.h \
     src/simulationgame/participantregistry.h \
     src/simulationgame/abstractparticipant.h \
-    src/simulationgame/participants/lanefollower.h
+    src/simulationgame/participants/lanefollower.h \
+    src/simulationgame/datagatherer.h \
+    src/simulationgame/settings.h \
+    src/simulationgame/gamerunner.h
 
 
