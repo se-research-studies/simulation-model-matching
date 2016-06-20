@@ -19,7 +19,7 @@ namespace SimulationGame {
         startProcess(std::string("odsimirus --cid=" + cid + " --freq=" + freq).c_str());
         //startProcess(std::string("odcockpit --cid=" + cid).c_str());
         startProcess(std::string("odsimcamera --cid=" + cid + " --freq=" + freq).c_str());
-        sleep(5);
+        sleep(2);
     }
 
     void OdvControl::stop() {
@@ -52,10 +52,10 @@ namespace SimulationGame {
 
     bool OdvControl::waitForProcessToStop(pid_t pid, uint8_t seconds) {
         for (int i = 0; i < seconds; i++) {
-            sleep(1);
             if (waitpid(pid, nullptr, WNOHANG) == pid) {
                 return true;
             }
+            sleep(1);
         }
         return false;
     }
