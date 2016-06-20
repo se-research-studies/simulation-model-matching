@@ -13,8 +13,8 @@ namespace SimulationGame {
 
     public:
         void start();
-        void startStep();
-        void finishStep();
+        void startFrame();
+        void finishFrame();
         void stop();
         void save();
         void addSteeringAction();

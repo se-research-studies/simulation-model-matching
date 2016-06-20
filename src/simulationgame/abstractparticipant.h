@@ -15,6 +15,8 @@
 
 namespace SimulationGame {
 
+    class Settings;
+
     class AbstractParticipant : public odcore::base::module::TimeTriggeredConferenceClientModule
     {
     public:
@@ -28,7 +30,7 @@ namespace SimulationGame {
             return std::make_unique<SubClass>(argc, argv);
         }
 
-        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(uint32_t frameLimit, const std::string& featureSource);
+        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(const Settings& settings);
         void forceQuit();
 
         void setUp() override;
@@ -43,14 +45,17 @@ namespace SimulationGame {
         bool continueBody();
         void processFrame(const odcore::data::image::SharedImage& sharedImage);
         cv::Mat prepareImage(const odcore::data::image::SharedImage& sharedImage, const std::shared_ptr<odcore::wrapper::SharedMemory>& sharedImageMemory);
+        void gatherDataBeforeSimulation();
         void gatherDataBeforeFrame();
         void gatherDataDuringFrame(double speed, double steeringWheelAngle);
         void gatherDataAfterFrame();
+        void gatherDataAfterSimulation();
         void addFeatures(cv::Mat& image, uint32_t frame) const;
 
     private:
         uint32_t frameLimit = 0;
         uint32_t currentFrame = 0;
+        bool showGui;
         bool quitFlag = false;
 
         DataGatherer dataGatherer;

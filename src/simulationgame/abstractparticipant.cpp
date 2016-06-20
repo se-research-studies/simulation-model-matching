@@ -6,6 +6,8 @@
 #include <opendavinci/odcore/wrapper/SharedMemoryFactory.h>
 #include <opendavinci/odcore/base/Lock.h>
 
+#include <FeatureSimulation/SimulationGame/settings.h>
+
 namespace SimulationGame {
 
     AbstractParticipant::AbstractParticipant(int argc, char** argv, const std::string& name)
@@ -17,11 +19,12 @@ namespace SimulationGame {
     {
     }
 
-    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::runModule(uint32_t frameLimit, const std::string& featureSource)
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::runModule(const Settings& settings)
     {
-        this->frameLimit = frameLimit;
-        if (featureSource.size() > 0) {
-            featureSet = featureSetDao.load(featureSource);
+        frameLimit = settings.frameLimit;
+        showGui = settings.showGui;
+        if (settings.featureSource.size() > 0) {
+            featureSet = featureSetDao.load(settings.featureSource);
         }
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
@@ -38,12 +41,14 @@ namespace SimulationGame {
 
     void AbstractParticipant::tearDown()
     {
-        // Daten speichern
-        std::cout << "tearDown" << std::endl;
+        std::cout << "Saving data" << std::endl;
+        //dataGatherer.save();
+        std::cout << "Data saved" << std::endl;
     }
 
     odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::body()
     {
+        gatherDataBeforeSimulation();
         while (continueBody()) {
             odcore::data::Container container = getKeyValueDataStore().get(odcore::data::image::SharedImage::ID());
             if (container.getDataType() == odcore::data::image::SharedImage::ID()) {
@@ -53,7 +58,7 @@ namespace SimulationGame {
                 std::cout << "Container does not contain image" << std::endl;
             }
         }
-
+        gatherDataAfterSimulation();
         return odcore::data::dmcp::ModuleExitCodeMessage::OKAY;
     }
 
@@ -69,15 +74,16 @@ namespace SimulationGame {
         std::shared_ptr<odcore::wrapper::SharedMemory> sharedImageMemory = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(sharedImage.getName());
         if (sharedImageMemory->isValid()) {
             ++currentFrame;
-
             cv::Mat image = prepareImage(sharedImage, sharedImageMemory);
 
             gatherDataBeforeFrame();
             processImage(image);
             gatherDataAfterFrame();
 
-            cv::imshow("Image", image);
-            cv::waitKey(10);
+            if (showGui) {
+                cv::imshow("Image", image);
+                cv::waitKey(10);
+            }
         }
     }
 
@@ -90,9 +96,14 @@ namespace SimulationGame {
         return image;
     }
 
+    void AbstractParticipant::gatherDataBeforeSimulation()
+    {
+        dataGatherer.start();
+    }
+
     void AbstractParticipant::gatherDataBeforeFrame()
     {
-
+        dataGatherer.startFrame();
     }
 
     void AbstractParticipant::setControls(double speed, double steeringWheelAngle)
@@ -120,7 +131,12 @@ namespace SimulationGame {
 
     void AbstractParticipant::gatherDataAfterFrame()
     {
+        dataGatherer.finishFrame();
+    }
 
+    void AbstractParticipant::gatherDataAfterSimulation()
+    {
+        dataGatherer.stop();
     }
 
     void AbstractParticipant::addFeatures(cv::Mat& image, uint32_t frame) const

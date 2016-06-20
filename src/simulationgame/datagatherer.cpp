@@ -13,12 +13,12 @@ namespace SimulationGame {
         startTime = std::chrono::steady_clock::now();
     }
 
-    void DataGatherer::startStep() {
+    void DataGatherer::startFrame() {
         stepStartTime = std::chrono::steady_clock::now();
         measurements.addFrame();
     }
 
-    void DataGatherer::finishStep() {
+    void DataGatherer::finishFrame() {
         //measurements.addToComputationTime(passedMilliSecs(stepStartTime));
     }
 

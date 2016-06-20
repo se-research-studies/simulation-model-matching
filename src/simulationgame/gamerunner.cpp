@@ -41,14 +41,18 @@ namespace SimulationGame {
     int GameRunner::runSimulation(const Settings& settings)
     {
         std::unique_ptr<AbstractParticipant> participant = registry.getParticipant(settings.participant);
-        std::future<odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode> simulation = std::async(std::launch::async, &AbstractParticipant::runModule, participant.get(), settings.frameLimit, settings.featureSource);
+        std::future<odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode> simulation = std::async(std::launch::async, &AbstractParticipant::runModule, participant.get(), settings);
         std::future<void> enterKey = std::async(std::launch::async, &GameRunner::waitForEnter);
         while (simulation.wait_for(std::chrono::milliseconds(10)) != std::future_status::ready) {
             if (enterKey.wait_for(std::chrono::milliseconds(10)) == std::future_status::ready) {
                 participant->forceQuit();
             }
         }
-        std::cout << "Done" << std::endl;
+        if (enterKey.wait_for(std::chrono::milliseconds(10)) != std::future_status::ready) {
+            std::cout << "Done. Press enter to quit." << std::endl;
+        } else {
+            std::cout << "Done." << std::endl;
+        }
         return simulation.get();
     }
 

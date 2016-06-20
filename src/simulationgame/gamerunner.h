@@ -7,6 +7,15 @@ namespace SimulationGame {
     class ParticipantRegistry;
     struct Settings;
 
+//    class KeyWatcher {
+//    public:
+//        void quit();
+//        void waitForEnter();
+
+//    private:
+//        bool quitFlag =
+//    };
+
     class GameRunner {
     public:
         GameRunner(SimulationGame::ParticipantRegistry& registry);
