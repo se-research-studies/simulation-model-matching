@@ -26,6 +26,11 @@ namespace SimulationGame {
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
 
+    void AbstractParticipant::forceQuit()
+    {
+        quitFlag = true;
+    }
+
     void AbstractParticipant::setUp()
     {
         currentFrame = 0;
@@ -33,12 +38,13 @@ namespace SimulationGame {
 
     void AbstractParticipant::tearDown()
     {
-        // Daten speichern?
+        // Daten speichern
+        std::cout << "tearDown" << std::endl;
     }
 
     odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::body()
     {
-        while (getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING && currentFrame < frameLimit) {
+        while (continueBody()) {
             odcore::data::Container container = getKeyValueDataStore().get(odcore::data::image::SharedImage::ID());
             if (container.getDataType() == odcore::data::image::SharedImage::ID()) {
                 odcore::data::image::SharedImage sharedImage = container.getData<odcore::data::image::SharedImage>();
@@ -49,6 +55,13 @@ namespace SimulationGame {
         }
 
         return odcore::data::dmcp::ModuleExitCodeMessage::OKAY;
+    }
+
+    bool AbstractParticipant::continueBody()
+    {
+        return getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING &&
+                (frameLimit == -1 || currentFrame < frameLimit) &&
+                !quitFlag;
     }
 
     void AbstractParticipant::processFrame(const odcore::data::image::SharedImage& sharedImage)

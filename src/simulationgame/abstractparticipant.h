@@ -29,6 +29,7 @@ namespace SimulationGame {
         }
 
         odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(uint32_t frameLimit, const std::string& featureSource);
+        void forceQuit();
 
         void setUp() override;
         void tearDown() override;
@@ -39,6 +40,7 @@ namespace SimulationGame {
         void setControls(double speed, double steeringWheelAngle);
 
     private:
+        bool continueBody();
         void processFrame(const odcore::data::image::SharedImage& sharedImage);
         cv::Mat prepareImage(const odcore::data::image::SharedImage& sharedImage, const std::shared_ptr<odcore::wrapper::SharedMemory>& sharedImageMemory);
         void gatherDataBeforeFrame();
@@ -49,6 +51,7 @@ namespace SimulationGame {
     private:
         uint32_t frameLimit = 0;
         uint32_t currentFrame = 0;
+        bool quitFlag = false;
 
         DataGatherer dataGatherer;
 

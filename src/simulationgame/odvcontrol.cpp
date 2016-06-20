@@ -7,14 +7,13 @@
 
 namespace SimulationGame {
 
-    OdvControl::OdvControl(const std::string& cid, const std::string& freq, const std::string& configurationFile)
-        : cid(cid), freq(freq), configurationFile(configurationFile) {
+    OdvControl::OdvControl() {
     }
 
     OdvControl::~OdvControl() {
     }
 
-    void OdvControl::start() {
+    void OdvControl::start(const std::string& cid, const std::string& freq, const std::string& configurationFile) {
         startProcess(std::string("odsupercomponent --cid=" + cid /*+ " --configuration=" + configurationFile*/).c_str());
         startProcess(std::string("odsimvehicle --cid=" + cid + " --freq=" + freq).c_str());
         startProcess(std::string("odsimirus --cid=" + cid + " --freq=" + freq).c_str());

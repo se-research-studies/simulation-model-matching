@@ -9,11 +9,11 @@ namespace SimulationGame {
 
     class OdvControl {
     public:
-        OdvControl(const std::string& cid, const std::string& freq, const std::string& configurationFile);
+        OdvControl();
         virtual ~OdvControl();
 
     public:
-        void start();
+        void start(const std::string& cid, const std::string& freq, const std::string& configurationFile);
         void stop();
 
     private:

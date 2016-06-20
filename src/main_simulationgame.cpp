@@ -1,38 +1,21 @@
 #include <iostream>
-#include <limits>
-#include <thread>
 
-#include "simulationgame/odvcontrol.h"
-#include "simulationgame/participants/lanefollower.h"
+#include <FeatureSimulation/SimulationGame/gamerunner.h>
 #include <FeatureSimulation/SimulationGame/participantregistry.h>
+#include <FeatureSimulation/SimulationGame/settings.h>
+
+#include <FeatureSimulation/SimulationGame/Participants/lanefollower.h>
 
 int main(int argc, char *argv[]) {
 
-    // Ausgeben welche Participants es gibt
-    // Hardcoded settings for tests
-    std::string cid = "111";
-    std::string freq = "10";
-    std::string configurationFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/configuration";
-    std::string participant = "LaneFollower";
-    uint32_t frameLimit = 300;
-    //int featureScale;
-    //int featureSize;
-    std::string featureSource = "../resources/straightroad.rec";
+    SimulationGame::Settings settings;
 
-    SimulationGame::OdvControl control(cid, freq, configurationFile);
-
-//    std::cout << "Press ENTER to start... " << std::endl;
-//    std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
-
-    control.start();
-
-    SimulationGame::ParticipantRegistry registry(cid, freq);
+    SimulationGame::ParticipantRegistry registry(settings.cid, settings.freq);
     registry.registerParticipant<SimulationGame::LaneFollower>("LaneFollower");
+    // Ausgeben welche Participants es gibt
 
-    std::unique_ptr<SimulationGame::AbstractParticipant> laneFollower = registry.getParticipant(participant);
-    int exitCode = laneFollower->runModule(frameLimit, featureSource);
+    SimulationGame::GameRunner gameRunner(registry);
+    gameRunner.start(settings);
 
-    control.stop();
-
-    exit(exitCode);
+    exit(EXIT_SUCCESS);
 }
