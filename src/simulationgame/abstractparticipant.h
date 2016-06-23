@@ -64,9 +64,6 @@ namespace SimulationGame {
         std::unique_ptr<Common::FeatureSet> featureSet;
 
         automotive::VehicleControl vehicleControl;
-
-        double lastSteeringWheelAngle = 0;
-        double lastSpeed = 0;
     };
 
 } // namespace SimulationGame

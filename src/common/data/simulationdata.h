@@ -4,40 +4,13 @@
 #include <string>
 #include <vector>
 
+#include <FeatureSimulation/Common/Data/simulationframedata.h>
+
 namespace Common {
 
-    class Measurements {
+    class SimulationData {
     public:
-        Measurements(const std::string& simulationName, const std::string& recordingName);
-
-    public:
-        struct FrameTime {
-            FrameTime() = default;
-            FrameTime(FrameTime&& other) = default;
-            FrameTime(const FrameTime& other) = delete;
-            FrameTime(uint32_t frame, uint32_t computationTime);
-
-            uint32_t frame = 0;
-            uint32_t computationTime = 0;
-
-            std::string toString() const;
-        };
-
-        struct FrameMemory {
-            FrameMemory() = default;
-            FrameMemory(FrameMemory&& other) = default;
-            FrameMemory(const FrameMemory& other) = delete;
-            FrameMemory(uint32_t frame, uint32_t before, uint32_t during, uint32_t after);
-
-            uint32_t frame = 0;
-            uint32_t before = 0;
-            uint32_t during = 0;
-            uint32_t after = 0;
-
-            std::string toString() const;
-            uint32_t sum() const;
-            uint32_t average() const;
-        };
+        SimulationData(const std::string& simulationName, const std::string& recordingName);
 
     public:        
         std::string getSimulationName() const;
@@ -46,10 +19,9 @@ namespace Common {
 
         uint32_t getFrames() const;
         void setFrames(uint32_t value);
-        void addFrame();
 
         uint32_t getAverageComputationTime() const;
-        void addComputationTime(FrameTime&& value);
+        void addComputationTime(const FrameTime& value);
         std::string computationTimesToString() const;
 
         uint32_t getLapTime() const;
@@ -68,7 +40,7 @@ namespace Common {
         void addDeceleration();
 
         uint32_t getAverageMemory() const;
-        void addFrameMemory(FrameMemory&& value);
+        void addFrameMemory(const FrameMemory& value);
         std::string memoryToString() const;
 
     private:

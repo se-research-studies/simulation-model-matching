@@ -117,6 +117,7 @@ namespace SimulationGame {
         }
 
         setControls(2, desiredSteering);
+        cvReleaseImage(&iplImage);
     }
 
 

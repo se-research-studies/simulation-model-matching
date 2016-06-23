@@ -1,0 +1,43 @@
+#include "simulationdatadao.h"
+
+#include <FeatureSimulation/Common/DataManagement/database.h>
+
+namespace Common {
+
+    void SimulationDataDAO::ensureTable() const {
+        std::vector<TableColumn> columns;
+        columns.push_back({SimulationDataContract::COL_SIMULATIONNAME, "TEXT"});
+        columns.push_back({SimulationDataContract::COL_RECORDINGNAME, "TEXT"});
+        columns.push_back({SimulationDataContract::COL_FRAMES, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_COMPUTATIONTIMES, "TEXT"});
+        columns.push_back({SimulationDataContract::COL_AVERAGECOMPUTATIONTIME, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_LAPTIME, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_STEERINGACTIONS, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_ACCELERATIONS, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_DECELERATIONS, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_MEMORY, "TEXT"});
+        columns.push_back({SimulationDataContract::COL_AVERAGEMEMORY, "INTEGER"});
+        Database::getInstance().createTable(SimulationDataContract::TABLENAME, columns);
+    }
+
+    void SimulationDataDAO::save(const SimulationData& data) const {
+        Database::getInstance().insert(SimulationDataContract::TABLENAME, toRow(data));
+    }
+
+    std::vector<TableField> SimulationDataDAO::toRow(const SimulationData& data) const {
+        std::vector<TableField> result;
+        result.push_back({SimulationDataContract::COL_SIMULATIONNAME, data.getSimulationName()});
+        result.push_back({SimulationDataContract::COL_RECORDINGNAME, data.getRecordingName()});
+        result.push_back({SimulationDataContract::COL_FRAMES, std::to_string(data.getFrames())});
+        result.push_back({SimulationDataContract::COL_COMPUTATIONTIMES, data.computationTimesToString()});
+        result.push_back({SimulationDataContract::COL_AVERAGECOMPUTATIONTIME, std::to_string(data.getAverageComputationTime())});
+        result.push_back({SimulationDataContract::COL_LAPTIME, std::to_string(data.getLapTime())});
+        result.push_back({SimulationDataContract::COL_STEERINGACTIONS, std::to_string(data.getSteeringActions())});
+        result.push_back({SimulationDataContract::COL_ACCELERATIONS, std::to_string(data.getAccelerations())});
+        result.push_back({SimulationDataContract::COL_DECELERATIONS, std::to_string(data.getDecelerations())});
+        result.push_back({SimulationDataContract::COL_MEMORY, data.memoryToString()});
+        result.push_back({SimulationDataContract::COL_AVERAGEMEMORY, std::to_string(data.getAverageMemory())});
+        return result;
+    }
+
+} // namespace Common

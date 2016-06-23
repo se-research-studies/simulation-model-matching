@@ -24,7 +24,7 @@ namespace SimulationGame {
         frameLimit = settings.frameLimit;
         showGui = settings.showGui;
         if (settings.featureSource.size() > 0) {
-            featureSet = featureSetDao.load(settings.featureSource);
+            //featureSet = featureSetDao.load(settings.featureSource);
         }
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
@@ -42,7 +42,7 @@ namespace SimulationGame {
     void AbstractParticipant::tearDown()
     {
         std::cout << "Saving data" << std::endl;
-        //dataGatherer.save();
+        dataGatherer.save();
         std::cout << "Data saved" << std::endl;
     }
 
@@ -106,27 +106,9 @@ namespace SimulationGame {
         dataGatherer.startFrame();
     }
 
-    void AbstractParticipant::setControls(double speed, double steeringWheelAngle)
-    {
-        gatherDataDuringFrame(speed, steeringWheelAngle);
-        lastSteeringWheelAngle = steeringWheelAngle;
-        lastSpeed = speed;
-        vehicleControl.setSpeed(speed);
-        vehicleControl.setSteeringWheelAngle(steeringWheelAngle);
-        odcore::data::Container container(vehicleControl);
-        getConference().send(container);
-    }
-
     void AbstractParticipant::gatherDataDuringFrame(double speed, double steeringWheelAngle)
     {
-        if (steeringWheelAngle != lastSteeringWheelAngle) {
-            dataGatherer.addSteeringAction();
-        }
-        if (speed > lastSpeed) {
-            dataGatherer.addAcceleration();
-        } else if (speed < lastSpeed) {
-            dataGatherer.addDeceleration();
-        }
+        dataGatherer.midFrame(speed, steeringWheelAngle);
     }
 
     void AbstractParticipant::gatherDataAfterFrame()
@@ -147,6 +129,15 @@ namespace SimulationGame {
                 cv::circle(image, cv::Point(feature.getX(), feature.getY()), 5, cv::Scalar(255, 255, 255), -1);
             }
         }
+    }
+
+    void AbstractParticipant::setControls(double speed, double steeringWheelAngle)
+    {
+        gatherDataDuringFrame(speed, steeringWheelAngle);
+        vehicleControl.setSpeed(speed);
+        vehicleControl.setSteeringWheelAngle(steeringWheelAngle);
+        odcore::data::Container container(vehicleControl);
+        getConference().send(container);
     }
 
 } // namespace SimulationGame
