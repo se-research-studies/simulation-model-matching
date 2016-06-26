@@ -15,12 +15,16 @@ namespace Common {
         static const std::string COL_FRAMES = "frames";
         static const std::string COL_COMPUTATIONTIMES = "computationTimes";
         static const std::string COL_AVERAGECOMPUTATIONTIME = "averageComputationTime";
+        static const std::string COL_MINCOMPUTATIONTIME = "minComputationTime";
+        static const std::string COL_MAXCOMPUTATIONTIME = "maxComputationTime";
         static const std::string COL_LAPTIME = "lapTime";
         static const std::string COL_STEERINGACTIONS = "steeringActions";
         static const std::string COL_ACCELERATIONS = "accelerations";
         static const std::string COL_DECELERATIONS = "decelerations";
         static const std::string COL_MEMORY = "memory";
         static const std::string COL_AVERAGEMEMORY = "averageMemory";
+        static const std::string COL_MINMEMORY = "minMemory";
+        static const std::string COL_MAXMEMORY = "maxMemory";
         static const std::string COL_DATE = "date";
     }
 
@@ -29,6 +33,9 @@ namespace Common {
         void ensureTable() const;
         void save(const SimulationData& data) const;
         std::vector<TableField> toRow(const SimulationData& data) const;
+
+    private:
+        std::string currentDateTime() const;
     };
 
 } // namespace Common

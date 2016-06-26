@@ -23,12 +23,37 @@ namespace Common {
     }
 
     uint32_t SimulationData::getAverageComputationTime() const {
-        return totalComputationTime / frames;
+        uint32_t totalComputationTime = 0;
+        for (const FrameTime& frameTime : computationTimes) {
+            totalComputationTime += frameTime.getComputationTime();
+        }
+        uint32_t result = totalComputationTime / frames;
+        return result;
+    }
+
+    uint32_t SimulationData::getMinComputationTime() const
+    {
+        uint32_t minComputationTime = 0;
+        if (computationTimes.size() > 0) {
+            minComputationTime = computationTimes.at(0).getComputationTime();
+        }
+        for (const FrameTime& frameTime : computationTimes) {
+            minComputationTime = std::min(minComputationTime, frameTime.getComputationTime());
+        }
+        return minComputationTime;
+    }
+
+    uint32_t SimulationData::getMaxComputationTime() const
+    {
+        uint32_t maxComputationTime = 0;
+        for (const FrameTime& frameTime : computationTimes) {
+            maxComputationTime = std::max(maxComputationTime, frameTime.getComputationTime());
+        }
+        return maxComputationTime;
     }
 
     void SimulationData::addComputationTime(const FrameTime& value)
     {
-        totalComputationTime += value.getComputationTime();
         computationTimes.push_back(value);
     }
 
@@ -94,12 +119,37 @@ namespace Common {
     }
 
     uint32_t SimulationData::getAverageMemory() const {
-        return totalMemory / (frames  * 3);
+        uint32_t totalAverageMemory = 0;
+        for (const FrameMemory& frameMemory : memory) {
+            totalAverageMemory += frameMemory.average();
+        }
+        uint32_t result = totalAverageMemory / frames;
+        return result;
+    }
+
+    uint32_t SimulationData::getMinMemory() const
+    {
+        uint32_t minMemory = 0;
+        if (memory.size() > 0) {
+            minMemory = memory.at(0).minimum();
+        }
+        for (const FrameMemory& frameMemory : memory) {
+            minMemory = std::min(minMemory, frameMemory.minimum());
+        }
+        return minMemory;
+    }
+
+    uint32_t SimulationData::getMaxMemory() const
+    {
+        uint32_t maxMemory = 0;
+        for (const FrameMemory& frameMemory : memory) {
+            maxMemory = std::max(maxMemory, frameMemory.maximum());
+        }
+        return maxMemory;
     }
 
     void SimulationData::addFrameMemory(const FrameMemory& value)
     {
-        totalMemory += value.sum();
         memory.push_back(value);
     }
 

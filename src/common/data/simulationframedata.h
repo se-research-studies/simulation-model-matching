@@ -29,22 +29,26 @@ namespace Common {
         FrameMemory(uint32_t frame);
 
     public:
-        void setMemoryBeforeFrame(size_t memBeforeFrame);
-        void setMemoryDuringFrame(size_t memDuringFrame);
-        void setMemoryAfterFrame(size_t memAfterFrame);
+        void setMemoryBeforeFrame(uint32_t memBeforeFrame);
+        void setMemoryDuringFrame(uint32_t memDuringFrame);
+        void setMemoryAfterFrame(uint32_t memAfterFrame);
 
         std::string toString() const;
-        size_t sum() const;
-        size_t average() const;
+        uint32_t sum() const;
+        uint32_t average() const;
+        uint32_t minimum() const;
+        uint32_t maximum() const;
 
     public:
         FrameMemory& operator=(const FrameMemory& other);
 
     private:
         uint32_t frame = 0;
-        size_t before = 0;
-        size_t during = 0;
-        size_t after = 0;
+        uint32_t before = 0;
+        uint32_t during = 0;
+        uint32_t after = 0;
+
+        const uint8_t parts = 3;
     };
 
 } // namespace Common

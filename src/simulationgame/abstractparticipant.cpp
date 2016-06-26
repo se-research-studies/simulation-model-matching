@@ -65,7 +65,7 @@ namespace SimulationGame {
     bool AbstractParticipant::continueBody()
     {
         return getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING &&
-                (frameLimit == -1 || currentFrame < frameLimit) &&
+                (frameLimit == 0 || currentFrame < frameLimit) &&
                 !quitFlag;
     }
 

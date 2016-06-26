@@ -37,17 +37,17 @@ namespace Common {
     {
     }
 
-    void FrameMemory::setMemoryBeforeFrame(size_t memBeforeFrame)
+    void FrameMemory::setMemoryBeforeFrame(uint32_t memBeforeFrame)
     {
         before = memBeforeFrame;
     }
 
-    void FrameMemory::setMemoryDuringFrame(size_t memDuringFrame)
+    void FrameMemory::setMemoryDuringFrame(uint32_t memDuringFrame)
     {
         during = memDuringFrame;
     }
 
-    void FrameMemory::setMemoryAfterFrame(size_t memAfterFrame)
+    void FrameMemory::setMemoryAfterFrame(uint32_t memAfterFrame)
     {
         after = memAfterFrame;
     }
@@ -57,14 +57,30 @@ namespace Common {
         return "{" + std::to_string(frame) + "," + std::to_string(before) + "," + std::to_string(during) + "," + std::to_string(after) + "}";
     }
 
-    size_t FrameMemory::sum() const
+    uint32_t FrameMemory::sum() const
     {
         return before + during + after;
     }
 
-    size_t FrameMemory::average() const
+    uint32_t FrameMemory::average() const
     {
-        return sum() / 3;
+        return sum() / parts;
+    }
+
+    uint32_t FrameMemory::minimum() const
+    {
+        uint32_t min = before;
+        min = std::min(min, during);
+        min = std::min(min, after);
+        return min;
+    }
+
+    uint32_t FrameMemory::maximum() const
+    {
+        uint32_t max = before;
+        max = std::max(max, during);
+        max = std::max(max, after);
+        return max;
     }
 
     FrameMemory& FrameMemory::operator=(const FrameMemory& other)

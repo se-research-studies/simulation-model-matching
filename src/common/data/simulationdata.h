@@ -21,6 +21,8 @@ namespace Common {
         void setFrames(uint32_t value);
 
         uint32_t getAverageComputationTime() const;
+        uint32_t getMinComputationTime() const;
+        uint32_t getMaxComputationTime() const;
         void addComputationTime(const FrameTime& value);
         std::string computationTimesToString() const;
 
@@ -40,6 +42,8 @@ namespace Common {
         void addDeceleration();
 
         uint32_t getAverageMemory() const;
+        uint32_t getMinMemory() const;
+        uint32_t getMaxMemory() const;
         void addFrameMemory(const FrameMemory& value);
         std::string memoryToString() const;
 
@@ -48,17 +52,11 @@ namespace Common {
         const std::string recordingName;
 
         uint32_t frames = 0;
-
-        uint32_t totalComputationTime = 0;
-        std::vector<FrameTime> computationTimes;
-
         uint32_t lapTime = 0;
-
         uint32_t steeringActions = 0;
         uint32_t accelerations = 0;
-        uint32_t decelerations = 0;
-
-        uint32_t totalMemory = 0;
+        uint32_t decelerations = 0;        
+        std::vector<FrameTime> computationTimes;
         std::vector<FrameMemory> memory;
     };
 
