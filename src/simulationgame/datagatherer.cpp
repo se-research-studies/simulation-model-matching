@@ -3,10 +3,22 @@
 #include <unistd.h>
 #include <sys/resource.h>
 
+#include <FeatureSimulation/Common/utils.h>
+
 namespace SimulationGame {
 
-    DataGatherer::DataGatherer(const std::string& simulationName, const std::string& recordingName)
-        : data(simulationName, recordingName), frameMemory(0) {
+    DataGatherer::DataGatherer()
+        : frameMemory(0) {
+    }
+
+    void DataGatherer::setSimulationName(const std::string& value)
+    {
+        data.setSimulationName(value);
+    }
+
+    void DataGatherer::setRecordingName(const std::string& value)
+    {
+        data.setRecordingName(value);
     }
 
     void DataGatherer::start() {
@@ -19,30 +31,44 @@ namespace SimulationGame {
         ++frames;
         frameMemory = Common::FrameMemory(frames);
         frameTime = Common::FrameTime(frames);
-        frameMemory.setMemoryBeforeFrame(getCurrentMemoryUsage());
+        frameMemory.setMemoryBeforeFrame(getCurrentMemoryUsageInKb());
         frameStartTime = std::chrono::steady_clock::now();
     }
 
     void DataGatherer::midFrame(double speed, double steeringWheelAngle)
     {
         std::chrono::steady_clock::time_point midFrameStart = std::chrono::steady_clock::now();
-        frameMemory.setMemoryDuringFrame(getCurrentMemoryUsage());
-        if (steeringWheelAngle != lastSteeringWheelAngle) {
-            data.addSteeringAction();
-        }
-        if (speed > lastSpeed) {
-            data.addAcceleration();
-        } else if (speed < lastSpeed) {
-            data.addDeceleration();
+        frameMemory.setMemoryDuringFrame(getCurrentMemoryUsageInKb());
+        compareSteeringWheel(steeringWheelAngle);
+        compareSpeed(speed);
+        frameStartTime += (std::chrono::steady_clock::now() - midFrameStart);
+    }
+
+    void DataGatherer::compareSteeringWheel(double steeringWheelAngle)
+    {
+        int angleComparison = Common::Utils::compare(steeringWheelAngle, lastSteeringWheelAngle);
+        if (angleComparison == 1) {
+            data.addRightSteering();
+        } else if (angleComparison == -1) {
+            data.addLeftSteering();
         }
         lastSteeringWheelAngle = steeringWheelAngle;
+    }
+
+    void DataGatherer::compareSpeed(double speed)
+    {
+        int speedComparison = Common::Utils::compare(speed, lastSpeed);
+        if (speedComparison == 1) {
+            data.addAcceleration();
+        } else if (speedComparison == -1) {
+            data.addDeceleration();
+        }
         lastSpeed = speed;
-        frameStartTime += (std::chrono::steady_clock::now() - midFrameStart);
     }
 
     void DataGatherer::finishFrame() {
         frameTime.setComputationTime(passedMicroSecs(frameStartTime));
-        frameMemory.setMemoryAfterFrame(getCurrentMemoryUsage());
+        frameMemory.setMemoryAfterFrame(getCurrentMemoryUsageInKb());
         data.addComputationTime(frameTime);
         data.addFrameMemory(frameMemory);
     }
@@ -56,30 +82,31 @@ namespace SimulationGame {
         dao.save(data);
     }
 
-    uint32_t DataGatherer::passedMilliSecs(const std::chrono::_V2::steady_clock::time_point& since) {
+    uint64_t DataGatherer::passedMilliSecs(const std::chrono::_V2::steady_clock::time_point& since) {
         const std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
         return std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - since).count();
     }
 
-    uint32_t DataGatherer::passedMicroSecs(const std::chrono::_V2::steady_clock::time_point& since)
+    uint64_t DataGatherer::passedMicroSecs(const std::chrono::_V2::steady_clock::time_point& since)
     {
         const std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
         return std::chrono::duration_cast<std::chrono::microseconds>(currentTime - since).count();
     }
 
-    size_t DataGatherer::getCurrentMemoryUsage()
+    uint64_t DataGatherer::getCurrentMemoryUsageInKb()
     {
-        size_t rss = 0L;
         FILE* fp = fopen( "/proc/self/statm", "r" );
         if (fp == nullptr) {
             return 0;
         }
+        uint64_t rss = 0;
         if (fscanf(fp, "%*s%ld", &rss) != 1) {
             fclose(fp);
             return 0;
         }
         fclose(fp);
-        return rss * sysconf(_SC_PAGESIZE);
+        uint64_t bytes = rss * sysconf(_SC_PAGESIZE);
+        return bytes / 1024;
     }
 
 }

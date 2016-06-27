@@ -11,9 +11,11 @@ namespace SimulationGame {
 
     class DataGatherer {
     public:
-        DataGatherer(const std::string& simulationName, const std::string& recordingName);
+        DataGatherer();
 
     public:
+        void setSimulationName(const std::string& value);
+        void setRecordingName(const std::string& value);
         void start();
         void startFrame();
         void midFrame(double speed, double steeringWheelAngle);
@@ -22,9 +24,11 @@ namespace SimulationGame {
         void save();
 
     private:
-        uint32_t passedMilliSecs(const std::chrono::steady_clock::time_point& since);
-        uint32_t passedMicroSecs(const std::chrono::steady_clock::time_point& since);
-        size_t getCurrentMemoryUsage();
+        uint64_t passedMilliSecs(const std::chrono::steady_clock::time_point& since);
+        uint64_t passedMicroSecs(const std::chrono::steady_clock::time_point& since);
+        uint64_t getCurrentMemoryUsageInKb();
+        void compareSteeringWheel(double steeringWheelAngle);
+        void compareSpeed(double speed);
 
     private:
         Common::SimulationData data;

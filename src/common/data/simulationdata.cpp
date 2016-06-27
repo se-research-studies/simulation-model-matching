@@ -2,16 +2,25 @@
 
 namespace Common {
 
-    SimulationData::SimulationData(const std::string& simulationName, const std::string& recordingName)
-        : simulationName(simulationName), recordingName(recordingName) {
+    SimulationData::SimulationData() {
     }
 
     std::string SimulationData::getSimulationName() const {
         return simulationName;
     }
 
+    void SimulationData::setSimulationName(const std::string& value)
+    {
+        simulationName = value;
+    }
+
     std::string SimulationData::getRecordingName() const {
         return recordingName;
+    }
+
+    void SimulationData::setRecordingName(const std::string& value)
+    {
+        recordingName = value;
     }
 
     uint32_t SimulationData::getFrames() const {
@@ -68,24 +77,42 @@ namespace Common {
         return result;
     }
 
-    uint32_t SimulationData::getLapTime() const {
+    uint64_t SimulationData::getLapTime() const {
         return lapTime;
     }
 
-    void SimulationData::setLapTime(uint32_t value) {
+    void SimulationData::setLapTime(uint64_t value) {
         lapTime = value;
     }
 
-    uint32_t SimulationData::getSteeringActions() const {
-        return steeringActions;
+    uint32_t SimulationData::getLeftSteerings() const
+    {
+        return leftSteerings;
     }
 
-    void SimulationData::setSteeringActions(uint32_t value) {
-        steeringActions = value;
+    void SimulationData::setLeftSteerings(uint32_t value)
+    {
+        leftSteerings = value;
     }
 
-    void SimulationData::addSteeringAction() {
-        ++steeringActions;
+    void SimulationData::addLeftSteering()
+    {
+        ++leftSteerings;
+    }
+
+    uint32_t SimulationData::getRightSteerings() const
+    {
+        return rightSteerings;
+    }
+
+    void SimulationData::setRightSteerings(uint32_t value)
+    {
+        rightSteerings = value;
+    }
+
+    void SimulationData::addRightSteering()
+    {
+        ++rightSteerings;
     }
 
     uint32_t SimulationData::getAccelerations() const
@@ -118,18 +145,18 @@ namespace Common {
         ++decelerations;
     }
 
-    uint32_t SimulationData::getAverageMemory() const {
-        uint32_t totalAverageMemory = 0;
+    uint64_t SimulationData::getAverageMemory() const {
+        uint64_t totalAverageMemory = 0;
         for (const FrameMemory& frameMemory : memory) {
             totalAverageMemory += frameMemory.average();
         }
-        uint32_t result = totalAverageMemory / frames;
+        uint64_t result = totalAverageMemory / frames;
         return result;
     }
 
-    uint32_t SimulationData::getMinMemory() const
+    uint64_t SimulationData::getMinMemory() const
     {
-        uint32_t minMemory = 0;
+        uint64_t minMemory = 0;
         if (memory.size() > 0) {
             minMemory = memory.at(0).minimum();
         }
@@ -139,9 +166,9 @@ namespace Common {
         return minMemory;
     }
 
-    uint32_t SimulationData::getMaxMemory() const
+    uint64_t SimulationData::getMaxMemory() const
     {
-        uint32_t maxMemory = 0;
+        uint64_t maxMemory = 0;
         for (const FrameMemory& frameMemory : memory) {
             maxMemory = std::max(maxMemory, frameMemory.maximum());
         }
@@ -163,5 +190,5 @@ namespace Common {
         result += "}";
         return result;
     }
-
+    
 } // namespace Common

@@ -10,12 +10,14 @@ namespace Common {
 
     class SimulationData {
     public:
-        SimulationData(const std::string& simulationName, const std::string& recordingName);
+        SimulationData();
 
     public:        
         std::string getSimulationName() const;
+        void setSimulationName(const std::string& value);
 
         std::string getRecordingName() const;
+        void setRecordingName(const std::string& value);
 
         uint32_t getFrames() const;
         void setFrames(uint32_t value);
@@ -26,12 +28,16 @@ namespace Common {
         void addComputationTime(const FrameTime& value);
         std::string computationTimesToString() const;
 
-        uint32_t getLapTime() const;
-        void setLapTime(uint32_t value);
+        uint64_t getLapTime() const;
+        void setLapTime(uint64_t value);
 
-        uint32_t getSteeringActions() const;
-        void setSteeringActions(uint32_t value);
-        void addSteeringAction();
+        uint32_t getLeftSteerings() const;
+        void setLeftSteerings(uint32_t value);
+        void addLeftSteering();
+
+        uint32_t getRightSteerings() const;
+        void setRightSteerings(uint32_t value);
+        void addRightSteering();
 
         uint32_t getAccelerations() const;
         void setAccelerations(uint32_t value);
@@ -41,19 +47,19 @@ namespace Common {
         void setDecelerations(uint32_t value);
         void addDeceleration();
 
-        uint32_t getAverageMemory() const;
-        uint32_t getMinMemory() const;
-        uint32_t getMaxMemory() const;
+        uint64_t getAverageMemory() const;
+        uint64_t getMinMemory() const;
+        uint64_t getMaxMemory() const;
         void addFrameMemory(const FrameMemory& value);
-        std::string memoryToString() const;
+        std::string memoryToString() const;        
 
     private:
-        const std::string simulationName;
-        const std::string recordingName;
-
+        std::string simulationName;
+        std::string recordingName;
         uint32_t frames = 0;
-        uint32_t lapTime = 0;
-        uint32_t steeringActions = 0;
+        uint64_t lapTime = 0;
+        uint32_t leftSteerings = 0;
+        uint32_t rightSteerings = 0;
         uint32_t accelerations = 0;
         uint32_t decelerations = 0;        
         std::vector<FrameTime> computationTimes;

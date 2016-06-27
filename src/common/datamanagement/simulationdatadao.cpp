@@ -17,7 +17,8 @@ namespace Common {
         columns.push_back({SimulationDataContract::COL_MINCOMPUTATIONTIME, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_MAXCOMPUTATIONTIME, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_LAPTIME, "INTEGER"});
-        columns.push_back({SimulationDataContract::COL_STEERINGACTIONS, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_LEFTSTEERINGS, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_RIGHTSTEERINGS, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_ACCELERATIONS, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_DECELERATIONS, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_MEMORY, "TEXT"});
@@ -42,7 +43,8 @@ namespace Common {
         result.push_back({SimulationDataContract::COL_MINCOMPUTATIONTIME, std::to_string(data.getMinComputationTime())});
         result.push_back({SimulationDataContract::COL_MAXCOMPUTATIONTIME, std::to_string(data.getMaxComputationTime())});
         result.push_back({SimulationDataContract::COL_LAPTIME, std::to_string(data.getLapTime())});
-        result.push_back({SimulationDataContract::COL_STEERINGACTIONS, std::to_string(data.getSteeringActions())});
+        result.push_back({SimulationDataContract::COL_LEFTSTEERINGS, std::to_string(data.getLeftSteerings())});
+        result.push_back({SimulationDataContract::COL_RIGHTSTEERINGS, std::to_string(data.getRightSteerings())});
         result.push_back({SimulationDataContract::COL_ACCELERATIONS, std::to_string(data.getAccelerations())});
         result.push_back({SimulationDataContract::COL_DECELERATIONS, std::to_string(data.getDecelerations())});
         result.push_back({SimulationDataContract::COL_MEMORY, data.memoryToString()});
