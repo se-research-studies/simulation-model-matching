@@ -26,7 +26,7 @@ namespace FeatureSetCreation {
     }
 
     void FeatureSetCreator::createFeatureSet() {
-        Common::FeatureSet result(recordingFile);
+        Common::FeatureSet result(Common::Utils::fileName(recordingFile));
         uint32_t frameNumber = 0;
         RecordingPlayer player(recordingFile);
         ImageMasker imageMasker(recordingFile);
