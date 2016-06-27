@@ -2,16 +2,19 @@
 
 #include <iostream>
 
+#include <automotivedata/generated/automotive/VehicleData.h>
 #include <opendavinci/odcore/data/Container.h>
 #include <opendavinci/odcore/wrapper/SharedMemoryFactory.h>
 #include <opendavinci/odcore/base/Lock.h>
+
+#include <FeatureSimulation/Common/utils.h>
 
 #include <FeatureSimulation/SimulationGame/settings.h>
 
 namespace SimulationGame {
 
     AbstractParticipant::AbstractParticipant(int argc, char** argv, const std::string& name)
-        : odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, name), dataGatherer("", "" /* TODO: FIX!*/)
+        : odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, name)
     {
     }
 
@@ -24,7 +27,10 @@ namespace SimulationGame {
         frameLimit = settings.frameLimit;
         showGui = settings.showGui;
         if (settings.featureSource.size() > 0) {
-            //featureSet = featureSetDao.load(settings.featureSource);
+            featureScale = settings.featureScale;
+            featureSize = settings.featureSize;
+            featureSet = featureSetDao.load(settings.featureSource);
+            dataGatherer.setRecordingName(settings.featureSource);
         }
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
@@ -36,20 +42,26 @@ namespace SimulationGame {
 
     void AbstractParticipant::setUp()
     {
+        std::string simulationName = getDMCPClient()->getConfiguration().getValue<std::string>("global.scenario");
+        dataGatherer.setSimulationName(Common::Utils::fileName(simulationName));
         currentFrame = 0;
     }
 
     void AbstractParticipant::tearDown()
     {
-        std::cout << "Saving data" << std::endl;
         dataGatherer.save();
-        std::cout << "Data saved" << std::endl;
     }
 
     odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::body()
     {
         gatherDataBeforeSimulation();
         while (continueBody()) {
+            odcore::data::Container containerVehicleData = getKeyValueDataStore().get(automotive::VehicleData::ID());
+            automotive::VehicleData vd = containerVehicleData.getData<automotive::VehicleData>();
+            cartesian::Point2 position = vd.getPosition();
+            std::string pos = position.toString();
+
+
             odcore::data::Container container = getKeyValueDataStore().get(odcore::data::image::SharedImage::ID());
             if (container.getDataType() == odcore::data::image::SharedImage::ID()) {
                 odcore::data::image::SharedImage sharedImage = container.getData<odcore::data::image::SharedImage>();
@@ -126,7 +138,8 @@ namespace SimulationGame {
         if (featureSet != nullptr) {
             const Common::DirtyFrame& dirtyFrame = featureSet->getFrame(frame % featureSet->getFrameCount());
             for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
-                cv::circle(image, cv::Point(feature.getX(), feature.getY()), 5, cv::Scalar(255, 255, 255), -1);
+                int radius = featureSize > 0 ? featureSize : (feature.getDiameter() / 2) * featureScale;
+                cv::circle(image, cv::Point(feature.getX(), feature.getY()), radius, cv::Scalar(255, 255, 255), -1);
             }
         }
     }

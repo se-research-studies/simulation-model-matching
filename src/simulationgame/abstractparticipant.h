@@ -62,6 +62,8 @@ namespace SimulationGame {
 
         Common::FeatureSetDAO featureSetDao;
         std::unique_ptr<Common::FeatureSet> featureSet;
+        float featureScale = 0;
+        int featureSize = 0;
 
         automotive::VehicleControl vehicleControl;
     };

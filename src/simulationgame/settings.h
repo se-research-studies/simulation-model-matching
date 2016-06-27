@@ -10,9 +10,9 @@ namespace SimulationGame {
         std::string configurationFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/configuration";
         std::string participant = "LaneFollower";
         uint32_t frameLimit = 100;
-        //int featureScale;
-        //int featureSize;
-        std::string featureSource = "../resources/straightroad.rec";
+        float featureScale = 0.25;
+        int featureSize = 10;
+        std::string featureSource /*= "straightroad.rec"*/;
         bool showGui = false;
     };
 
