@@ -14,13 +14,13 @@ namespace Common {
         simulationName = value;
     }
 
-    std::string SimulationData::getRecordingName() const {
-        return recordingName;
+    std::string SimulationData::getCorrelationFile() const {
+        return correlationFile;
     }
 
-    void SimulationData::setRecordingName(const std::string& value)
+    void SimulationData::setCorrelationFile(const std::string& value)
     {
-        recordingName = value;
+        correlationFile = value;
     }
 
     uint32_t SimulationData::getFrames() const {
@@ -78,11 +78,11 @@ namespace Common {
     }
 
     uint64_t SimulationData::getLapTime() const {
-        return lapTime;
-    }
-
-    void SimulationData::setLapTime(uint64_t value) {
-        lapTime = value;
+        uint32_t result = 0;
+        for (const FrameTime& frameTime : computationTimes) {
+            result += frameTime.getComputationTime();
+        }
+        return result;
     }
 
     uint32_t SimulationData::getLeftSteerings() const

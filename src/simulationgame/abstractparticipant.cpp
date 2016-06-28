@@ -22,16 +22,14 @@ namespace SimulationGame {
     {
     }
 
-    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::runModule(const Settings& settings)
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::runModule(const Settings& settings, Common::LocalFeatureSets&& featureSets)
     {
         frameLimit = settings.frameLimit;
         showGui = settings.showGui;
-        if (settings.featureSource.size() > 0) {
-            featureScale = settings.featureScale;
-            featureSize = settings.featureSize;
-            featureSet = featureSetDao.load(settings.featureSource);
-            dataGatherer.setRecordingName(settings.featureSource);
-        }
+        dataGatherer.setCorrelationFile(Common::Utils::fileName(settings.correlationFile));
+        featureScale = settings.featureScale;
+        featureSize = settings.featureSize;
+        this->featureSets = std::move(featureSets);
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
 
@@ -56,12 +54,6 @@ namespace SimulationGame {
     {
         gatherDataBeforeSimulation();
         while (continueBody()) {
-            odcore::data::Container containerVehicleData = getKeyValueDataStore().get(automotive::VehicleData::ID());
-            automotive::VehicleData vd = containerVehicleData.getData<automotive::VehicleData>();
-            cartesian::Point2 position = vd.getPosition();
-            std::string pos = position.toString();
-
-
             odcore::data::Container container = getKeyValueDataStore().get(odcore::data::image::SharedImage::ID());
             if (container.getDataType() == odcore::data::image::SharedImage::ID()) {
                 odcore::data::image::SharedImage sharedImage = container.getData<odcore::data::image::SharedImage>();
@@ -104,7 +96,7 @@ namespace SimulationGame {
         odcore::base::Lock l(sharedImageMemory);
         cv::Mat image(cv::Size(sharedImage.getWidth(), sharedImage.getHeight()), CV_MAKETYPE(CV_8U, sharedImage.getBytesPerPixel()), sharedImageMemory->getSharedMemory());
         cv::flip(image, image, -1);
-        addFeatures(image, currentFrame);
+        addFeatures(image);
         return image;
     }
 
@@ -133,15 +125,38 @@ namespace SimulationGame {
         dataGatherer.stop();
     }
 
-    void AbstractParticipant::addFeatures(cv::Mat& image, uint32_t frame) const
+    void AbstractParticipant::addFeatures(cv::Mat& image)
     {
-        if (featureSet != nullptr) {
-            const Common::DirtyFrame& dirtyFrame = featureSet->getFrame(frame % featureSet->getFrameCount());
-            for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
-                int radius = featureSize > 0 ? featureSize : (feature.getDiameter() / 2) * featureScale;
-                cv::circle(image, cv::Point(feature.getX(), feature.getY()), radius, cv::Scalar(255, 255, 255), -1);
+        if (featureSets.size() > 0) {
+            odcore::data::Container containerVehicleData = getKeyValueDataStore().get(automotive::VehicleData::ID());
+            automotive::VehicleData vd = containerVehicleData.getData<automotive::VehicleData>();
+            cartesian::Point2 position = vd.getPosition();
+
+            for (const auto& featureSet : featureSets) {
+                if (liesInRectangle(position, featureSet.first)) {
+                    if (lastSegment != featureSet.first) {
+                        currentFrameInSegment = 0;
+                        lastSegment = featureSet.first;
+                    } else if (currentFrameInSegment > featureSet.second->getLastFrame()) {
+                        currentFrameInSegment = featureSet.second->getFirstFrame();
+                    }
+                    const Common::DirtyFrame& dirtyFrame = featureSet.second->getFrame(currentFrameInSegment);
+                    for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
+                        int radius = featureSize > 0 ? featureSize : (feature.getDiameter() / 2) * featureScale;
+                        cv::circle(image, cv::Point(feature.getX(), feature.getY()), radius, cv::Scalar(255, 255, 255), -1);
+                    }
+                    break;
+                }
             }
         }
+    }
+
+    bool AbstractParticipant::liesInRectangle(cartesian::Point2& point, const Common::Rectangle& rectangle) const
+    {
+        int x = point.getP()[0];
+        int y = point.getP()[1];
+        return rectangle.getTopLeft().getX() < x && rectangle.getTopLeft().getY() < y &&
+                rectangle.getBottomRight().getX() > x && rectangle.getBottomRight().getY() > y;
     }
 
     void AbstractParticipant::setControls(double speed, double steeringWheelAngle)

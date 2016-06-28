@@ -15,7 +15,7 @@ namespace SimulationGame {
 
     public:
         void setSimulationName(const std::string& value);
-        void setRecordingName(const std::string& value);
+        void setCorrelationFile(const std::string& value);
         void start();
         void startFrame();
         void midFrame(double speed, double steeringWheelAngle);
@@ -24,7 +24,6 @@ namespace SimulationGame {
         void save();
 
     private:
-        uint64_t passedMilliSecs(const std::chrono::steady_clock::time_point& since);
         uint64_t passedMicroSecs(const std::chrono::steady_clock::time_point& since);
         uint64_t getCurrentMemoryUsageInKb();
         void compareSteeringWheel(double steeringWheelAngle);
@@ -33,7 +32,6 @@ namespace SimulationGame {
     private:
         Common::SimulationData data;
 
-        std::chrono::steady_clock::time_point startTime;
         std::chrono::steady_clock::time_point frameStartTime;
         Common::FrameMemory frameMemory;
         Common::FrameTime frameTime;

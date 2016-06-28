@@ -14,16 +14,12 @@ namespace Common {
         template <typename TargetInt, typename SourceInt>
         TargetInt to(SourceInt from) {
             TargetInt result = static_cast<TargetInt>(from);
-            if (result != from) {
-                throw std::out_of_range("Type conversion error. From = " + std::to_string(from) + ", result = " + std::to_string(result));
-            }
             return result;
         }
 
-        // Returns 1 if a > b, 0 if a == b, -1 if a < b, limited to relevantDecimalPlaces
+        // Returns 1 if a > b, 0 if a == b, -1 if a < b, limited in precision to relevantDecimalPlaces
         template <typename T>
-        int compare(T a, T b, int relevantDecimalPlaces = 4)
-        {
+        int compare(T a, T b, int relevantDecimalPlaces = 4) {
             int scaleFactor = std::pow(10, relevantDecimalPlaces);
             int scaledA = a * scaleFactor;
             int scaledB = b * scaleFactor;
@@ -34,6 +30,15 @@ namespace Common {
             } else {
                 return 0;
             }
+        }
+
+        // Inspired by boost::hash_combine
+        template <class T>
+        size_t hashCombine(size_t currentHash, const T& newValue) {
+            std::hash<T> hasher;
+            size_t result = currentHash;
+            result ^= hasher(newValue) + 0x9e3779b9 + (result<<6) + (result>>2);
+            return result;
         }
 
     }

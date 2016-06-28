@@ -9,11 +9,11 @@ namespace Common {
 
 class Position {
 public:
-    Position(uint32_t x, uint32_t y, uint16_t theta);
+    Position(int x, int y, uint16_t theta);
 
 public:
-    uint32_t getX() const;
-    uint32_t getY() const;
+    int getX() const;
+    int getY() const;
     uint16_t getTheta() const;
     std::string toSqlString() const;
     static Position fromSqlString(const std::string& stringFormatted);

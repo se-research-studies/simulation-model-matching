@@ -6,15 +6,23 @@ namespace Common {
 
 class Coordinates {
 public:
-    Coordinates(uint32_t x, uint32_t y);
+    Coordinates(int x, int y);
+    Coordinates() = default;
+    Coordinates(const Coordinates&) = default;
 
 public:
-    uint32_t getX() const;
-    uint32_t getY() const;
+    int getX() const;
+    void setX(int value);
+    int getY() const;
+    void setY(int value);
+
+    bool operator==(const Coordinates& other) const;
+    bool operator!=(const Coordinates& other) const;
+    Coordinates& operator=(const Coordinates& other) = default;
 
 private:
-    const uint32_t x = 0;
-    const uint32_t y = 0;
+    int x = 0;
+    int y = 0;
 };
 
 } // namespace FeatureExtraction

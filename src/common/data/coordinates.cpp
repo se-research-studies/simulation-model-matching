@@ -2,16 +2,36 @@
 
 namespace Common {
 
-Coordinates::Coordinates(uint32_t x, uint32_t y)
+Coordinates::Coordinates(int x, int y)
     : x(x), y(y) {
 }
 
-uint32_t Coordinates::getX() const {
+int Coordinates::getX() const {
     return x;
 }
 
-uint32_t Coordinates::getY() const {
+void Coordinates::setX(int value)
+{
+    x = value;
+}
+
+int Coordinates::getY() const {
     return y;
+}
+
+void Coordinates::setY(int value)
+{
+    y = value;
+}
+
+bool Coordinates::operator==(const Coordinates& other) const
+{
+    return x == other.x && y == other.y;
+}
+
+bool Coordinates::operator!=(const Coordinates& other) const
+{
+    return x != other.x || y != other.y;
 }
 
 } // namespace FeatureExtraction

@@ -16,8 +16,8 @@ namespace Common {
         std::string getSimulationName() const;
         void setSimulationName(const std::string& value);
 
-        std::string getRecordingName() const;
-        void setRecordingName(const std::string& value);
+        std::string getCorrelationFile() const;
+        void setCorrelationFile(const std::string& value);
 
         uint32_t getFrames() const;
         void setFrames(uint32_t value);
@@ -27,9 +27,7 @@ namespace Common {
         uint32_t getMaxComputationTime() const;
         void addComputationTime(const FrameTime& value);
         std::string computationTimesToString() const;
-
         uint64_t getLapTime() const;
-        void setLapTime(uint64_t value);
 
         uint32_t getLeftSteerings() const;
         void setLeftSteerings(uint32_t value);
@@ -55,9 +53,8 @@ namespace Common {
 
     private:
         std::string simulationName;
-        std::string recordingName;
+        std::string correlationFile;
         uint32_t frames = 0;
-        uint64_t lapTime = 0;
         uint32_t leftSteerings = 0;
         uint32_t rightSteerings = 0;
         uint32_t accelerations = 0;

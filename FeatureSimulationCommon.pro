@@ -28,7 +28,11 @@ HEADERS += \
     src/common/datamanagement/tablecolumn.h \
     src/common/data/simulationdata.h \
     src/common/data/simulationframedata.h \
-    src/common/datamanagement/simulationdatadao.h
+    src/common/datamanagement/simulationdatadao.h \
+    src/common/data/rectangle.h \
+    src/common/data/recordingsection.h \
+    src/common/data/correlation.h \
+    src/common/data/permutation.h
 
 SOURCES += \
     src/common/data/coordinates.cpp \
@@ -48,4 +52,8 @@ SOURCES += \
     src/common/datamanagement/tablecolumn.cpp \
     src/common/data/simulationframedata.cpp \
     src/common/data/simulationdata.cpp \
-    src/common/datamanagement/simulationdatadao.cpp
+    src/common/datamanagement/simulationdatadao.cpp \
+    src/common/data/rectangle.cpp \
+    src/common/data/recordingsection.cpp \
+    src/common/data/correlation.cpp \
+    src/common/data/permutation.cpp

@@ -14,8 +14,12 @@ int main(int argc, char *argv[]) {
     registry.registerParticipant<SimulationGame::LaneFollower>("LaneFollower");
     // Ausgeben welche Participants es gibt
 
-    SimulationGame::GameRunner gameRunner(registry);
-    gameRunner.start(settings);
+    try {
+        SimulationGame::GameRunner gameRunner(registry);
+        gameRunner.start(settings);
+    } catch (std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
 
     exit(EXIT_SUCCESS);
 }

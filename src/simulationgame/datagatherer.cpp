@@ -16,15 +16,14 @@ namespace SimulationGame {
         data.setSimulationName(value);
     }
 
-    void DataGatherer::setRecordingName(const std::string& value)
+    void DataGatherer::setCorrelationFile(const std::string& value)
     {
-        data.setRecordingName(value);
+        data.setCorrelationFile(value);
     }
 
     void DataGatherer::start() {
         dao.ensureTable();
         frames = 0;
-        startTime = std::chrono::steady_clock::now();
     }
 
     void DataGatherer::startFrame() {
@@ -74,17 +73,11 @@ namespace SimulationGame {
     }
 
     void DataGatherer::stop() {
-        data.setLapTime(passedMilliSecs(startTime));
         data.setFrames(frames);
     }
 
     void DataGatherer::save() {
         dao.save(data);
-    }
-
-    uint64_t DataGatherer::passedMilliSecs(const std::chrono::_V2::steady_clock::time_point& since) {
-        const std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
-        return std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - since).count();
     }
 
     uint64_t DataGatherer::passedMicroSecs(const std::chrono::_V2::steady_clock::time_point& since)

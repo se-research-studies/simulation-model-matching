@@ -10,7 +10,7 @@ namespace Common {
     void SimulationDataDAO::ensureTable() const {
         std::vector<TableColumn> columns;
         columns.push_back({SimulationDataContract::COL_SIMULATIONNAME, "TEXT"});
-        columns.push_back({SimulationDataContract::COL_RECORDINGNAME, "TEXT"});
+        columns.push_back({SimulationDataContract::COL_CORRELATIONFILE, "TEXT"});
         columns.push_back({SimulationDataContract::COL_FRAMES, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_COMPUTATIONTIMES, "TEXT"});
         columns.push_back({SimulationDataContract::COL_AVERAGECOMPUTATIONTIME, "INTEGER"});
@@ -36,7 +36,7 @@ namespace Common {
     std::vector<TableField> SimulationDataDAO::toRow(const SimulationData& data) const {
         std::vector<TableField> result;
         result.push_back({SimulationDataContract::COL_SIMULATIONNAME, data.getSimulationName()});
-        result.push_back({SimulationDataContract::COL_RECORDINGNAME, data.getRecordingName()});
+        result.push_back({SimulationDataContract::COL_CORRELATIONFILE, data.getCorrelationFile()});
         result.push_back({SimulationDataContract::COL_FRAMES, std::to_string(data.getFrames())});
         result.push_back({SimulationDataContract::COL_COMPUTATIONTIMES, data.computationTimesToString()});
         result.push_back({SimulationDataContract::COL_AVERAGECOMPUTATIONTIME, std::to_string(data.getAverageComputationTime())});

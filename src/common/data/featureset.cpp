@@ -14,6 +14,16 @@ size_t FeatureSet::getFrameCount() const {
     return frames.size();
 }
 
+uint32_t FeatureSet::getFirstFrame() const
+{
+    return frames.cbegin()->first;
+}
+
+uint32_t FeatureSet::getLastFrame() const
+{
+    return (--frames.cend())->first;
+}
+
 const DirtyFrame& FeatureSet::getFrame(uint32_t index) const {
     if (frames.count(index) == 0) {
         throw std::out_of_range("There is no frame with index " + std::to_string(index));

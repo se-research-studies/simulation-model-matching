@@ -6,15 +6,15 @@
 
 namespace Common {
 
-Position::Position(uint32_t x, uint32_t y, uint16_t theta)
+Position::Position(int x, int y, uint16_t theta)
     : coordinates({ x, y }), theta(theta) {
 }
 
-uint32_t Position::getX() const {
+int Position::getX() const {
     return coordinates.getX();
 }
 
-uint32_t Position::getY() const {
+int Position::getY() const {
     return coordinates.getY();
 }
 

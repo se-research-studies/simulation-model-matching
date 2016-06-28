@@ -1,15 +1,20 @@
 #pragma once
 
+#include <unordered_map>
+
 #include <opendavinci/odcore/base/module/TimeTriggeredConferenceClientModule.h>
 #include <automotivedata/generated/automotive/VehicleControl.h>
 #include <opendavinci/generated/odcore/data/image/SharedImage.h>
 #include <opendavinci/odcore/wrapper/SharedMemory.h>
+#include <automotivedata/generated/cartesian/Point2.h>
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #include <FeatureSimulation/Common/makeunique.h>
-#include <FeatureSimulation/Common/DataManagement/featuresetdao.h>
+#include <FeatureSimulation/Common/Data/featureset.h>
+#include <FeatureSimulation/Common/Data/rectangle.h>
+#include <FeatureSimulation/Common/Data/permutation.h>
 
 #include <FeatureSimulation/SimulationGame/datagatherer.h>
 
@@ -30,7 +35,7 @@ namespace SimulationGame {
             return std::make_unique<SubClass>(argc, argv);
         }
 
-        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(const Settings& settings);
+        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(const Settings& settings, Common::LocalFeatureSets&& featureSets);
         void forceQuit();
 
         void setUp() override;
@@ -50,21 +55,21 @@ namespace SimulationGame {
         void gatherDataDuringFrame(double speed, double steeringWheelAngle);
         void gatherDataAfterFrame();
         void gatherDataAfterSimulation();
-        void addFeatures(cv::Mat& image, uint32_t frame) const;
+        void addFeatures(cv::Mat& image);
+        bool liesInRectangle(cartesian::Point2& point, const Common::Rectangle& rectangle) const;
 
     private:
         uint32_t frameLimit = 0;
         uint32_t currentFrame = 0;
+        uint32_t currentFrameInSegment = 0;
         bool showGui;
         bool quitFlag = false;
-
-        DataGatherer dataGatherer;
-
-        Common::FeatureSetDAO featureSetDao;
-        std::unique_ptr<Common::FeatureSet> featureSet;
+        Common::LocalFeatureSets featureSets;
+        Common::Rectangle lastSegment;
         float featureScale = 0;
         int featureSize = 0;
 
+        DataGatherer dataGatherer;
         automotive::VehicleControl vehicleControl;
     };
 

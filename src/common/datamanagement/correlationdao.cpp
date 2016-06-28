@@ -5,52 +5,62 @@
 
 namespace Common {
 
-CorrelationDAO::CorrelationDAO() {
-}
+    CorrelationDAO::CorrelationDAO() {
+    }
 
-CorrelationDAO::~CorrelationDAO() {
-}
+    CorrelationDAO::~CorrelationDAO() {
+    }
 
-//std::unordered_map<std::string, Correlation> CorrelationDAO::load(const std::string& simulationFilename) const {
-//    std::unordered_map<std::string, Correlation> result;
+    std::vector<Correlation> CorrelationDAO::load(const std::string& correlationFilename) const
+    {
+        std::vector<Correlation> result;
+        Json::Value root = readFile(correlationFilename);
+        Json::Value correlationArray = root["correlations"];
+        for (auto iterator = correlationArray.begin(); iterator != correlationArray.end(); ++iterator) {
+            result.push_back(toCorrelation(*iterator));
+        }
+        return result;
+    }
 
-//    Json::Value root = readFile(toCorFilename(simulationFilename));
-//    Json::Value correlationArray = root["correlations"];
-//    for (auto iterator = correlationArray.begin(); iterator != correlationArray.end(); ++iterator) {
-//        std::string recordingFile = (*iterator)["recordingFile"].asString();
-//        result.insert({recordingFile, toCorrelation(*iterator)});
-//    }
+    Json::Value CorrelationDAO::readFile(const std::string& corFilename) const {
+        std::ifstream file;
+        file.open(corFilename);
+        if (!file.is_open()) {
+            throw std::runtime_error("Could not open " + corFilename + ": " + std::strerror(errno));
+        }
+        Json::Value root;
+        file >> root;
+        return root;
+    }
 
-//    return result;
-//}
+    Correlation CorrelationDAO::toCorrelation(const Json::Value& value) const {
+        Correlation result(toRectangle(value));
+        Json::Value sectionArray = value["sections"];
+        for (auto iterator = sectionArray.begin(); iterator != sectionArray.end(); ++iterator) {
+            result.addSection(toRecordingSection(*iterator));
+        }
+        return result;
+    }
 
-//std::string CorrelationDAO::toCorFilename(const std::string& simulationFilename) const {
-//    std::string strippedSimulationName = simulationFilename.substr(0, simulationFilename.find_last_of("."));
-//    return strippedSimulationName + ".cor";
-//}
+    Rectangle CorrelationDAO::toRectangle(const Json::Value& value) const
+    {
+        Coordinates topLeft = toCoordinates(value["topLeft"]);
+        Coordinates bottomRight = toCoordinates(value["bottomRight"]);
+        return Rectangle(topLeft, bottomRight);
+    }
 
-//Json::Value CorrelationDAO::readFile(const std::string& corFilename) const {
-//    std::ifstream file;
-//    file.open(corFilename);
-//    if (!file.is_open()) {
-//        throw std::runtime_error("Could not open " + corFilename + ": " + std::strerror(errno));
-//    }
-//    Json::Value root;
-//    file >> root;
-//    return root;
-//}
+    Coordinates CorrelationDAO::toCoordinates(const Json::Value& value) const {
+        int x = value["x"].asInt();
+        int y = value["y"].asInt();
+        return Coordinates(x, y);
+    }
 
-//Correlation CorrelationDAO::toCorrelation(const Json::Value& value) const {
-//    uint32_t startFrame = value["startFrame"].asUInt();
-//    uint32_t endFrame = value["endFrame"].asUInt();
-//    return Correlation(startFrame, endFrame, toPosition(value["startPosition"]), toPosition(value["endPosition"]));
-//}
-
-//Position CorrelationDAO::toPosition(const Json::Value& value) const {
-//    uint32_t x = value["x"].asUInt();
-//    uint32_t y = value["y"].asUInt();
-//    uint16_t theta = value["theta"].asUInt();
-//    return Position(x, y, theta);
-//}
+    RecordingSection CorrelationDAO::toRecordingSection(const Json::Value& value) const
+    {
+        std::string recordingName = value["recordingName"].asString();
+        uint32_t startFrame = value["startFrame"].asUInt();
+        uint32_t endFrame = value["endFrame"].asUInt();
+        return RecordingSection(recordingName, startFrame, endFrame);
+    }
 
 } // namespace FeatureExtraction
