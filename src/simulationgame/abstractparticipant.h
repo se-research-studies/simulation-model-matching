@@ -35,7 +35,7 @@ namespace SimulationGame {
             return std::make_unique<SubClass>(argc, argv);
         }
 
-        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(const Settings& settings, Common::LocalFeatureSets&& featureSets);
+        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(const Settings& settings, Common::LocalFeatureSets&& localFeatureSets);
         void forceQuit();
 
         void setUp() override;
@@ -57,6 +57,7 @@ namespace SimulationGame {
         void gatherDataAfterSimulation();
         void addFeatures(cv::Mat& image);
         bool liesInRectangle(cartesian::Point2& point, const Common::Rectangle& rectangle) const;
+        void addFeaturesFromFrame(cv::Mat& image, const Common::DirtyFrame& dirtyFrame) const;
 
     private:
         uint32_t frameLimit = 0;
@@ -64,7 +65,7 @@ namespace SimulationGame {
         uint32_t currentFrameInSegment = 0;
         bool showGui;
         bool quitFlag = false;
-        Common::LocalFeatureSets featureSets;
+        Common::LocalFeatureSets localFeatureSets;
         Common::Rectangle lastSegment;
         float featureScale = 0;
         int featureSize = 0;

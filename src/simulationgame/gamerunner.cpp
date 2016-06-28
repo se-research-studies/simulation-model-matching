@@ -63,47 +63,43 @@ namespace SimulationGame {
 
     std::vector<Common::LocalFeatureSets> GameRunner::createPermutations(const std::string& correlationFile) const
     {
+        std::vector<Common::LocalFeatureSets> result;
         std::vector<Common::Correlation> correlations = correlationDao.load(correlationFile);
-        std::vector<Common::LocalRecordingSections> permutatedSections;
-
         std::vector<uint8_t> correlationSectionIndexes(correlations.size(), 0);
-        bool done = false;
-        while (!done) {
-            Common::LocalRecordingSections localSections;
+        do {
+            Common::LocalFeatureSets localFeatureSets;
             for (size_t correlationIndex = 0; correlationIndex < correlations.size(); ++correlationIndex) {
                 const Common::Correlation& correlation = correlations.at(correlationIndex);
-                localSections.emplace(correlation.getRectangle(), correlation.getSections().at(correlationSectionIndexes.at(correlationIndex)));
+                const Common::RecordingSection& recordingSection = correlation.getSections().at(correlationSectionIndexes.at(correlationIndex));
+                std::unique_ptr<Common::FeatureSet> features = featureSetDao.load(recordingSection.getRecordingName(), recordingSection.getStartFrame(), recordingSection.getEndFrame());
+                localFeatureSets.emplace(correlation.getRectangle(), std::move(features));
             }
-            permutatedSections.push_back(std::move(localSections));
-            for (size_t correlationIndex = 0; correlationIndex < correlations.size(); ++correlationIndex) {
-                bool goToNeighbour = false;
-                if (correlationSectionIndexes.at(correlationIndex) < correlations.at(correlationIndex).getSections().size() - 1) {
-                    ++correlationSectionIndexes[correlationIndex];
-                } else {
-                    correlationSectionIndexes[correlationIndex] = 0;
-                    goToNeighbour = true;
-                }
-                if (goToNeighbour) {
-                    if (correlationIndex == correlations.size() - 1) {
-                        done = true;
-                    }
-                } else {
+            result.push_back(std::move(localFeatureSets));
+        } while (adaptCorrelationSectionIndexes(correlations, correlationSectionIndexes));
+
+        return result;
+    }
+
+    bool GameRunner::adaptCorrelationSectionIndexes(const std::vector<Common::Correlation>& correlations, std::vector<uint8_t>& correlationSectionIndexes) const
+    {
+        bool result = true;
+        for (size_t correlationIndex = 0; correlationIndex < correlations.size(); ++correlationIndex) {
+            bool goToNeighbour = false;
+            if (correlationSectionIndexes.at(correlationIndex) < correlations.at(correlationIndex).getSections().size() - 1) {
+                ++correlationSectionIndexes[correlationIndex];
+            } else {
+                correlationSectionIndexes[correlationIndex] = 0;
+                goToNeighbour = true;
+            }
+            if (goToNeighbour) {
+                if (correlationIndex == correlations.size() - 1) {
+                    result = false;
                     break;
                 }
+            } else {
+                break;
             }
         }
-
-        std::vector<Common::LocalFeatureSets> result;
-        for (const std::unordered_map<Common::Rectangle, Common::RecordingSection>& permutatedSection : permutatedSections) {
-            Common::LocalFeatureSets permutation;
-            for (const auto& combination : permutatedSection) {
-                const Common::RecordingSection& recordingSection = combination.second;
-                std::unique_ptr<Common::FeatureSet> features = featureSetDao.load(recordingSection.getRecordingName(), recordingSection.getStartFrame(), recordingSection.getEndFrame());
-                permutation.emplace(combination.first, std::move(features));
-            }
-            result.push_back(std::move(permutation));
-        }
-
         return result;
     }
 

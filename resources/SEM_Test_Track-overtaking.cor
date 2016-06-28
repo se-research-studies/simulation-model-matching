@@ -2,18 +2,72 @@
 	"correlations": [
 		{
 			"topLeft": {
-				"x": -9999999,
-				"y": -9999999
+				"x": 1,
+				"y": 1
 			},
 			"bottomRight": {
-				"x": 9999999,
-				"y": 9999999
+				"x": 2,
+				"y": 2
 			},
 			"sections": [
 				{
-					"recordingName": "straightroad.rec",
+					"recordingName": "a.rec",
 					"startFrame": 1,
-					"endFrame": 999999
+					"endFrame": 2
+				},
+				{
+					"recordingName": "b.rec",
+					"startFrame": 3,
+					"endFrame": 4
+				},
+				{
+					"recordingName": "c.rec",
+					"startFrame": 5,
+					"endFrame": 6
+				}
+			]
+		},
+		{
+			"topLeft": {
+				"x": 3,
+				"y": 3
+			},
+			"bottomRight": {
+				"x": 4,
+				"y": 4
+			},
+			"sections": [
+				{
+					"recordingName": "d.rec",
+					"startFrame": 1,
+					"endFrame": 2
+				},
+				{
+					"recordingName": "e.rec",
+					"startFrame": 3,
+					"endFrame": 4
+				}
+			]
+		},
+		{
+			"topLeft": {
+				"x": 5,
+				"y": 5
+			},
+			"bottomRight": {
+				"x": 6,
+				"y": 6
+			},
+			"sections": [
+				{
+					"recordingName": "f.rec",
+					"startFrame": 1,
+					"endFrame": 2
+				},
+				{
+					"recordingName": "g.rec",
+					"startFrame": 3,
+					"endFrame": 4
 				}
 			]
 		}

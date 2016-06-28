@@ -29,7 +29,7 @@ namespace SimulationGame {
         dataGatherer.setCorrelationFile(Common::Utils::fileName(settings.correlationFile));
         featureScale = settings.featureScale;
         featureSize = settings.featureSize;
-        this->featureSets = std::move(featureSets);
+        this->localFeatureSets = std::move(featureSets);
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
 
@@ -127,24 +127,24 @@ namespace SimulationGame {
 
     void AbstractParticipant::addFeatures(cv::Mat& image)
     {
-        if (featureSets.size() > 0) {
+        if (localFeatureSets.size() > 0) {
             odcore::data::Container containerVehicleData = getKeyValueDataStore().get(automotive::VehicleData::ID());
             automotive::VehicleData vd = containerVehicleData.getData<automotive::VehicleData>();
             cartesian::Point2 position = vd.getPosition();
 
-            for (const auto& featureSet : featureSets) {
-                if (liesInRectangle(position, featureSet.first)) {
-                    if (lastSegment != featureSet.first) {
+            for (const auto& localFeatureSet : localFeatureSets) {
+                const Common::Rectangle& segment = localFeatureSet.first;
+                if (liesInRectangle(position, segment)) {
+                    if (lastSegment != segment) {
                         currentFrameInSegment = 0;
-                        lastSegment = featureSet.first;
-                    } else if (currentFrameInSegment > featureSet.second->getLastFrame()) {
-                        currentFrameInSegment = featureSet.second->getFirstFrame();
+                        lastSegment = segment;
                     }
-                    const Common::DirtyFrame& dirtyFrame = featureSet.second->getFrame(currentFrameInSegment);
-                    for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
-                        int radius = featureSize > 0 ? featureSize : (feature.getDiameter() / 2) * featureScale;
-                        cv::circle(image, cv::Point(feature.getX(), feature.getY()), radius, cv::Scalar(255, 255, 255), -1);
+                    const std::unique_ptr<Common::FeatureSet>& featureSet = localFeatureSet.second;
+                    if (currentFrameInSegment > featureSet->getLastFrame()) {
+                        currentFrameInSegment = featureSet->getFirstFrame();
                     }
+                    const Common::DirtyFrame& dirtyFrame = featureSet->getFrame(currentFrameInSegment);
+                    addFeaturesFromFrame(image, dirtyFrame);
                     break;
                 }
             }
@@ -157,6 +157,14 @@ namespace SimulationGame {
         int y = point.getP()[1];
         return rectangle.getTopLeft().getX() < x && rectangle.getTopLeft().getY() < y &&
                 rectangle.getBottomRight().getX() > x && rectangle.getBottomRight().getY() > y;
+    }
+
+    void AbstractParticipant::addFeaturesFromFrame(cv::Mat& image, const Common::DirtyFrame& dirtyFrame) const
+    {
+        for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
+            int radius = featureSize > 0 ? featureSize : (feature.getDiameter() / 2) * featureScale;
+            cv::circle(image, cv::Point(feature.getX(), feature.getY()), radius, cv::Scalar(255, 255, 255), -1);
+        }
     }
 
     void AbstractParticipant::setControls(double speed, double steeringWheelAngle)

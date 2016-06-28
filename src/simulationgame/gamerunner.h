@@ -23,6 +23,7 @@ namespace SimulationGame {
         static void waitForEnter();
         int runSimulation(const Settings& settings, Common::LocalFeatureSets&& permutation);
         std::vector<Common::LocalFeatureSets> createPermutations(const std::string& correlationFile) const;
+        bool adaptCorrelationSectionIndexes(const std::vector<Common::Correlation>& correlations, std::vector<uint8_t>& correlationSectionIndexes) const;
 
     private:
         SimulationGame::ParticipantRegistry& registry;
