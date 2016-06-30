@@ -7,12 +7,12 @@ namespace SimulationGame {
     struct Settings {
         std::string cid = "111";
         std::string freq = "10";
-        std::string configurationFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/configuration";
-        std::string participant = "LaneFollower";
+        std::string configurationFile;
+        std::string participant;
         uint32_t frameLimit = 0;
         float featureScale = 0.25;
         float featureSize = 10;
-        std::string correlationFile = "../resources/SEM_Test_Track-overtaking.cor";
+        std::string correlationFile;
         bool showGui = false;
         uint32_t repetitions = 1;
     };

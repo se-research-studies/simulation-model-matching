@@ -11,7 +11,7 @@ static const struct option simulationGameLongopts[] = {
     {"frames", optional_argument, nullptr, SimulationGame::SimSettingsReader::FRAME_LIMIT},
     {"scale", optional_argument, nullptr, SimulationGame::SimSettingsReader::FEATURE_SCALE},
     {"size", optional_argument, nullptr, SimulationGame::SimSettingsReader::FEATURE_SIZE},
-    {"cor", required_argument, nullptr, SimulationGame::SimSettingsReader::CORRELATION_FILE},
+    {"cor", optional_argument, nullptr, SimulationGame::SimSettingsReader::CORRELATION_FILE},
     {"guiEnabled", optional_argument, nullptr, SimulationGame::SimSettingsReader::SHOW_GUI},
     {"repetitions", optional_argument, nullptr, SimulationGame::SimSettingsReader::REPETITIONS},
     {0, 0, 0, 0} //Required by getopt_long_only to mark the end of the arrays
@@ -25,12 +25,12 @@ namespace SimulationGame {
         fprintf(stderr,
                 "  -cid               Optional. cid for OpenDaVinci. Default is 111.\n"
                 "  -freq              Optional. freq for OpenDaVinci. Default is 10.\n"
-                "  -conf              Optional. Path to OpenDaVinci conf file.\n"
+                "  -conf              Optional. Path to OpenDaVinci conf file. File must be in same folder as executable if not set.\n"
                 "  -participant       Required. Name of Algorithm to use.\n"
                 "  -frames            Optional. Maximum number of frames. Default is 0, ie. no limit.\n"
                 "  -scale             Optional. Scale factor for feature size. Default is 0.25.\n"
                 "  -size              Optional. Absolute size for features. Default is 10. Supersedes scale if set.\n"
-                "  -cor               Required. Path to .cor file.\n"
+                "  -cor               Optional. Path to .cor file. If not set no features will be used.\n"
                 "  -guiEnabled        Optional. Default is false\n"
                 "  -repetitions       Optional. Number of repetitions of all permutations. Default is 1.\n"
                 "\n"

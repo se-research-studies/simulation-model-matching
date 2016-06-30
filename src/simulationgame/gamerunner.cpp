@@ -23,12 +23,20 @@ namespace SimulationGame {
 
         int result;
         for (uint32_t i = 0; i < settings.repetitions; ++i) {
-            std::vector<Common::LocalFeatureSets> permutations = createPermutations(settings.correlationFile);
-            for (Common::LocalFeatureSets& permutation : permutations) {
+            std::cout << "Running repetition " << i << " of " << settings.repetitions << std::endl;
+            std::vector<Common::LocalFeatureSets> permutations;
+            if (settings.correlationFile.size() > 0) {
+                permutations = createPermutations(settings.correlationFile);
+            } else {
+                permutations.push_back(Common::LocalFeatureSets());
+            }
+            for (size_t permutation = 0; permutation < permutations.size(); ++permutation) {
+                std::cout << "Running permutation " << permutation << " of " << permutations.size() << std::endl;
                 control.start(settings.cid, settings.freq, settings.configurationFile);
-                result = runSimulation(settings, std::move(permutation));
+                result = runSimulation(settings, std::move(permutations.at(permutation)));
                 control.stop();
                 if (result != odcore::data::dmcp::ModuleExitCodeMessage::OKAY) {
+                    std::cout << "An OpenDaVinci error occured. Exit code: " << result << std::endl;
                     return result;
                 }
             }
@@ -77,7 +85,6 @@ namespace SimulationGame {
             }
             result.push_back(std::move(localFeatureSets));
         } while (adaptCorrelationSectionIndexes(correlations, correlationSectionIndexes));
-
         return result;
     }
 

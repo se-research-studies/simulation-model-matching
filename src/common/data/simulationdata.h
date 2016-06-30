@@ -27,7 +27,7 @@ namespace Common {
         uint32_t getMaxComputationTime() const;
         void addComputationTime(const FrameTime& value);
         std::string computationTimesToString() const;
-        uint64_t getLapTime() const;
+        uint64_t getTotalComputationTime() const;
 
         uint32_t getLeftSteerings() const;
         void setLeftSteerings(uint32_t value);

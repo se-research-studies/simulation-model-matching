@@ -77,8 +77,8 @@ namespace Common {
         return result;
     }
 
-    uint64_t SimulationData::getLapTime() const {
-        uint32_t result = 0;
+    uint64_t SimulationData::getTotalComputationTime() const {
+        uint64_t result = 0;
         for (const FrameTime& frameTime : computationTimes) {
             result += frameTime.getComputationTime();
         }
