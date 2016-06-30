@@ -21,15 +21,16 @@ namespace SimulationGame {
         std::cout << "Press ENTER to start and again enter to stop before frame limit is reached... " << std::endl;
         waitForEnter();
 
-        std::vector<Common::LocalFeatureSets> permutations = createPermutations(settings.correlationFile);
-
         int result;
-        for (Common::LocalFeatureSets& permutation : permutations) {
-            control.start(settings.cid, settings.freq, settings.configurationFile);
-            result = runSimulation(settings, std::move(permutation));
-            control.stop();
-            if (result != odcore::data::dmcp::ModuleExitCodeMessage::OKAY) {
-                break;
+        for (uint32_t i = 0; i < settings.repetitions; ++i) {
+            std::vector<Common::LocalFeatureSets> permutations = createPermutations(settings.correlationFile);
+            for (Common::LocalFeatureSets& permutation : permutations) {
+                control.start(settings.cid, settings.freq, settings.configurationFile);
+                result = runSimulation(settings, std::move(permutation));
+                control.stop();
+                if (result != odcore::data::dmcp::ModuleExitCodeMessage::OKAY) {
+                    return result;
+                }
             }
         }
 
