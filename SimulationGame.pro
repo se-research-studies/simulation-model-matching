@@ -18,7 +18,8 @@ SOURCES += \
     src/simulationgame/participants/lanefollower.cpp \
     src/simulationgame/datagatherer.cpp \
     src/simulationgame/settings.cpp \
-    src/simulationgame/gamerunner.cpp
+    src/simulationgame/gamerunner.cpp \
+    src/simulationgame/simsettingsreader.cpp
 
 HEADERS += \
     gamestarter.h \
@@ -28,6 +29,7 @@ HEADERS += \
     src/simulationgame/participants/lanefollower.h \
     src/simulationgame/datagatherer.h \
     src/simulationgame/settings.h \
-    src/simulationgame/gamerunner.h
+    src/simulationgame/gamerunner.h \
+    src/simulationgame/simsettingsreader.h
 
 

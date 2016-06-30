@@ -22,7 +22,8 @@ SOURCES += \
     src/featuresetcreation/ronimasker.cpp \
     src/featuresetcreation/recordingplayer.cpp \
     src/featuresetcreation/guicontroler.cpp \
-    src/featuresetcreation/imagemasker.cpp
+    src/featuresetcreation/imagemasker.cpp \
+    src/featuresetcreation/featuresettingsreader.cpp
 
 HEADERS += \
     src/featuresetcreation/featuredetector.h \
@@ -35,6 +36,7 @@ HEADERS += \
     src/featuresetcreation/ronimasker.h \
     src/featuresetcreation/recordingplayer.h \
     src/featuresetcreation/guicontroler.h \
-    src/featuresetcreation/imagemasker.h
+    src/featuresetcreation/imagemasker.h \
+    src/featuresetcreation/featuresettingsreader.h
 
 

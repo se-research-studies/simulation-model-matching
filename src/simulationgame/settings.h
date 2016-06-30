@@ -9,11 +9,12 @@ namespace SimulationGame {
         std::string freq = "10";
         std::string configurationFile = "/home/sebastian/Uni/Bachelorarbeit/Code/resources/configuration";
         std::string participant = "LaneFollower";
-        uint32_t frameLimit = 100;
+        uint32_t frameLimit = 0;
         float featureScale = 0.25;
-        int featureSize = 10;
+        float featureSize = 10;
         std::string correlationFile = "../resources/SEM_Test_Track-overtaking.cor";
         bool showGui = false;
+        uint32_t repetitions = 1;
     };
 
 } // namespace SimulationGame
