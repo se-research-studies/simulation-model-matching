@@ -9,18 +9,18 @@ namespace Common {
 
 class Feature {
 public:
-    Feature(uint32_t x, uint32_t y, float diameter);
+    Feature(int x, int y, uint16_t diameter);
 
 public:
-    uint32_t getX() const;
-    uint32_t getY() const;
-    float getDiameter() const;
+    int getX() const;
+    int getY() const;
+    uint16_t getDiameter() const;
     std::string toSqlString() const;
     static Feature fromSqlString(const std::string& stringFormatted);
 
 private:
     const Coordinates coordinates;
-    const float diameter = 0;
+    const uint16_t diameter = 0;
 };
 
 } // namespace FeatureExtraction

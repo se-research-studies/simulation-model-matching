@@ -6,19 +6,19 @@
 
 namespace Common {
 
-Feature::Feature(uint32_t x, uint32_t y, float radius)
+Feature::Feature(int x, int y, uint16_t radius)
     : coordinates({ x, y }), diameter(radius) {
 }
 
-uint32_t Feature::getX() const {
+int Feature::getX() const {
     return coordinates.getX();
 }
 
-uint32_t Feature::getY() const {
+int Feature::getY() const {
     return coordinates.getY();
 }
 
-float Feature::getDiameter() const {
+uint16_t Feature::getDiameter() const {
     return diameter;
 }
 
@@ -32,7 +32,7 @@ Feature Feature::fromSqlString(const std::string& stringFormatted) {
     std::getline(stream, x, ',');
     std::getline(stream, y, ',');
     std::getline(stream, radius, ',');
-    return Feature(Utils::stoui(x), Utils::stoui(y), std::stof(radius));
+    return Feature(std::stoi(x), std::stoi(y), Utils::stoi<uint16_t>(radius));
 }
 
 } // namespace FeatureExtraction
