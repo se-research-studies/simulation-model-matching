@@ -18,9 +18,6 @@ namespace SimulationGame {
 
     int GameRunner::start(const Settings& settings)
     {
-        std::cout << "Press ENTER to start... " << std::endl;
-        waitForEnter();
-
         int result;
         for (uint32_t i = 0; i < settings.repetitions; ++i) {
             std::cout << "Running repetition " << i + 1 << " of " << settings.repetitions << std::endl;
