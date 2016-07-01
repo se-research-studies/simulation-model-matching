@@ -18,12 +18,12 @@ namespace SimulationGame {
 
     int GameRunner::start(const Settings& settings)
     {
-        std::cout << "Press ENTER to start and again enter to stop before frame limit is reached... " << std::endl;
+        std::cout << "Press ENTER to start... " << std::endl;
         waitForEnter();
 
         int result;
         for (uint32_t i = 0; i < settings.repetitions; ++i) {
-            std::cout << "Running repetition " << i << " of " << settings.repetitions << std::endl;
+            std::cout << "Running repetition " << i + 1 << " of " << settings.repetitions << std::endl;
             std::vector<Common::LocalFeatureSets> permutations;
             if (settings.correlationFile.size() > 0) {
                 permutations = createPermutations(settings.correlationFile);
@@ -31,7 +31,7 @@ namespace SimulationGame {
                 permutations.push_back(Common::LocalFeatureSets());
             }
             for (size_t permutation = 0; permutation < permutations.size(); ++permutation) {
-                std::cout << "Running permutation " << permutation << " of " << permutations.size() << std::endl;
+                std::cout << "Running permutation " << permutation + 1 << " of " << permutations.size() << std::endl;
                 control.start(settings.cid, settings.freq, settings.configurationFile);
                 result = runSimulation(settings, std::move(permutations.at(permutation)));
                 control.stop();
@@ -53,20 +53,35 @@ namespace SimulationGame {
 
     int GameRunner::runSimulation(const Settings& settings, Common::LocalFeatureSets&& permutation)
     {
+        int result;
+        if (settings.frameLimit == 0) {
+            result = runSimulationWithEnterKeyDetection(settings, move(permutation));
+        } else {
+            result = runSimulationWithFrameLimit(settings, move(permutation));
+        }
+        std::cout << "Done." << std::endl;
+        return result;
+    }
+
+    int GameRunner::runSimulationWithFrameLimit(const Settings& settings, Common::LocalFeatureSets&& permutation)
+    {
+        std::unique_ptr<AbstractParticipant> participant = registry.getParticipant(settings.participant);
+        std::future<odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode> simulation =
+                std::async(std::launch::async, &AbstractParticipant::runModule, participant.get(), settings, std::move(permutation));
+        while (simulation.wait_for(std::chrono::milliseconds(10)) != std::future_status::ready) {
+        }
+        return simulation.get();
+    }
+
+    int GameRunner::runSimulationWithEnterKeyDetection(const Settings& settings, Common::LocalFeatureSets&& permutation)
+    {
         std::unique_ptr<AbstractParticipant> participant = registry.getParticipant(settings.participant);
         std::future<odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode> simulation =
                 std::async(std::launch::async, &AbstractParticipant::runModule, participant.get(), settings, std::move(permutation));
         std::future<void> enterKey = std::async(std::launch::async, &GameRunner::waitForEnter);
-        while (simulation.wait_for(std::chrono::milliseconds(10)) != std::future_status::ready) {
-            if (enterKey.wait_for(std::chrono::milliseconds(10)) == std::future_status::ready) {
-                participant->forceQuit();
-            }
+        while (enterKey.wait_for(std::chrono::milliseconds(10)) != std::future_status::ready) {
         }
-        if (enterKey.wait_for(std::chrono::milliseconds(10)) != std::future_status::ready) {
-            std::cout << "Done. Press enter to quit." << std::endl;
-        } else {
-            std::cout << "Done." << std::endl;
-        }
+        participant->forceQuit();
         return simulation.get();
     }
 
