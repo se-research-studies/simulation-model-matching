@@ -12,7 +12,7 @@
 int main(int argc, char *argv[]) {
     try {
         SimulationGame::Settings settings = SimulationGame::SimSettingsReader::readSettings(argc, argv);
-        Common::Database::getInstance().setDbFilename(settings.database);
+        Common::Database::getInstance().setDbFilename(argv[0], settings.database);
 
         SimulationGame::ParticipantRegistry registry(settings.cid, settings.freq);
         registry.registerParticipant<SimulationGame::LaneFollower>("LaneFollower");
