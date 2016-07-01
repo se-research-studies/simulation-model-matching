@@ -179,7 +179,7 @@ namespace FeatureSetCreation {
                 break;
             default:
                 printUsage(argv[0]);
-                throw std::runtime_error("Invalid argument");
+                throw std::runtime_error("");
             }
         }
         return settings;

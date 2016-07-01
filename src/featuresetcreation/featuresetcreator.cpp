@@ -45,7 +45,7 @@ namespace FeatureSetCreation {
         }
         std::cout << "Saving results..." << std::endl;
         saveFeatureSet(result);
-        std::cout << "Done" << std::endl;
+        std::cout << "Shutting down..." << std::endl;
     }
 
     void FeatureSetCreator::saveFeatureSet(const Common::FeatureSet& featureSet) const {

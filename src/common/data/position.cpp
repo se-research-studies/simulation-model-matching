@@ -32,7 +32,7 @@ Position Position::fromSqlString(const std::string& stringFormatted) {
     std::getline(stream, x, ',');
     std::getline(stream, y, ',');
     std::getline(stream, theta, ',');
-    return Position(Utils::stoui(x), Utils::stoui(y), Utils::stoui(theta));
+    return Position(std::stoi(x), std::stoi(y), Utils::stoi<uint16_t>(theta));
 }
 
 } // namespace FeatureExtraction

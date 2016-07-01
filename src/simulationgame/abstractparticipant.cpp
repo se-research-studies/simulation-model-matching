@@ -153,8 +153,8 @@ namespace SimulationGame {
 
     bool AbstractParticipant::liesInRectangle(cartesian::Point2& point, const Common::Rectangle& rectangle) const
     {
-        int x = point.getP()[0];
-        int y = point.getP()[1];
+        int x = Common::Utils::to<int>(point.getP()[0]);
+        int y = Common::Utils::to<int>(point.getP()[1]);
         return rectangle.getTopLeft().getX() < x && rectangle.getTopLeft().getY() < y &&
                 rectangle.getBottomRight().getX() > x && rectangle.getBottomRight().getY() > y;
     }
@@ -162,7 +162,7 @@ namespace SimulationGame {
     void AbstractParticipant::addFeaturesFromFrame(cv::Mat& image, const Common::DirtyFrame& dirtyFrame) const
     {
         for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
-            int radius = featureSize > 0 ? featureSize : (feature.getDiameter() / 2) * featureScale;
+            int radius = featureSize > 0 ? featureSize : Common::Utils::to<int>((feature.getDiameter() / 2) * featureScale);
             cv::circle(image, cv::Point(feature.getX(), feature.getY()), radius, cv::Scalar(255, 255, 255), -1);
         }
     }

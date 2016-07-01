@@ -8,13 +8,23 @@ namespace Common {
 
     namespace Utils {
         extern std::string removeBraces(std::string from);
-        extern uint32_t stoui(const std::string& string);
         extern std::string fileName(const std::string& filePath);
         extern std::string fileFolderPath(const std::string& filePath);
 
         template <typename TargetInt, typename SourceInt>
         TargetInt to(SourceInt from) {
             TargetInt result = static_cast<TargetInt>(from);
+            return result;
+        }
+
+        // Converts a string to a int of type TargetInt. Unlike std::stoi this method can be used for unsigned types as well
+        template <typename TargetInt>
+        TargetInt stoi(const std::string& string) {
+            uint64_t longResult = std::stoul(string);
+            TargetInt result = Utils::to<TargetInt>(longResult);
+            if (result != longResult) {
+                throw std::out_of_range(string + " cannot be converted to uint32_t");
+            }
             return result;
         }
 
