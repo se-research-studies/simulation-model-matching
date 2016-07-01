@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <FeatureSimulation/Common/DataManagement/database.h>
+
 #include <FeatureSimulation/SimulationGame/gamerunner.h>
 #include <FeatureSimulation/SimulationGame/participantregistry.h>
 #include <FeatureSimulation/SimulationGame/settings.h>
@@ -10,10 +12,10 @@
 int main(int argc, char *argv[]) {
     try {
         SimulationGame::Settings settings = SimulationGame::SimSettingsReader::readSettings(argc, argv);
+        Common::Database::getInstance().setDbFilename(settings.database);
 
         SimulationGame::ParticipantRegistry registry(settings.cid, settings.freq);
         registry.registerParticipant<SimulationGame::LaneFollower>("LaneFollower");
-        // Ausgeben welche Participants es gibt
 
         SimulationGame::GameRunner gameRunner(registry);
         gameRunner.start(settings);

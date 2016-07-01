@@ -15,6 +15,7 @@ namespace SimulationGame {
         enum Argument {
             CID,
             FREQ,
+            DATABASE,
             CONFIG_FILE,
             PARTICIPANT,
             FRAME_LIMIT,

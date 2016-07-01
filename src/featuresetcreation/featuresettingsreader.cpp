@@ -2,6 +2,7 @@
 
 static const struct option featureSetCreationLongopts[] = {
     {"rec", required_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::REC_FILE},
+    {"db", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::DATABASE},
     {"detector", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::DETECTOR},
     {"guiEnabled", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::USE_GUI},
     // ORB arguments
@@ -47,7 +48,8 @@ namespace FeatureSetCreation {
         fprintf(stderr, "Usage: %s -rec='file' [-options]\n", programName);
         fprintf(stderr,
                 "  -rec               Recording file.\n"
-                "  -detector          Optional. Feature Detection Algorithm. Supported are: ORB. Default is ORB.\n"
+                "  -db                Optional. Database file. Default is ./data.sqlite.\n"
+                "  -detector          Optional. Feature Detection Algorithm. Default is ORB.\n"
                 "  -guiEnabled        Optional. Default is true\n"
                 "  -nFeatures         Optional ORB parameter. Default is 500.\n"
                 "  -scaleFactor       Optional ORB parameter. Default is 1.2\n"
@@ -73,6 +75,12 @@ namespace FeatureSetCreation {
                 "  -blockSize         Optional ShiTomasi in parameter. Default is 3.\n"
                 "  -useHarrisDetector Optional ShiTomasi boolean parameter. Default is F (false).\n"
                 "  -kFree             Optional ShiTomasi double parameter. Default is 0.4.\n"
+                "\n"
+                "  Available detector:\n"
+                "    - ORB\n"
+                "    - ShiTomasi\n"
+                "\n"
+                "  Please note: All filenames must be absolute or relative to the location of the executable.\n"
                 );
     }
 
@@ -85,11 +93,14 @@ namespace FeatureSetCreation {
             case REC_FILE:
                 settings.recordingFile = std::string(optarg);
                 break;
+            case DATABASE:
+                settings.database = std::string(optarg);
+                break;
             case DETECTOR:
                 settings.detectionAlg = std::string(optarg);
                 break;
             case USE_GUI:
-                settings.guiEnabled = optarg;
+                settings.guiEnabled = atoi(optarg);
                 break;
             case ORB_N_FEATURES:
                 settings.orbSettings.nFeatures = atoi(optarg);

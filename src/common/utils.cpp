@@ -27,4 +27,14 @@ namespace Common {
         }
     }
 
+    std::string Utils::fileFolderPath(const std::string& filePath)
+    {
+        size_t lastSlash = filePath.find_last_of("/");
+        if (lastSlash == std::string::npos) {
+            return filePath;
+        } else {
+            return filePath.substr(0, lastSlash);
+        }
+    }
+
 } // namespace Common

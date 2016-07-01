@@ -10,6 +10,7 @@ namespace Common {
         extern std::string removeBraces(std::string from);
         extern uint32_t stoui(const std::string& string);
         extern std::string fileName(const std::string& filePath);
+        extern std::string fileFolderPath(const std::string& filePath);
 
         template <typename TargetInt, typename SourceInt>
         TargetInt to(SourceInt from) {

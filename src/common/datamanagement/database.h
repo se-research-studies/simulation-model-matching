@@ -26,6 +26,7 @@ public:
     static Database& getInstance();
 
 public:
+    void setDbFilename(const std::string& argv0, const std::string& value);
     void beginTransaction();
     void endTransaction();
     void createTable(const std::string& table, const std::vector<TableColumn>& columns);
@@ -41,7 +42,7 @@ private:
     std::pair<std::string, std::string> buildInsertContentStrings(const std::vector<TableField>& content) const;
 
 private:
-    std::string DB_FILENAME = "data.sqlite";
+    std::string dbFilename = "data.sqlite";
 
 private:
     sqlite3* db = nullptr;

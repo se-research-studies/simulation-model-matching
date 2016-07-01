@@ -18,6 +18,7 @@ namespace FeatureSetCreation {
     public:
         enum Argument {
             REC_FILE,
+            DATABASE,
             DETECTOR,
             USE_GUI,
             ORB_N_FEATURES,

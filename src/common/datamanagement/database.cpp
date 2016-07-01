@@ -2,6 +2,8 @@
 
 #include <stdexcept>
 
+#include <FeatureSimulation/Common/utils.h>
+
 namespace Common {
 
 Database::Database() {
@@ -15,13 +17,19 @@ Database::~Database() {
 
 Database& Database::getInstance() {
     static Database instance;
-    instance.open();
     return instance;
+}
+
+void Database::setDbFilename(const std::string& argv0, const std::string& value)
+{
+    std::string executableFolder = Utils::fileFolderPath(argv0);
+    dbFilename = "file:" + executableFolder + "/" + value;
+    getInstance().open();
 }
 
 void Database::open() {
     if (!isOpen) {
-        if (sqlite3_open(DB_FILENAME.c_str(), &db) == SQLITE_OK) {
+        if (sqlite3_open_v2(dbFilename.c_str(), &db, SQLITE_OPEN_URI | SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE, NULL) == SQLITE_OK) {
             isOpen = true;
         } else {
             throw std::runtime_error(sqlite3_errmsg(db));
@@ -76,34 +84,46 @@ void Database::execSql(const std::string& sql) {
 }
 
 std::string Database::buildCreateTableColumnsString(const std::vector<TableColumn>& columns) const {
-    std::string result = "(";
-    for (const TableColumn& tableColumn : columns) {
-        result += tableColumn.name + " " + tableColumn.type + ",";
+    if (columns.size() > 0) {
+        std::string result = "(";
+        for (const TableColumn& tableColumn : columns) {
+            result += tableColumn.name + " " + tableColumn.type + ",";
+        }
+        result.pop_back();
+        result += ")";
+        return result;
+    } else {
+        throw std::runtime_error("Common::Database: CREATE TABLE without columns");
     }
-    result.pop_back();
-    result += ")";
-    return result;
 }
 
 std::string Database::buildSelectColumnsString(const std::vector<std::string>& columns) const {
-    std::string result;
-    for (const std::string& column : columns) {
-        result += column + ",";
+    if (columns.size() > 0) {
+        std::string result;
+        for (const std::string& column : columns) {
+            result += column + ",";
+        }
+        result.pop_back();
+        return result;
+    } else {
+        throw std::runtime_error("Common::Database: SELECT clause without columns");
     }
-    result.pop_back();
-    return result;
 }
 
 std::pair<std::string, std::string> Database::buildInsertContentStrings(const std::vector<TableField>& content) const {
-    std::string columns;
-    std::string values;
-    for (const TableField& tableField : content) {
-        columns += tableField.field + ",";
-        values += "'" + tableField.value + "',";
+    if (content.size() > 0) {
+        std::string columns;
+        std::string values;
+        for (const TableField& tableField : content) {
+            columns += tableField.field + ",";
+            values += "'" + tableField.value + "',";
+        }
+        columns.pop_back();
+        values.pop_back();
+        return std::make_pair(columns, values);
+    } else {
+        throw std::runtime_error("Common::Database: INSERT without content");
     }
-    columns.pop_back();
-    values.pop_back();
-    return std::make_pair(columns, values);
 }
 
 } // namespace Common

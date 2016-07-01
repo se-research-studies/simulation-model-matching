@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <FeatureSimulation/Common/DataManagement/database.h>
+
 #include <FeatureSimulation/FeatureSetCreation/featuresetcreator.h>
 #include <FeatureSimulation/FeatureSetCreation/guicontroler.h>
 #include <FeatureSimulation/FeatureSetCreation/settings.h>
@@ -10,6 +12,7 @@ int main(int argc, char *argv[]) {
     try {
         FeatureSetCreation::Settings settings = FeatureSetCreation::FeatureSettingsReader::readSettings(argc, argv);
         FeatureSetCreation::GuiControler::instance().setEnabled(settings.guiEnabled);
+        Common::Database::getInstance().setDbFilename(argv[0], settings.database);
 
         FeatureSetCreation::SettingsValidator validator;
         validator.validate(settings);

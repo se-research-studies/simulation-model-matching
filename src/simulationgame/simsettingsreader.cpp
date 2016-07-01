@@ -6,6 +6,7 @@ static const struct option simulationGameLongopts[] = {
     // Operation arguments
     {"cid", optional_argument, nullptr, SimulationGame::SimSettingsReader::CID},
     {"freq", optional_argument, nullptr, SimulationGame::SimSettingsReader::FREQ},
+    {"db", optional_argument, nullptr, SimulationGame::SimSettingsReader::DATABASE},
     {"conf", optional_argument, nullptr, SimulationGame::SimSettingsReader::CONFIG_FILE},
     {"participant", required_argument, nullptr, SimulationGame::SimSettingsReader::PARTICIPANT},
     {"frames", optional_argument, nullptr, SimulationGame::SimSettingsReader::FRAME_LIMIT},
@@ -25,6 +26,7 @@ namespace SimulationGame {
         fprintf(stderr,
                 "  -cid               Optional. cid for OpenDaVinci. Default is 111.\n"
                 "  -freq              Optional. freq for OpenDaVinci. Default is 10.\n"
+                "  -db                Optional. Database file. Default is ./data.sqlite.\n"
                 "  -conf              Optional. Path to OpenDaVinci conf file. File must be in same folder as executable if not set.\n"
                 "  -participant       Required. Name of Algorithm to use.\n"
                 "  -frames            Optional. Maximum number of frames. Default is 0, ie. no limit.\n"
@@ -36,6 +38,8 @@ namespace SimulationGame {
                 "\n"
                 "  Available participants:\n"
                 "    - LaneFollower\n"
+                "\n"
+                "  Please note: All filenames must be absolute or relative to the location of the executable.\n"
                 );
     }
 
@@ -50,6 +54,9 @@ namespace SimulationGame {
                 break;
             case FREQ:
                 settings.freq = std::string(optarg);
+                break;
+            case DATABASE:
+                settings.database = std::string(optarg);
                 break;
             case CONFIG_FILE:
                 settings.configurationFile =  std::string(optarg);
