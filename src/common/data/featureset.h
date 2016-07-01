@@ -29,6 +29,7 @@ public:
 private:
     const std::string recordingName;
     std::map<uint32_t, DirtyFrame> frames;
+    const DirtyFrame emptyFrame;
 };
 
 } // namespace FeatureExtraction

@@ -24,10 +24,12 @@ void DirtyFrame::addFeature(Feature&& feature) {
 
 std::string DirtyFrame::toSqlString() const {
     std::string result;
-    for (const Feature& feature : features) {
-        result += feature.toSqlString() + ";";
+    if (features.size() > 0) {
+        for (const Feature& feature : features) {
+            result += feature.toSqlString() + ";";
+        }
+        result.pop_back();
     }
-    result.pop_back();
     return result;
 }
 

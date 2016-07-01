@@ -28,17 +28,24 @@ namespace FeatureSetCreation {
     void FeatureSetCreator::createFeatureSet() {
         Common::FeatureSet result(Common::Utils::fileName(recordingFile));
         uint32_t frameNumber = 0;
+        std::cout << "Loading file " << recordingFile << "..." << std::endl;
         RecordingPlayer player(recordingFile);
         ImageMasker imageMasker(recordingFile);
         cv::Mat mask = imageMasker.createMask(player.imageSize());
+        std::cout << "Detecting features..." << std::endl;
         while (player.hasNext()) {
             cv::Mat image = player.next();
             GuiControler::instance().setImage(image, mask);
-            result.addFrame(frameNumber, featureDetector->detectFeatures(image, mask));
+            Common::DirtyFrame dirtyFrame = featureDetector->detectFeatures(image, mask);
+            if (dirtyFrame.getFeatureCount() > 0) {
+                result.addFrame(frameNumber, featureDetector->detectFeatures(image, mask));
+            }
             GuiControler::instance().show();
             ++frameNumber;
         }
+        std::cout << "Saving results..." << std::endl;
         saveFeatureSet(result);
+        std::cout << "Done" << std::endl;
     }
 
     void FeatureSetCreator::saveFeatureSet(const Common::FeatureSet& featureSet) const {

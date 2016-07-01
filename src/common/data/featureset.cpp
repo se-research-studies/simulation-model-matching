@@ -3,7 +3,7 @@
 namespace Common {
 
 FeatureSet::FeatureSet(const std::string& recordingName)
-    : recordingName(recordingName) {
+    : recordingName(recordingName), emptyFrame(DirtyFrame()) {
 }
 
 std::string FeatureSet::getRecordingName() const {
@@ -26,9 +26,10 @@ uint32_t FeatureSet::getLastFrame() const
 
 const DirtyFrame& FeatureSet::getFrame(uint32_t index) const {
     if (frames.count(index) == 0) {
-        throw std::out_of_range("There is no frame with index " + std::to_string(index));
+        return emptyFrame;
+    } else {
+        return frames.at(index);
     }
-    return frames.at(index);
 }
 
 const std::map<uint32_t, DirtyFrame>& FeatureSet::getFrames() const {
