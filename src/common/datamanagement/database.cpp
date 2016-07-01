@@ -22,8 +22,12 @@ Database& Database::getInstance() {
 
 void Database::setDbFilename(const std::string& argv0, const std::string& value)
 {
-    std::string executableFolder = Utils::fileFolderPath(argv0);
-    dbFilename = "file:" + executableFolder + "/" + value;
+    if (value.compare(0, 3, "../") == 0) {
+        std::string executableFolder = Utils::fileFolderPath(argv0);
+        dbFilename = "file:" + executableFolder + "/" + value;
+    } else {
+        dbFilename = value;
+    }
     getInstance().open();
 }
 
