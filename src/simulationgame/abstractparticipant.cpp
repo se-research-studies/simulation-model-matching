@@ -29,7 +29,7 @@ namespace SimulationGame {
         dataGatherer.setCorrelationFile(Common::Utils::fileName(settings.correlationFile));
         featureScale = settings.featureScale;
         featureSize = settings.featureSize;
-        this->localFeatureSets = std::move(featureSets);
+        localFeatureSets = std::move(featureSets);
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
 
@@ -135,13 +135,14 @@ namespace SimulationGame {
             for (const auto& localFeatureSet : localFeatureSets) {
                 const Common::Rectangle& segment = localFeatureSet.first;
                 if (liesInRectangle(position, segment)) {
-                    if (lastSegment != segment) {
-                        currentFrameInSegment = 0;
-                        lastSegment = segment;
-                    }
                     const std::unique_ptr<Common::FeatureSet>& featureSet = localFeatureSet.second;
-                    if (currentFrameInSegment > featureSet->getLastFrame()) {
+                    if (lastSegment != segment) {
                         currentFrameInSegment = featureSet->getFirstFrame();
+                        lastSegment = segment;
+                    } else if (currentFrameInSegment > featureSet->getLastFrame()) {
+                        currentFrameInSegment = featureSet->getFirstFrame();
+                    } else {
+                        ++currentFrameInSegment;
                     }
                     const Common::DirtyFrame& dirtyFrame = featureSet->getFrame(currentFrameInSegment);
                     addFeaturesFromFrame(image, dirtyFrame);

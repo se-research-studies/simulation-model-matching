@@ -18,27 +18,19 @@ namespace SimulationGame {
 
     int GameRunner::start(const Settings& settings)
     {
-        int result;
+        int result = odcore::data::dmcp::ModuleExitCodeMessage::OKAY;
         for (uint32_t i = 0; i < settings.repetitions; ++i) {
             std::cout << "Running repetition " << i + 1 << " of " << settings.repetitions << std::endl;
-            std::vector<Common::LocalFeatureSets> permutations;
-            if (settings.correlationFile.size() > 0) {
-                permutations = createPermutations(settings.correlationFile);
-            } else {
-                permutations.push_back(Common::LocalFeatureSets());
-            }
+            std::vector<Common::LocalFeatureSets> permutations = createPermutations(settings.correlationFile);
             for (size_t permutation = 0; permutation < permutations.size(); ++permutation) {
                 std::cout << "Running permutation " << permutation + 1 << " of " << permutations.size() << std::endl;
-                control.start(settings.cid, settings.freq, settings.configurationFile);
                 result = runSimulation(settings, std::move(permutations.at(permutation)));
-                control.stop();
                 if (result != odcore::data::dmcp::ModuleExitCodeMessage::OKAY) {
                     std::cout << "An OpenDaVinci error occured. Exit code: " << result << std::endl;
                     return result;
                 }
             }
         }
-
         return result;
     }
 
@@ -50,12 +42,14 @@ namespace SimulationGame {
 
     int GameRunner::runSimulation(const Settings& settings, Common::LocalFeatureSets&& permutation)
     {
+        control.start(settings.cid, settings.freq, settings.configurationFile);
         int result;
         if (settings.frameLimit == 0) {
             result = runSimulationWithEnterKeyDetection(settings, move(permutation));
         } else {
             result = runSimulationWithFrameLimit(settings, move(permutation));
         }
+        control.stop();
         std::cout << "Done." << std::endl;
         return result;
     }
@@ -82,10 +76,26 @@ namespace SimulationGame {
         return simulation.get();
     }
 
-    std::vector<Common::LocalFeatureSets> GameRunner::createPermutations(const std::string& correlationFile) const
+    std::vector<Common::LocalFeatureSets> GameRunner::createPermutations(const std::string& correlationFilename) const
+    {
+        if (correlationFilename.size() == 0) {
+            return createPermutationWithoutFeatures();
+        } else {
+            return convertCorrelationsToPermutations(correlationFilename);
+        }
+    }
+
+    std::vector<Common::LocalFeatureSets> GameRunner::createPermutationWithoutFeatures() const
     {
         std::vector<Common::LocalFeatureSets> result;
-        std::vector<Common::Correlation> correlations = correlationDao.load(correlationFile);
+        result.push_back(Common::LocalFeatureSets());
+        return result;
+    }
+
+    std::vector<Common::LocalFeatureSets> GameRunner::convertCorrelationsToPermutations(const std::string& correlationFilename) const
+    {
+        std::vector<Common::LocalFeatureSets> result;
+        std::vector<Common::Correlation> correlations = correlationDao.load(correlationFilename);
         std::vector<uint8_t> correlationSectionIndexes(correlations.size(), 0);
         do {
             Common::LocalFeatureSets localFeatureSets;

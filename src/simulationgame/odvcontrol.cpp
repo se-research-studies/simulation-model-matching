@@ -28,6 +28,7 @@ namespace SimulationGame {
         }
     }
 
+    // Starts a terminal after forking a new process. The terminal then executes command
     void OdvControl::startProcess(const char* command) {
         pid_t pid = vfork();
         if (pid == 0) { // We are the child process
@@ -41,6 +42,7 @@ namespace SimulationGame {
         }
     }
 
+    // Asks a process to terminate. If it hasn't terminated within 5 seconds it is killed
     void OdvControl::stopProcess(pid_t pid) {
         std::cout << "Shutting down process " << pid << std::endl;
         kill(pid, SIGTERM);
@@ -49,6 +51,7 @@ namespace SimulationGame {
         }
     }
 
+    // Waits the given number of seconds for the process with pid to stop. Returns true if the process stops in time
     bool OdvControl::waitForProcessToStop(pid_t pid, uint8_t seconds) {
         for (int i = 0; i < seconds; i++) {
             if (waitpid(pid, nullptr, WNOHANG) == pid) {
