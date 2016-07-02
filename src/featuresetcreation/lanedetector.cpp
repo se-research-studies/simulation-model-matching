@@ -3,6 +3,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include <FeatureSimulation/Common/utils.h>
+
 #include <FeatureSimulation/FeatureSetCreation/guicontroler.h>
 
 namespace FeatureSetCreation {
@@ -42,6 +44,9 @@ namespace FeatureSetCreation {
         return lines;
     }
 
+    // Tests if point is hit by line by projecting the point onto the line
+    // and then calculating the distance between point and the projected point.
+    // If the distance is less than the maxDistance set by the user the line hits the point.
     bool LaneDetector::getsHitByLine(const cv::Point2f& point, const cv::Vec4i& line) const
     {
         const cv::Point2f lineStart(line[0], line[1]);
@@ -59,27 +64,27 @@ namespace FeatureSetCreation {
 
     float LaneDetector::pointDistanceSquared(const cv::Point2f& a, const cv::Point2f& b) const
     {
-        return pow(a.x - b.x, 2) + pow(a.y - b.y, 2);
+        return Common::Utils::to<float>(pow(a.x - b.x, 2)) + Common::Utils::to<float>(pow(a.y - b.y, 2));
     }
 
     float LaneDetector::pointDistance(const cv::Point2f& a, const cv::Point2f& b) const
     {
-        return sqrt(pointDistanceSquared(a, b));
+        return Common::Utils::to<float>(sqrt(pointDistanceSquared(a, b)));
     }
 
     cv::Point2f LaneDetector::projectPointOntoLine(const cv::Point2f& p, const float lineLengthSquared, const cv::Point2f& lineStart, const cv::Point2f& lineEnd) const
     {
-        const float lineLength = sqrt(lineLengthSquared);
+        const float lineLength = Common::Utils::to<float>(sqrt(lineLengthSquared));
         const float pointToLineXScaled = (p.x - lineStart.x) / lineLength;
         const float pointToLineYScaled = (p.y - lineStart.y) / lineLength;
         const float lineX = lineEnd.x - lineStart.x;
         const float lineY = lineEnd.y - lineStart.y;
         const float lineXScaled = lineX / lineLength;
         const float lineYScaled = lineY / lineLength;
-        const float t = pointToLineXScaled * lineXScaled + pointToLineYScaled * lineYScaled;
-        const float clampedT = std::max(0.0f, std::min(1.0f, t));
-        const float projectedX = lineStart.x + clampedT * lineX;
-        const float projectedY = lineStart.y + clampedT * lineY;
+        const float projectionFactor = pointToLineXScaled * lineXScaled + pointToLineYScaled * lineYScaled;
+        const float clampedProjectionFactor = std::max(0.0f, std::min(1.0f, projectionFactor));
+        const float projectedX = lineStart.x + clampedProjectionFactor * lineX;
+        const float projectedY = lineStart.y + clampedProjectionFactor * lineY;
         return cv::Point2f(projectedX, projectedY);
     }
 

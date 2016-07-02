@@ -19,6 +19,7 @@ namespace FeatureSetCreation {
     RecordingPlayer::~RecordingPlayer() {
     }
 
+    // Moves the placer to the first image to gather the size and depth of the image. Then the recording is reset.
     void RecordingPlayer::initMetaData() {
         if (hasNext()) {
             odcore::data::image::SharedImage sharedImage = currentContainer.getData<odcore::data::image::SharedImage>();

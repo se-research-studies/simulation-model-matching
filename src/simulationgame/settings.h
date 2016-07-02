@@ -12,7 +12,7 @@ namespace SimulationGame {
         std::string participant;
         uint32_t frameLimit = 0;
         float featureScale = 0.25;
-        float featureSize = 10;
+        int featureSize = 10;
         std::string correlationFile;
         bool showGui = false;
         uint32_t repetitions = 1;

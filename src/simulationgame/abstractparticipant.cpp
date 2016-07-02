@@ -95,7 +95,10 @@ namespace SimulationGame {
     cv::Mat AbstractParticipant::prepareImage(const odcore::data::image::SharedImage& sharedImage, const std::shared_ptr<odcore::wrapper::SharedMemory>& sharedImageMemory)
     {
         odcore::base::Lock l(sharedImageMemory);
-        cv::Mat image(cv::Size(sharedImage.getWidth(), sharedImage.getHeight()), CV_MAKETYPE(CV_8U, sharedImage.getBytesPerPixel()), sharedImageMemory->getSharedMemory());
+        cv::Mat image(cv::Size(Common::Utils::to<int>(sharedImage.getWidth()), Common::Utils::to<int>(sharedImage.getHeight())),
+                      Common::Utils::to<int>(CV_MAKETYPE(CV_8U, sharedImage.getBytesPerPixel())),
+                      sharedImageMemory->getSharedMemory());
+        // The image has to be flipped horizontally and vertically. OpenGl seems to create a flipped image.
         cv::flip(image, image, -1);
         addFeatures(image);
         return image;
@@ -133,14 +136,18 @@ namespace SimulationGame {
             automotive::VehicleData vd = containerVehicleData.getData<automotive::VehicleData>();
             cartesian::Point2 position = vd.getPosition();
 
+            // Iterates over all the feature sets until we find the simulation segment the car is in.
+            // Then the features for that segment are added to the image
             for (const auto& localFeatureSet : localFeatureSets) {
                 const Common::Rectangle& segment = localFeatureSet.first;
                 if (liesInRectangle(position, segment)) {
                     const std::unique_ptr<Common::FeatureSet>& featureSet = localFeatureSet.second;
                     if (lastSegment != segment) {
+                        // The car is in a new segment, so the frame for the current segment has to be reset
                         currentFrameInSegment = featureSet->getFirstFrame();
                         lastSegment = segment;
-                    } else if (currentFrameInSegment > featureSet->getLastFrame()) {
+                    } else if (currentFrameInSegment == featureSet->getLastFrame()) {
+                        // The car is still in the last segment, but has reached the last frame of the feature set, so we start again at the first
                         currentFrameInSegment = featureSet->getFirstFrame();
                     } else {
                         ++currentFrameInSegment;

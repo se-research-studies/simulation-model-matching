@@ -41,6 +41,7 @@ namespace SimulationGame {
 
     void DataGatherer::midFrame(double speed, double steeringWheelAngle)
     {
+        // To not add the time this takes to the frame time the start time is stored and at the and the frameStartTime adapted
         std::chrono::steady_clock::time_point midFrameStart = std::chrono::steady_clock::now();
         frameMemory.setMemoryDuringFrame(getCurrentMemoryUsageInKb());
         data.addSteeringWheelAngle(Common::FrameSteeringWheelAngle(frames, steeringWheelAngle));

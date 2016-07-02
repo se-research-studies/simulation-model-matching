@@ -25,6 +25,9 @@ namespace FeatureSetCreation {
     FeatureSetCreator::~FeatureSetCreator() {
     }
 
+    // Runs through every image of recordingFile by opening the recording with the RecordingPlayer.
+    // Creates a mask from the values set in the .roni file, if present.
+    // Then lets the feature detector detect the keypoints in each frame.
     void FeatureSetCreator::createFeatureSet() {
         Common::FeatureSet result(Common::Utils::fileName(recordingFile));
         uint32_t frameNumber = 0;

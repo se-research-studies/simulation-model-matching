@@ -131,7 +131,7 @@ namespace Common {
     {
         double result = 0;
         for (const FrameSteeringWheelAngle& angle : steeringWheelAngles) {
-            if (fabs(result) < fabs(angle.getAngle())) {
+            if (Common::Utils::compare(fabs(angle.getAngle()), fabs(result)) == 1) {
                 result = angle.getAngle();
             }
         }

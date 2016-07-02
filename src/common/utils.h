@@ -18,7 +18,7 @@ namespace Common {
             return result;
         }
 
-        // Converts a string to a int of type TargetInt. Unlike std::stoi this method can be used for unsigned types as well
+        // Converts a string to an int of type TargetInt. Unlike std::stoi this method can be used for unsigned types as well
         template <typename TargetInt>
         TargetInt stoi(const std::string& string) {
             uint64_t longResult = std::stoul(string);
@@ -32,7 +32,7 @@ namespace Common {
         // Returns 1 if a > b, 0 if a == b, -1 if a < b, limited in precision to relevantDecimalPlaces
         template <typename T>
         int compare(T a, T b, int relevantDecimalPlaces = 4) {
-            int scaleFactor = std::pow(10, relevantDecimalPlaces);
+            int scaleFactor = to<int>(std::pow(10, relevantDecimalPlaces));
             int scaledA = a * scaleFactor;
             int scaledB = b * scaleFactor;
             if (scaledA > scaledB) {
