@@ -54,7 +54,7 @@ namespace FeatureSetCreation {
     void FeatureSetCreator::saveFeatureSet(const Common::FeatureSet& featureSet) const {
         featureSetDao.beginTransaction();
         featureSetDao.ensureTable();
-        featureSetDao.deleteAll(recordingFile);
+        featureSetDao.deleteAll(featureSet.getRecordingName());
         featureSetDao.save(featureSet);
         featureSetDao.endTransaction();
     }
