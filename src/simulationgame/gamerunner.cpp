@@ -79,13 +79,13 @@ namespace SimulationGame {
     std::vector<Common::Permutation> GameRunner::createPermutations(const std::string& correlationFilename) const
     {
         if (correlationFilename.size() == 0) {
-            return createPermutationWithoutFeatures();
+            return createEmptyPermutation();
         } else {
             return convertCorrelationsToPermutations(correlationFilename);
         }
     }
 
-    std::vector<Common::Permutation> GameRunner::createPermutationWithoutFeatures() const
+    std::vector<Common::Permutation> GameRunner::createEmptyPermutation() const
     {
         std::vector<Common::Permutation> result;
         result.push_back(Common::Permutation());

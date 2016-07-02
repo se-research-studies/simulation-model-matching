@@ -1,5 +1,9 @@
 #include "simulationdata.h"
 
+#include <math.h>
+
+#include <FeatureSimulation/Common/utils.h>
+
 namespace Common {
 
     SimulationData::SimulationData() {
@@ -95,34 +99,81 @@ namespace Common {
         return result;
     }
 
+    double SimulationData::getAverageLeftSteeringWheelAngle() const
+    {
+        double angleSum = 0;
+        uint32_t count = 0;
+        for (const FrameSteeringWheelAngle& angle : steeringWheelAngles) {
+            if (Common::Utils::compare(angle.getAngle(), 0.0) == -1) {
+                angleSum += fabs(angle.getAngle());
+                ++count;
+            }
+        }
+        double result = angleSum / count;
+        return result;
+    }
+
+    double SimulationData::getAverageRightSteeringWheelAngle() const
+    {
+        double angleSum = 0;
+        uint32_t count = 0;
+        for (const FrameSteeringWheelAngle& angle : steeringWheelAngles) {
+            if (Common::Utils::compare(angle.getAngle(), 0.0) == 1) {
+                angleSum += angle.getAngle();
+                ++count;
+            }
+        }
+        double result = angleSum / count;
+        return result;
+    }
+
+    double SimulationData::getMaxSteeringWheelAngle() const
+    {
+        double result = 0;
+        for (const FrameSteeringWheelAngle& angle : steeringWheelAngles) {
+            if (fabs(result) < fabs(angle.getAngle())) {
+                result = angle.getAngle();
+            }
+        }
+        return result;
+    }
+
     uint32_t SimulationData::getLeftSteerings() const
     {
-        return leftSteerings;
-    }
-
-    void SimulationData::setLeftSteerings(uint32_t value)
-    {
-        leftSteerings = value;
-    }
-
-    void SimulationData::addLeftSteering()
-    {
-        ++leftSteerings;
+        uint32_t result = 0;
+        for (const FrameSteeringWheelAngle& angle : steeringWheelAngles) {
+            if (Common::Utils::compare(angle.getAngle(), 0.0) == -1) {
+                ++result;
+            }
+        }
+        return result;
     }
 
     uint32_t SimulationData::getRightSteerings() const
     {
-        return rightSteerings;
+        uint32_t result = 0;
+        for (const FrameSteeringWheelAngle& angle : steeringWheelAngles) {
+            if (Common::Utils::compare(angle.getAngle(), 0.0) == 1) {
+                ++result;
+            }
+        }
+        return result;
     }
 
-    void SimulationData::setRightSteerings(uint32_t value)
+    void SimulationData::addSteeringWheelAngle(const FrameSteeringWheelAngle& value)
     {
-        rightSteerings = value;
+        steeringWheelAngles.push_back(value);
     }
 
-    void SimulationData::addRightSteering()
+    std::string SimulationData::steeringWheelAnglesToString() const
     {
-        ++rightSteerings;
+        std::string result = "{";
+        for (const FrameSteeringWheelAngle& angle : steeringWheelAngles) {
+            result += angle.toString() + ",";
+        }
+        result.pop_back();
+        result += "}";
+        return result;
     }
 
     uint32_t SimulationData::getAccelerations() const

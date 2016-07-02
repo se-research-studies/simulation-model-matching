@@ -43,20 +43,10 @@ namespace SimulationGame {
     {
         std::chrono::steady_clock::time_point midFrameStart = std::chrono::steady_clock::now();
         frameMemory.setMemoryDuringFrame(getCurrentMemoryUsageInKb());
-        compareSteeringWheel(steeringWheelAngle);
+        data.addSteeringWheelAngle(Common::FrameSteeringWheelAngle(frames, steeringWheelAngle));
+        lastSteeringWheelAngle = steeringWheelAngle;
         compareSpeed(speed);
         frameStartTime += (std::chrono::steady_clock::now() - midFrameStart);
-    }
-
-    void DataGatherer::compareSteeringWheel(double steeringWheelAngle)
-    {
-        int angleComparison = Common::Utils::compare(steeringWheelAngle, lastSteeringWheelAngle);
-        if (angleComparison == 1) {
-            data.addRightSteering();
-        } else if (angleComparison == -1) {
-            data.addLeftSteering();
-        }
-        lastSteeringWheelAngle = steeringWheelAngle;
     }
 
     void DataGatherer::compareSpeed(double speed)
@@ -85,10 +75,10 @@ namespace SimulationGame {
         dao.save(data);
     }
 
-    uint64_t DataGatherer::passedMicroSecs(const std::chrono::_V2::steady_clock::time_point& since)
+    uint32_t DataGatherer::passedMicroSecs(const std::chrono::_V2::steady_clock::time_point& since)
     {
         const std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
-        return std::chrono::duration_cast<std::chrono::microseconds>(currentTime - since).count();
+        return Common::Utils::to<uint32_t>(std::chrono::duration_cast<std::chrono::microseconds>(currentTime - since).count());
     }
 
     uint64_t DataGatherer::getCurrentMemoryUsageInKb()
@@ -103,7 +93,7 @@ namespace SimulationGame {
             return 0;
         }
         fclose(fp);
-        uint64_t bytes = rss * sysconf(_SC_PAGESIZE);
+        uint64_t bytes = rss * Common::Utils::to<uint64_t>(sysconf(_SC_PAGESIZE));
         return bytes / 1024;
     }
 

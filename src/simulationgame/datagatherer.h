@@ -25,9 +25,8 @@ namespace SimulationGame {
         void save();
 
     private:
-        uint64_t passedMicroSecs(const std::chrono::steady_clock::time_point& since);
+        uint32_t passedMicroSecs(const std::chrono::steady_clock::time_point& since);
         uint64_t getCurrentMemoryUsageInKb();
-        void compareSteeringWheel(double steeringWheelAngle);
         void compareSpeed(double speed);
 
     private:

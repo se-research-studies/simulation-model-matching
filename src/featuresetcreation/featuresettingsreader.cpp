@@ -62,7 +62,7 @@ namespace FeatureSetCreation {
                 "  -fastThreshold     Optional ORB parameter. Default is 20\n"
                 "  -maxDistance       Optional Lane Detection parameter. Default is 25\n"
                 "  -firstThreshold    Optional Lane Detection parameter. Default is 100\n"
-                "  -secondThreshold   Optional Lane Detection parameter. Default is 400\n"
+                "  -secondThreshold   Optional Lane Detection parameter. Default is 300\n"
                 "  -apertureSize      Optional Lane Detection parameter. Default is 3\n"
                 "  -rho               Optional Lane Detection parameter. Default is 1\n"
                 "  -theta             Optional Lane Detection parameter. Default is Pi/180\n"

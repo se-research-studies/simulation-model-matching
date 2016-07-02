@@ -11,6 +11,7 @@ namespace Common {
         extern std::string fileName(const std::string& filePath);
         extern std::string fileFolderPath(const std::string& filePath);
 
+        // Converts an int value of type SourceInt to type TargetInt. Used to remove warnings
         template <typename TargetInt, typename SourceInt>
         TargetInt to(SourceInt from) {
             TargetInt result = static_cast<TargetInt>(from);

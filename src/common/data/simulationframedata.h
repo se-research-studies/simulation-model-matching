@@ -51,5 +51,20 @@ namespace Common {
         const uint8_t parts = 3;
     };
 
+    class FrameSteeringWheelAngle {
+      public:
+        FrameSteeringWheelAngle() = default;
+        FrameSteeringWheelAngle(uint32_t frame, double angle);
+
+    public:
+        void setAngle(double value);
+        double getAngle() const;
+        std::string toString() const;
+
+    private:
+        uint32_t frame = 0;
+        double angle = 0;
+    };
+
 } // namespace Common
 

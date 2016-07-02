@@ -18,6 +18,10 @@ namespace Common {
         columns.push_back({SimulationDataContract::COL_MINCOMPUTATIONTIME, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_MAXCOMPUTATIONTIME, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_TOTALCOMPUTATIONTIME, "INTEGER"});
+        columns.push_back({SimulationDataContract::COL_STEERINGWHEELANGLES, "TEXT"});
+        columns.push_back({SimulationDataContract::COL_AVERAGELEFTSTEERINGANGLE, "REAL"});
+        columns.push_back({SimulationDataContract::COL_AVERAGERIGHTSTEERINGANGLE, "REAL"});
+        columns.push_back({SimulationDataContract::COL_MAXSTEERINGANGLE, "REAL"});
         columns.push_back({SimulationDataContract::COL_LEFTSTEERINGS, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_RIGHTSTEERINGS, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_ACCELERATIONS, "INTEGER"});
@@ -45,6 +49,10 @@ namespace Common {
         result.push_back({SimulationDataContract::COL_MINCOMPUTATIONTIME, std::to_string(data.getMinComputationTime())});
         result.push_back({SimulationDataContract::COL_MAXCOMPUTATIONTIME, std::to_string(data.getMaxComputationTime())});
         result.push_back({SimulationDataContract::COL_TOTALCOMPUTATIONTIME, std::to_string(data.getTotalComputationTime())});
+        result.push_back({SimulationDataContract::COL_STEERINGWHEELANGLES, data.steeringWheelAnglesToString()});
+        result.push_back({SimulationDataContract::COL_AVERAGELEFTSTEERINGANGLE, std::to_string(data.getAverageLeftSteeringWheelAngle())});
+        result.push_back({SimulationDataContract::COL_AVERAGERIGHTSTEERINGANGLE, std::to_string(data.getAverageRightSteeringWheelAngle())});
+        result.push_back({SimulationDataContract::COL_MAXSTEERINGANGLE, std::to_string(data.getMaxSteeringWheelAngle())});
         result.push_back({SimulationDataContract::COL_LEFTSTEERINGS, std::to_string(data.getLeftSteerings())});
         result.push_back({SimulationDataContract::COL_RIGHTSTEERINGS, std::to_string(data.getRightSteerings())});
         result.push_back({SimulationDataContract::COL_ACCELERATIONS, std::to_string(data.getAccelerations())});

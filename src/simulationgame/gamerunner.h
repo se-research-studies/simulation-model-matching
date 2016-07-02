@@ -25,7 +25,7 @@ namespace SimulationGame {
         int runSimulationWithFrameLimit(const Settings& settings, Common::Permutation&& permutation);
         int runSimulationWithEnterKeyDetection(const Settings& settings, Common::Permutation&& permutation);
         std::vector<Common::Permutation> createPermutations(const std::string& correlationFilename) const;
-        std::vector<Common::Permutation> createPermutationWithoutFeatures() const;
+        std::vector<Common::Permutation> createEmptyPermutation() const;
         std::vector<Common::Permutation> convertCorrelationsToPermutations(const std::string& correlationFilename) const;
         bool adaptRecordingSectionIndexes(const std::vector<Common::Correlation>& correlations, std::vector<uint8_t>& recordingSectionIndexes) const;
         std::string recordingSectionIndexesToString(const std::vector<uint8_t>& recordingSectionIndexes) const;

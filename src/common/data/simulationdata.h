@@ -32,13 +32,13 @@ namespace Common {
         std::string computationTimesToString() const;
         uint64_t getTotalComputationTime() const;
 
+        double getAverageLeftSteeringWheelAngle() const;
+        double getAverageRightSteeringWheelAngle() const;
+        double getMaxSteeringWheelAngle() const;
         uint32_t getLeftSteerings() const;
-        void setLeftSteerings(uint32_t value);
-        void addLeftSteering();
-
         uint32_t getRightSteerings() const;
-        void setRightSteerings(uint32_t value);
-        void addRightSteering();
+        void addSteeringWheelAngle(const FrameSteeringWheelAngle& value);
+        std::string steeringWheelAnglesToString() const;
 
         uint32_t getAccelerations() const;
         void setAccelerations(uint32_t value);
@@ -59,12 +59,11 @@ namespace Common {
         std::string correlationFile;
         std::string permutationIndex;
         uint32_t frames = 0;
-        uint32_t leftSteerings = 0;
-        uint32_t rightSteerings = 0;
         uint32_t accelerations = 0;
         uint32_t decelerations = 0;        
         std::vector<FrameTime> computationTimes;
         std::vector<FrameMemory> memory;
+        std::vector<FrameSteeringWheelAngle> steeringWheelAngles;
     };
 
 } // namespace Common

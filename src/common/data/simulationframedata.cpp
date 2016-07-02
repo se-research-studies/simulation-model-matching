@@ -92,4 +92,27 @@ namespace Common {
         return *this;
     }
 
+
+
+
+    FrameSteeringWheelAngle::FrameSteeringWheelAngle(uint32_t frame, double angle)
+        : frame(frame), angle(angle)
+    {
+    }
+
+    void FrameSteeringWheelAngle::setAngle(double value)
+    {
+        angle = value;
+    }
+
+    double FrameSteeringWheelAngle::getAngle() const
+    {
+        return angle;
+    }
+
+    std::string FrameSteeringWheelAngle::toString() const
+    {
+        return "{" + std::to_string(frame) + "," + std::to_string(angle) + "}";
+    }
+
 } // namespace Common

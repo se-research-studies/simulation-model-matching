@@ -19,6 +19,10 @@ namespace Common {
         static const std::string COL_MINCOMPUTATIONTIME = "minComputationTime";
         static const std::string COL_MAXCOMPUTATIONTIME = "maxComputationTime";
         static const std::string COL_TOTALCOMPUTATIONTIME = "totalComputationTime";
+        static const std::string COL_STEERINGWHEELANGLES = "steeringWheelAngles";
+        static const std::string COL_AVERAGELEFTSTEERINGANGLE = "averageLeftSteeringAngle";
+        static const std::string COL_AVERAGERIGHTSTEERINGANGLE = "averageRightSteeringAngle";
+        static const std::string COL_MAXSTEERINGANGLE = "maxSteeringAngle";
         static const std::string COL_LEFTSTEERINGS = "leftSteerings";
         static const std::string COL_RIGHTSTEERINGS = "rightSteerings";
         static const std::string COL_ACCELERATIONS = "accelerations";

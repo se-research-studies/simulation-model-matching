@@ -19,7 +19,7 @@ namespace FeatureSetCreation {
   struct LaneDetectionSettings {
     uint16_t maxDistance = 25;
     double firstThreshold = 100;
-    double secondThreshold = 400;
+    double secondThreshold = 300;
     int apertureSize = 3;
     double rho = 1;
     double theta = CV_PI/180;
