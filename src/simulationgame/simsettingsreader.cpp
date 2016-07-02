@@ -29,12 +29,12 @@ namespace SimulationGame {
                 "  -db                Optional. Database file. Default is ./data.sqlite.\n"
                 "  -conf              Optional. Path to OpenDaVinci conf file. File must be in same folder as executable if not set.\n"
                 "  -participant       Required. Name of Algorithm to use.\n"
-                "  -frames            Optional. Maximum number of frames. Default is 0, ie. no limit. If set to 0 simulation can be stopped by pressing enter.\n"
-                "  -scale             Optional. Scale factor for feature size. Default is 0.25.\n"
-                "  -size              Optional. Absolute size for features. Default is 10. Supersedes scale if not 0.\n"
+                "  -frames            Optional. Integer. Maximum number of frames. Default is 0, ie. no limit. If set to 0 simulation can be stopped by pressing enter.\n"
+                "  -scale             Optional. Float. Scale factor for feature size. Default is 0.25.\n"
+                "  -size              Optional. Integer. Absolute size for features. Default is 10. Supersedes scale if not 0.\n"
                 "  -cor               Optional. Path to .cor file. If not set no features will be used.\n"
-                "  -guiEnabled        Optional. Default is false\n"
-                "  -repetitions       Optional. Number of repetitions of all permutations. Default is 1.\n"
+                "  -guiEnabled        Optional. Boolean. Default is 0\n"
+                "  -repetitions       Optional. Integer. Number of repetitions of all permutations. Default is 1.\n"
                 "\n"
                 "  Available participants:\n"
                 "    - LaneFollower\n"
@@ -71,7 +71,7 @@ namespace SimulationGame {
                 settings.featureScale = atof(optarg);
                 break;
             case FEATURE_SIZE:
-                settings.featureSize = atof(optarg);
+                settings.featureSize = atoi(optarg);
                 break;
             case CORRELATION_FILE:
                 settings.correlationFile =  std::string(optarg);
