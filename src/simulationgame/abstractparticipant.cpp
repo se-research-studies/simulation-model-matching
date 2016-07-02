@@ -22,14 +22,15 @@ namespace SimulationGame {
     {
     }
 
-    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::runModule(const Settings& settings, Common::LocalFeatureSets&& featureSets)
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::runModule(const Settings& settings, Common::Permutation&& permutation)
     {
         frameLimit = settings.frameLimit;
         showGui = settings.showGui;
         dataGatherer.setCorrelationFile(Common::Utils::fileName(settings.correlationFile));
+        dataGatherer.setPermutationIndex(permutation.index);
         featureScale = settings.featureScale;
         featureSize = settings.featureSize;
-        localFeatureSets = std::move(featureSets);
+        localFeatureSets = std::move(permutation.localFeatureSets);
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
 

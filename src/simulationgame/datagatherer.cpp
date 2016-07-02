@@ -21,6 +21,11 @@ namespace SimulationGame {
         data.setCorrelationFile(value);
     }
 
+    void DataGatherer::setPermutationIndex(const std::string& value)
+    {
+        data.setPermutationIndex(value);
+    }
+
     void DataGatherer::start() {
         dao.ensureTable();
         frames = 0;

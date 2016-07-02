@@ -21,13 +21,14 @@ namespace SimulationGame {
         
     private:
         static void waitForEnter();
-        int runSimulation(const Settings& settings, Common::LocalFeatureSets&& permutation);
-        int runSimulationWithFrameLimit(const Settings& settings, Common::LocalFeatureSets&& permutation);
-        int runSimulationWithEnterKeyDetection(const Settings& settings, Common::LocalFeatureSets&& permutation);
-        std::vector<Common::LocalFeatureSets> createPermutations(const std::string& correlationFilename) const;
-        std::vector<Common::LocalFeatureSets> createPermutationWithoutFeatures() const;
-        std::vector<Common::LocalFeatureSets> convertCorrelationsToPermutations(const std::string& correlationFilename) const;
-        bool adaptCorrelationSectionIndexes(const std::vector<Common::Correlation>& correlations, std::vector<uint8_t>& correlationSectionIndexes) const;
+        int runSimulation(const Settings& settings, Common::Permutation&& permutation);
+        int runSimulationWithFrameLimit(const Settings& settings, Common::Permutation&& permutation);
+        int runSimulationWithEnterKeyDetection(const Settings& settings, Common::Permutation&& permutation);
+        std::vector<Common::Permutation> createPermutations(const std::string& correlationFilename) const;
+        std::vector<Common::Permutation> createPermutationWithoutFeatures() const;
+        std::vector<Common::Permutation> convertCorrelationsToPermutations(const std::string& correlationFilename) const;
+        bool adaptRecordingSectionIndexes(const std::vector<Common::Correlation>& correlations, std::vector<uint8_t>& recordingSectionIndexes) const;
+        std::string recordingSectionIndexesToString(const std::vector<uint8_t>& recordingSectionIndexes) const;
 
     private:
         SimulationGame::ParticipantRegistry& registry;

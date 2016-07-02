@@ -19,6 +19,9 @@ namespace Common {
         std::string getCorrelationFile() const;
         void setCorrelationFile(const std::string& value);
 
+        std::string getPermutationIndex() const;
+        void setPermutationIndex(const std::string& value);
+
         uint32_t getFrames() const;
         void setFrames(uint32_t value);
 
@@ -49,11 +52,12 @@ namespace Common {
         uint64_t getMinMemory() const;
         uint64_t getMaxMemory() const;
         void addFrameMemory(const FrameMemory& value);
-        std::string memoryToString() const;        
+        std::string memoryToString() const;
 
     private:
         std::string simulationName;
         std::string correlationFile;
+        std::string permutationIndex;
         uint32_t frames = 0;
         uint32_t leftSteerings = 0;
         uint32_t rightSteerings = 0;

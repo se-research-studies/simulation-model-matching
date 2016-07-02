@@ -23,6 +23,16 @@ namespace Common {
         correlationFile = value;
     }
 
+    std::string SimulationData::getPermutationIndex() const
+    {
+        return permutationIndex;
+    }
+
+    void SimulationData::setPermutationIndex(const std::string& value)
+    {
+        permutationIndex = value;
+    }
+
     uint32_t SimulationData::getFrames() const {
         return frames;
     }

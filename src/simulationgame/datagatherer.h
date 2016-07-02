@@ -16,6 +16,7 @@ namespace SimulationGame {
     public:
         void setSimulationName(const std::string& value);
         void setCorrelationFile(const std::string& value);
+        void setPermutationIndex(const std::string& value);
         void start();
         void startFrame();
         void midFrame(double speed, double steeringWheelAngle);
