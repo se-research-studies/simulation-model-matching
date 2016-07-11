@@ -39,6 +39,7 @@ namespace FeatureSetCreation {
         while (player.hasNext()) {
             cv::Mat image = player.next();
             GuiController::instance().setImage(image, mask);
+            GuiController::instance().setFrame(frameNumber);
             Common::DirtyFrame dirtyFrame = featureDetector->detectFeatures(image, mask);
             if (dirtyFrame.getFeatureCount() > 0) {
                 result.addFrame(frameNumber, featureDetector->detectFeatures(image, mask));

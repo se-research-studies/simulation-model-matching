@@ -24,6 +24,7 @@ namespace FeatureSetCreation {
         void setImage(const cv::Mat& currentImage, const cv::Mat& mask);
         void setKeyPoints(const std::vector<cv::KeyPoint>& keyPoints);
         void setLines(const std::vector<cv::Vec4i>& lanes);
+        void setFrame(uint32_t frame);
         void show();
 
     private:

@@ -40,6 +40,11 @@ namespace FeatureSetCreation {
         }
     }
 
+    void GuiController::setFrame(uint32_t frame)
+    {
+        cv::putText(image, std::to_string(frame), cv::Point(10, 30), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255,255,255), 2);
+    }
+
     void GuiController::show()
     {
         if (enabled) {
