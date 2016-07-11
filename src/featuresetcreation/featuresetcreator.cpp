@@ -38,12 +38,12 @@ namespace FeatureSetCreation {
         std::cout << "Detecting features..." << std::endl;
         while (player.hasNext()) {
             cv::Mat image = player.next();
-            GuiControler::instance().setImage(image, mask);
+            GuiController::instance().setImage(image, mask);
             Common::DirtyFrame dirtyFrame = featureDetector->detectFeatures(image, mask);
             if (dirtyFrame.getFeatureCount() > 0) {
                 result.addFrame(frameNumber, featureDetector->detectFeatures(image, mask));
             }
-            GuiControler::instance().show();
+            GuiController::instance().show();
             ++frameNumber;
         }
         std::cout << "Saving results..." << std::endl;

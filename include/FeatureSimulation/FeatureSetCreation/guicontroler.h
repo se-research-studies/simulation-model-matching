@@ -1,1 +1,1 @@
-#include "../../../src/featuresetcreation/guicontroler.h"
+#include "../../../src/featuresetcreation/guicontroller.h"

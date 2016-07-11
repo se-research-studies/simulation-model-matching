@@ -33,8 +33,8 @@ HEADERS += \
     src/featuresetcreation/settingsvalidator.h \
     src/featuresetcreation/featuredetectorshitomasi.h \
     src/featuresetcreation/recordingplayer.h \
-    src/featuresetcreation/guicontroler.h \
     src/featuresetcreation/imagemasker.h \
-    src/featuresetcreation/featuresettingsreader.h
+    src/featuresetcreation/featuresettingsreader.h \
+    src/featuresetcreation/guicontroller.h
 
 

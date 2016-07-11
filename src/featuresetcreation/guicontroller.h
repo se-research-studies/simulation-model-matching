@@ -5,19 +5,19 @@
 
 namespace FeatureSetCreation {
 
-    class GuiControler {
+    class GuiController {
     private:
-        GuiControler();
+        GuiController();
 
     public:
-        virtual ~GuiControler();
+        virtual ~GuiController();
 
     public:
-        GuiControler(const GuiControler&) = delete;
-        GuiControler& operator=(const GuiControler&) = delete;
+        GuiController(const GuiController&) = delete;
+        GuiController& operator=(const GuiController&) = delete;
 
     public:
-        static GuiControler& instance();
+        static GuiController& instance();
 
     public:
         void setEnabled(bool isEnabled);

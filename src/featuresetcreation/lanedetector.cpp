@@ -40,7 +40,7 @@ namespace FeatureSetCreation {
         cv::Canny(image, cannyImage, settings.firstThreshold, settings.secondThreshold, settings.apertureSize);
         std::vector<cv::Vec4i> lines;
         cv::HoughLinesP(cannyImage, lines, settings.rho, settings.theta, settings.voteThreshold, settings.minLineLength, settings.maxLineGap);
-        GuiControler::instance().setLines(lines);
+        GuiController::instance().setLines(lines);
         return lines;
     }
 

@@ -17,7 +17,7 @@ namespace FeatureSetCreation {
     Common::DirtyFrame FeatureDetector::detectFeatures(const cv::Mat& image, const cv::Mat& mask) {
         std::vector<cv::KeyPoint> keyPoints = findKeyPoints(image, mask);
         keyPoints = laneDetector.subtractLanes(image, keyPoints);
-        GuiControler::instance().setKeyPoints(keyPoints);
+        GuiController::instance().setKeyPoints(keyPoints);
         return convertToDirtyFrame(keyPoints);
     }
 
