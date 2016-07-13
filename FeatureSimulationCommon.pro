@@ -14,7 +14,6 @@ HEADERS += \
     src/common/data/feature.h \
     src/common/data/featureset.h \
     src/common/data/dirtyframe.h \
-    src/common/data/position.h \
     src/common/data/region.h \
     src/common/datamanagement/correlationdao.h \
     src/common/datamanagement/featuresetdao.h \
@@ -39,7 +38,6 @@ SOURCES += \
     src/common/data/feature.cpp \
     src/common/data/featureset.cpp \
     src/common/data/dirtyframe.cpp \
-    src/common/data/position.cpp \
     src/common/data/region.cpp \
     src/common/datamanagement/correlationdao.cpp \
     src/common/datamanagement/featuresetdao.cpp \
