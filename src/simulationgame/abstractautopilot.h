@@ -22,16 +22,16 @@ namespace SimulationGame {
 
     class Settings;
 
-    class AbstractParticipant : public odcore::base::module::TimeTriggeredConferenceClientModule
+    class AbstractAutopilot : public odcore::base::module::TimeTriggeredConferenceClientModule
     {
     public:
-        AbstractParticipant(int argc, char** argv, const std::string& name);
-        virtual ~AbstractParticipant();
+        AbstractAutopilot(int argc, char** argv, const std::string& name);
+        virtual ~AbstractAutopilot();
 
     public:
         template <typename SubClass>
-        static std::unique_ptr<AbstractParticipant> createInstance(int argc, char** argv) {
-            static_assert(std::is_base_of<AbstractParticipant, SubClass>(), "Only use createInstance with AbstractParticipant subclasses");
+        static std::unique_ptr<AbstractAutopilot> createInstance(int argc, char** argv) {
+            static_assert(std::is_base_of<AbstractAutopilot, SubClass>(), "Only use createInstance with AbstractParticipant subclasses");
             return std::make_unique<SubClass>(argc, argv);
         }
 

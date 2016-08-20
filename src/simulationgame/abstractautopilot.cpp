@@ -1,4 +1,4 @@
-#include "abstractparticipant.h"
+#include "abstractautopilot.h"
 
 #include <iostream>
 
@@ -13,16 +13,16 @@
 
 namespace SimulationGame {
 
-    AbstractParticipant::AbstractParticipant(int argc, char** argv, const std::string& name)
+    AbstractAutopilot::AbstractAutopilot(int argc, char** argv, const std::string& name)
         : odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, name)
     {
     }
 
-    AbstractParticipant::~AbstractParticipant()
+    AbstractAutopilot::~AbstractAutopilot()
     {
     }
 
-    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::runModule(const Settings& settings, Common::Permutation&& permutation)
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractAutopilot::runModule(const Settings& settings, Common::Permutation&& permutation)
     {
         frameLimit = settings.frameLimit;
         showGui = settings.showGui;
@@ -34,24 +34,24 @@ namespace SimulationGame {
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
 
-    void AbstractParticipant::forceQuit()
+    void AbstractAutopilot::forceQuit()
     {
         quitFlag = true;
     }
 
-    void AbstractParticipant::setUp()
+    void AbstractAutopilot::setUp()
     {
         std::string simulationName = getDMCPClient()->getConfiguration().getValue<std::string>("global.scenario");
         dataGatherer.setSimulationName(Common::Utils::fileName(simulationName));
         currentFrame = 0;
     }
 
-    void AbstractParticipant::tearDown()
+    void AbstractAutopilot::tearDown()
     {
         dataGatherer.save();
     }
 
-    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractParticipant::body()
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractAutopilot::body()
     {
         gatherDataBeforeSimulation();
         while (continueBody()) {
@@ -67,14 +67,14 @@ namespace SimulationGame {
         return odcore::data::dmcp::ModuleExitCodeMessage::OKAY;
     }
 
-    bool AbstractParticipant::continueBody()
+    bool AbstractAutopilot::continueBody()
     {
         return getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING &&
                 (frameLimit == 0 || currentFrame < frameLimit) &&
                 !quitFlag;
     }
 
-    void AbstractParticipant::processFrame(const odcore::data::image::SharedImage& sharedImage)
+    void AbstractAutopilot::processFrame(const odcore::data::image::SharedImage& sharedImage)
     {
         std::shared_ptr<odcore::wrapper::SharedMemory> sharedImageMemory = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(sharedImage.getName());
         if (sharedImageMemory->isValid()) {
@@ -92,7 +92,7 @@ namespace SimulationGame {
         }
     }
 
-    cv::Mat AbstractParticipant::prepareImage(const odcore::data::image::SharedImage& sharedImage, const std::shared_ptr<odcore::wrapper::SharedMemory>& sharedImageMemory)
+    cv::Mat AbstractAutopilot::prepareImage(const odcore::data::image::SharedImage& sharedImage, const std::shared_ptr<odcore::wrapper::SharedMemory>& sharedImageMemory)
     {
         odcore::base::Lock l(sharedImageMemory);
         cv::Mat image(cv::Size(Common::Utils::to<int>(sharedImage.getWidth()), Common::Utils::to<int>(sharedImage.getHeight())),
@@ -104,32 +104,32 @@ namespace SimulationGame {
         return image;
     }
 
-    void AbstractParticipant::gatherDataBeforeSimulation()
+    void AbstractAutopilot::gatherDataBeforeSimulation()
     {
         dataGatherer.start();
     }
 
-    void AbstractParticipant::gatherDataBeforeFrame()
+    void AbstractAutopilot::gatherDataBeforeFrame()
     {
         dataGatherer.startFrame();
     }
 
-    void AbstractParticipant::gatherDataDuringFrame(double speed, double steeringWheelAngle)
+    void AbstractAutopilot::gatherDataDuringFrame(double speed, double steeringWheelAngle)
     {
         dataGatherer.midFrame(speed, steeringWheelAngle);
     }
 
-    void AbstractParticipant::gatherDataAfterFrame()
+    void AbstractAutopilot::gatherDataAfterFrame()
     {
         dataGatherer.finishFrame();
     }
 
-    void AbstractParticipant::gatherDataAfterSimulation()
+    void AbstractAutopilot::gatherDataAfterSimulation()
     {
         dataGatherer.stop();
     }
 
-    void AbstractParticipant::addFeatures(cv::Mat& image)
+    void AbstractAutopilot::addFeatures(cv::Mat& image)
     {
         if (localFeatureSets.size() > 0) {
             odcore::data::Container containerVehicleData = getKeyValueDataStore().get(automotive::VehicleData::ID());
@@ -160,7 +160,7 @@ namespace SimulationGame {
         }
     }
 
-    bool AbstractParticipant::liesInRectangle(cartesian::Point2& point, const Common::Rectangle& rectangle) const
+    bool AbstractAutopilot::liesInRectangle(cartesian::Point2& point, const Common::Rectangle& rectangle) const
     {
         int x = Common::Utils::to<int>(point.getP()[0]);
         int y = Common::Utils::to<int>(point.getP()[1]);
@@ -168,7 +168,7 @@ namespace SimulationGame {
                 rectangle.getBottomRight().getX() > x && rectangle.getBottomRight().getY() > y;
     }
 
-    void AbstractParticipant::addFeaturesFromFrame(cv::Mat& image, const Common::DirtyFrame& dirtyFrame) const
+    void AbstractAutopilot::addFeaturesFromFrame(cv::Mat& image, const Common::DirtyFrame& dirtyFrame) const
     {
         for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
             int radius = featureSize > 0 ? featureSize : Common::Utils::to<int>((feature.getDiameter() / 2) * featureScale);
@@ -176,7 +176,7 @@ namespace SimulationGame {
         }
     }
 
-    void AbstractParticipant::setControls(double speed, double steeringWheelAngle)
+    void AbstractAutopilot::setControls(double speed, double steeringWheelAngle)
     {
         gatherDataDuringFrame(speed, steeringWheelAngle);
         vehicleControl.setSpeed(speed);

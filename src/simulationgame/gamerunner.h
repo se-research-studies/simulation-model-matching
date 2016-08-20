@@ -8,12 +8,12 @@
 
 namespace SimulationGame {
 
-    class ParticipantRegistry;
+    class AutopilotRegistry;
     struct Settings;
 
     class GameRunner {
     public:
-        GameRunner(SimulationGame::ParticipantRegistry& registry);
+        GameRunner(SimulationGame::AutopilotRegistry& registry);
         virtual ~GameRunner();
 
     public:
@@ -31,7 +31,7 @@ namespace SimulationGame {
         std::string recordingSectionIndexesToString(const std::vector<uint8_t>& recordingSectionIndexes) const;
 
     private:
-        SimulationGame::ParticipantRegistry& registry;
+        SimulationGame::AutopilotRegistry& registry;
         OdvControl control;
         Common::CorrelationDAO correlationDao;
         Common::FeatureSetDAO featureSetDao;

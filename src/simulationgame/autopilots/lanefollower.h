@@ -1,10 +1,10 @@
 #pragma once
 
-#include <FeatureSimulation/SimulationGame/abstractparticipant.h>
+#include <FeatureSimulation/SimulationGame/abstractautopilot.h>
 
 namespace SimulationGame {
 
-    class LaneFollower : public AbstractParticipant
+    class LaneFollower : public AbstractAutopilot
     {
     public:
         LaneFollower(int argc, char** argv);

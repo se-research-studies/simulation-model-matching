@@ -17,7 +17,7 @@ namespace SimulationGame {
             FREQ,
             DATABASE,
             CONFIG_FILE,
-            PARTICIPANT,
+            AUTOPILOT,
             FRAME_LIMIT,
             FEATURE_SCALE,
             FEATURE_SIZE,

@@ -5,7 +5,7 @@
 namespace SimulationGame {
 
     LaneFollower::LaneFollower(int argc, char** argv)
-        : AbstractParticipant(argc, argv, "LaneFollower")
+        : AbstractAutopilot(argc, argv, "LaneFollower")
     {
     }
 

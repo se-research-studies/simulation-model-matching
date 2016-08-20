@@ -76,7 +76,7 @@ namespace FeatureSetCreation {
                 "  -useHarrisDetector Optional ShiTomasi boolean parameter. Default is F (false).\n"
                 "  -kFree             Optional ShiTomasi double parameter. Default is 0.4.\n"
                 "\n"
-                "  Available detector:\n"
+                "  Available detectors:\n"
                 "    - ORB\n"
                 "    - ShiTomasi\n"
                 "\n"

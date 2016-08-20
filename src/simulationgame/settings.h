@@ -9,7 +9,7 @@ namespace SimulationGame {
         std::string freq = "10";
         std::string database = "./data.sqlite";
         std::string configurationFile;
-        std::string participant;
+        std::string autopilot;
         uint32_t frameLimit = 0;
         float featureScale = 0.25;
         int featureSize = 10;
