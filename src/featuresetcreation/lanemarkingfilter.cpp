@@ -1,4 +1,4 @@
-#include "lanedetector.h"
+#include "lanemarkingfilter.h"
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -9,14 +9,14 @@
 
 namespace FeatureSetCreation {
 
-    LaneDetector::LaneDetector(const LaneDetectionSettings& settings)
+    LaneMarkingFilter::LaneMarkingFilter(const LaneMarkingFilterSettings& settings)
         : settings(settings) {
     }
 
-    LaneDetector::~LaneDetector() {
+    LaneMarkingFilter::~LaneMarkingFilter() {
     }
 
-    std::vector<cv::KeyPoint> LaneDetector::subtractLanes(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints)
+    std::vector<cv::KeyPoint> LaneMarkingFilter::filterOutLaneMarkings(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints)
     {
         std::vector<cv::Vec4i> lines = detectLines(image);
         std::vector<cv::KeyPoint> features;
@@ -35,7 +35,7 @@ namespace FeatureSetCreation {
         return features;
     }
 
-    std::vector<cv::Vec4i> LaneDetector::detectLines(const cv::Mat& image) {
+    std::vector<cv::Vec4i> LaneMarkingFilter::detectLines(const cv::Mat& image) {
         cv::Mat cannyImage;
         cv::Canny(image, cannyImage, settings.firstThreshold, settings.secondThreshold, settings.apertureSize);
         std::vector<cv::Vec4i> lines;
@@ -47,7 +47,7 @@ namespace FeatureSetCreation {
     // Tests if point is hit by line by projecting the point onto the line
     // and then calculating the distance between point and the projected point.
     // If the distance is less than the maxDistance set by the user the line hits the point.
-    bool LaneDetector::getsHitByLine(const cv::Point2f& point, const cv::Vec4i& line) const
+    bool LaneMarkingFilter::getsHitByLine(const cv::Point2f& point, const cv::Vec4i& line) const
     {
         const cv::Point2f lineStart(line[0], line[1]);
         const cv::Point2f lineEnd(line[2], line[3]);
@@ -62,17 +62,17 @@ namespace FeatureSetCreation {
         return distance <= settings.maxDistance;
     }
 
-    float LaneDetector::pointDistanceSquared(const cv::Point2f& a, const cv::Point2f& b) const
+    float LaneMarkingFilter::pointDistanceSquared(const cv::Point2f& a, const cv::Point2f& b) const
     {
         return Common::Utils::to<float>(pow(a.x - b.x, 2)) + Common::Utils::to<float>(pow(a.y - b.y, 2));
     }
 
-    float LaneDetector::pointDistance(const cv::Point2f& a, const cv::Point2f& b) const
+    float LaneMarkingFilter::pointDistance(const cv::Point2f& a, const cv::Point2f& b) const
     {
         return Common::Utils::to<float>(sqrt(pointDistanceSquared(a, b)));
     }
 
-    cv::Point2f LaneDetector::projectPointOntoLine(const cv::Point2f& p, const float lineLengthSquared, const cv::Point2f& lineStart, const cv::Point2f& lineEnd) const
+    cv::Point2f LaneMarkingFilter::projectPointOntoLine(const cv::Point2f& p, const float lineLengthSquared, const cv::Point2f& lineStart, const cv::Point2f& lineEnd) const
     {
         const float lineLength = Common::Utils::to<float>(sqrt(lineLengthSquared));
         const float pointToLineXScaled = (p.x - lineStart.x) / lineLength;

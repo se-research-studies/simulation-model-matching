@@ -14,7 +14,7 @@ public:
 
 private:
     std::string validateOrbSettings(const OrbSettings& settings) const;
-    std::string validateLaneDetectionSettings(const LaneDetectionSettings& settings) const;
+    std::string validateLaneDetectionSettings(const LaneMarkingFilterSettings& settings) const;
 };
 
 } // namespace FeatureSetCreation

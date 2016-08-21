@@ -15,26 +15,26 @@ SOURCES += \
     src/featuresetcreation/featuredetector.cpp \
     src/featuresetcreation/featuresetcreator.cpp \
     src/featuresetcreation/featuredetectororb.cpp \
-    src/featuresetcreation/lanedetector.cpp \
     src/featuresetcreation/settings.cpp \
     src/featuresetcreation/settingsvalidator.cpp \
     src/featuresetcreation/featuredetectorshitomasi.cpp \
     src/featuresetcreation/recordingplayer.cpp \
     src/featuresetcreation/guicontroler.cpp \
     src/featuresetcreation/imagemasker.cpp \
-    src/featuresetcreation/featuresettingsreader.cpp
+    src/featuresetcreation/featuresettingsreader.cpp \
+    src/featuresetcreation/lanemarkingfilter.cpp
 
 HEADERS += \
     src/featuresetcreation/featuredetector.h \
     src/featuresetcreation/featuresetcreator.h \
     src/featuresetcreation/featuredetectororb.h \
-    src/featuresetcreation/lanedetector.h \
     src/featuresetcreation/settings.h \
     src/featuresetcreation/settingsvalidator.h \
     src/featuresetcreation/featuredetectorshitomasi.h \
     src/featuresetcreation/recordingplayer.h \
     src/featuresetcreation/imagemasker.h \
     src/featuresetcreation/featuresettingsreader.h \
-    src/featuresetcreation/guicontroller.h
+    src/featuresetcreation/guicontroller.h \
+    src/featuresetcreation/lanemarkingfilter.h
 
 

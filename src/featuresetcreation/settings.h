@@ -16,7 +16,7 @@ namespace FeatureSetCreation {
     int fastThreshold = 20;
   };
 
-  struct LaneDetectionSettings {
+  struct LaneMarkingFilterSettings {
     uint16_t maxDistance = 25;
     double firstThreshold = 100;
     double secondThreshold = 300;
@@ -43,7 +43,7 @@ namespace FeatureSetCreation {
     std::string database = "../resources/data.sqlite";
     bool guiEnabled = true;
     OrbSettings orbSettings;
-    LaneDetectionSettings laneDetectionSettings;
+    LaneMarkingFilterSettings laneMarkingDetectionSettings;
     ShiTomasiSettings shiTomasiSettings;
   };
 

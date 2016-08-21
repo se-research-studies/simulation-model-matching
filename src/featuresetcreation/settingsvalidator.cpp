@@ -14,7 +14,7 @@ void SettingsValidator::validate(const Settings& settings) const {
         errors += settings.detectionAlg + " is not a supported feature detection algorithm.\n";
     }
     errors += validateOrbSettings(settings.orbSettings);
-    errors += validateLaneDetectionSettings(settings.laneDetectionSettings);
+    errors += validateLaneDetectionSettings(settings.laneMarkingDetectionSettings);
     if (errors.size() > 0) {
         throw std::runtime_error(errors);
     }
@@ -38,7 +38,7 @@ std::string SettingsValidator::validateOrbSettings(const OrbSettings& settings) 
     return errors;
 }
 
-std::string SettingsValidator::validateLaneDetectionSettings(const LaneDetectionSettings& settings) const {
+std::string SettingsValidator::validateLaneDetectionSettings(const LaneMarkingFilterSettings& settings) const {
     // See also: http://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html?highlight=houghlinesp#houghlinesp
     std::string errors;
     if (settings.apertureSize != 3 && settings.apertureSize != 5 && settings.apertureSize != 7) {

@@ -4,7 +4,7 @@
 #include <opencv2/features2d/features2d.hpp>
 
 #include <FeatureSimulation/Common/Data/dirtyframe.h>
-#include <FeatureSimulation/FeatureSetCreation/lanedetector.h>
+#include <FeatureSimulation/FeatureSetCreation/lanemarkingfilter.h>
 
 namespace FeatureSetCreation {
 
@@ -29,7 +29,7 @@ private:
     uint16_t maxDistance;
 
 private:
-    LaneDetector laneDetector;
+    LaneMarkingFilter laneDetector;
 };
 
 } // namespace FeatureSetCreation

@@ -8,13 +8,13 @@
 
 namespace FeatureSetCreation {
 
-class LaneDetector {
+class LaneMarkingFilter {
 public:
-    LaneDetector(const LaneDetectionSettings& settings);
-    virtual ~LaneDetector();
+    LaneMarkingFilter(const LaneMarkingFilterSettings& settings);
+    virtual ~LaneMarkingFilter();
 
 public:
-    std::vector<cv::KeyPoint> subtractLanes(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints);
+    std::vector<cv::KeyPoint> filterOutLaneMarkings(const cv::Mat& image, const std::vector<cv::KeyPoint>& keyPoints);
 
 private:
     std::vector<cv::Vec4i> detectLines(const cv::Mat& image);
@@ -24,7 +24,7 @@ private:
     cv::Point2f projectPointOntoLine(const cv::Point2f& p, const float lineLengthSquared, const cv::Point2f& lineStart, const cv::Point2f& lineEnd) const;
 
 private:
-    const LaneDetectionSettings settings;
+    const LaneMarkingFilterSettings settings;
 };
 
 } // namespace FeatureSetCreation

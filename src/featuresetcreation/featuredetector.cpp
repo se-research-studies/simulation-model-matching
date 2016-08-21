@@ -8,7 +8,7 @@
 namespace FeatureSetCreation {
 
     FeatureDetector::FeatureDetector(const Settings& settings)
-        : guiEnabled(settings.guiEnabled), maxDistance(settings.laneDetectionSettings.maxDistance), laneDetector(settings.laneDetectionSettings) {
+        : guiEnabled(settings.guiEnabled), maxDistance(settings.laneMarkingDetectionSettings.maxDistance), laneDetector(settings.laneMarkingDetectionSettings) {
     }
 
     FeatureDetector::~FeatureDetector() {
@@ -16,7 +16,7 @@ namespace FeatureSetCreation {
 
     Common::DirtyFrame FeatureDetector::detectFeatures(const cv::Mat& image, const cv::Mat& mask) {
         std::vector<cv::KeyPoint> keyPoints = findKeyPoints(image, mask);
-        keyPoints = laneDetector.subtractLanes(image, keyPoints);
+        keyPoints = laneDetector.filterOutLaneMarkings(image, keyPoints);
         GuiController::instance().setKeyPoints(keyPoints);
         return convertToDirtyFrame(keyPoints);
     }

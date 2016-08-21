@@ -130,31 +130,31 @@ namespace FeatureSetCreation {
                 settings.orbSettings.fastThreshold = atoi(optarg);
                 break;
             case LANE_MAX_DISTANCE:
-                settings.laneDetectionSettings.maxDistance = atoi(optarg);
+                settings.laneMarkingDetectionSettings.maxDistance = atoi(optarg);
                 break;
             case LANE_FIRST_THRESHOLD:
-                settings.laneDetectionSettings.firstThreshold = atoi(optarg);
+                settings.laneMarkingDetectionSettings.firstThreshold = atoi(optarg);
                 break;
             case  LANE_SECOND_THRESHOLD:
-                settings.laneDetectionSettings.secondThreshold = atoi(optarg);
+                settings.laneMarkingDetectionSettings.secondThreshold = atoi(optarg);
                 break;
             case LANE_APERTURE_SIZE:
-                settings.laneDetectionSettings.apertureSize = atoi(optarg);
+                settings.laneMarkingDetectionSettings.apertureSize = atoi(optarg);
                 break;
             case LANE_RHO:
-                settings.laneDetectionSettings.rho = atoi(optarg);
+                settings.laneMarkingDetectionSettings.rho = atoi(optarg);
                 break;
             case LANE_THETA:
-                settings.laneDetectionSettings.theta = atoi(optarg);
+                settings.laneMarkingDetectionSettings.theta = atoi(optarg);
                 break;
             case LANE_VOTE_THRESHOLD:
-                settings.laneDetectionSettings.voteThreshold = atoi(optarg);
+                settings.laneMarkingDetectionSettings.voteThreshold = atoi(optarg);
                 break;
             case LANE_MIN_LINE_LENGTH:
-                settings.laneDetectionSettings.minLineLength = atoi(optarg);
+                settings.laneMarkingDetectionSettings.minLineLength = atoi(optarg);
                 break;
             case LANE_MAX_LINE_GAP:
-                settings.laneDetectionSettings.maxLineGap = atoi(optarg);
+                settings.laneMarkingDetectionSettings.maxLineGap = atoi(optarg);
                 break;
             case SHI_MAX_CORNERS:
                 settings.shiTomasiSettings.maxCorners = atoi(optarg);
