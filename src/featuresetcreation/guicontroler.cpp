@@ -49,7 +49,7 @@ namespace FeatureSetCreation {
     {
         if (enabled) {
             cv::imshow("Analyzed Image", image);
-            cv::waitKey(10);
+            cv::waitKey(20);
         }
     }
 
