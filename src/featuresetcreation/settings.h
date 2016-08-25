@@ -42,6 +42,7 @@ namespace FeatureSetCreation {
     std::string detectionAlg = "ORB";
     std::string database = "../resources/data.sqlite";
     bool guiEnabled = true;
+    std::string id;
     OrbSettings orbSettings;
     LaneMarkingFilterSettings laneMarkingDetectionSettings;
     ShiTomasiSettings shiTomasiSettings;

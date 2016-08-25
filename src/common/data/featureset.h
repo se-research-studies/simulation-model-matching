@@ -10,7 +10,7 @@ namespace Common {
 
 class FeatureSet {
 public:
-    FeatureSet(const std::string& recordingName);
+    FeatureSet(const std::string& recordingName, const std::string& id = "");
     FeatureSet(FeatureSet&& other) = default;
 
 public:
@@ -19,6 +19,7 @@ public:
 
 public:
     std::string getRecordingName() const;
+    std::string getId() const;
     size_t getFrameCount() const;
     uint32_t getFirstFrame() const;
     uint32_t getLastFrame() const;
@@ -28,6 +29,7 @@ public:
 
 private:
     const std::string recordingName;
+    const std::string id;
     std::map<uint32_t, DirtyFrame> frames;
     const DirtyFrame emptyFrame;
 };

@@ -21,6 +21,7 @@ namespace FeatureSetCreation {
             DATABASE,
             DETECTOR,
             USE_GUI,
+            ID,
             ORB_N_FEATURES,
             ORB_SCALE_FACTOR,
             ORB_N_LEVELS,

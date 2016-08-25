@@ -1,5 +1,6 @@
 #include "database.h"
 
+#include <iostream>
 #include <stdexcept>
 
 #include <FeatureSimulation/Common/utils.h>
@@ -25,9 +26,11 @@ void Database::setDbFilename(const std::string& argv0, const std::string& value)
     if (value.compare(0, 3, "../") == 0) {
         std::string executableFolder = Utils::fileFolderPath(argv0);
         dbFilename = "file:" + executableFolder + "/" + value;
+        std::cout << "Creating database file: " << executableFolder + "/" + value << std::endl;
     } else {
         dbFilename = value;
     }
+    std::cout << "Database " << dbFilename << std::endl;
     getInstance().open();
 }
 

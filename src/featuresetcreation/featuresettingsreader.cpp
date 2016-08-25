@@ -5,6 +5,7 @@ static const struct option featureSetCreationLongopts[] = {
     {"db", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::DATABASE},
     {"detector", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::DETECTOR},
     {"guiEnabled", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::USE_GUI},
+    {"id", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::ID},
     // ORB arguments
     {"nFeatures", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::ORB_N_FEATURES},
     {"scaleFactor", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::ORB_SCALE_FACTOR},
@@ -47,10 +48,11 @@ namespace FeatureSetCreation {
     {
         fprintf(stderr, "Usage: %s -rec='file' [-options]\n", programName);
         fprintf(stderr,
-                "  -rec               Recording file.\n"
+                "  -rec               Required. Recording file.\n"
                 "  -db                Optional. Database file. Default is ./data.sqlite.\n"
                 "  -detector          Optional. Feature Detection Algorithm. Default is ORB.\n"
                 "  -guiEnabled        Optional. Default is true\n"
+                "  -id                Optional. Arbitrary id that will be saved with the features."
                 "  -nFeatures         Optional ORB parameter. Default is 500.\n"
                 "  -scaleFactor       Optional ORB parameter. Default is 1.2\n"
                 "  -nLevels           Optional ORB parameter. Default is 8\n"
@@ -69,12 +71,12 @@ namespace FeatureSetCreation {
                 "  -voteThreshold     Optional Lane Detection parameter. Default is 50\n"
                 "  -minLineLength     Optional Lane Detection parameter. Default is 30\n"
                 "  -maxLineGap        Optional Lane Detection parameter. Default is 20\n"
-                "  -maxCorners        Optional ShiTomasi int parameter. Default is 100.\n"
-                "  -qualityLevel      Optional ShiTomasi double parameter. Default is 0.5.\n"
-                "  -minDistance       Optional ShiTomasi double parameter. Default is 0.5.\n"
-                "  -blockSize         Optional ShiTomasi in parameter. Default is 3.\n"
-                "  -useHarrisDetector Optional ShiTomasi boolean parameter. Default is F (false).\n"
-                "  -kFree             Optional ShiTomasi double parameter. Default is 0.4.\n"
+                "  -maxCorners        Optional ShiTomasi parameter. Default is 100.\n"
+                "  -qualityLevel      Optional ShiTomasi parameter. Default is 0.5.\n"
+                "  -minDistance       Optional ShiTomasi parameter. Default is 0.5.\n"
+                "  -blockSize         Optional ShiTomasi parameter. Default is 3.\n"
+                "  -useHarrisDetector Optional ShiTomasi parameter. Default is F (false).\n"
+                "  -kFree             Optional ShiTomasi parameter. Default is 0.4.\n"
                 "\n"
                 "  Available detectors:\n"
                 "    - ORB\n"
@@ -86,6 +88,10 @@ namespace FeatureSetCreation {
 
     Settings FeatureSettingsReader::readSettings(int argc, char* argv[])
     {
+        if (argc == 1) {
+            printUsage(argv[0]);
+            throw std::runtime_error("");
+        }
         Settings settings;
         int optIndex = 0;
         while ((optIndex = getopt_long_only(argc, argv, "", featureSetCreationLongopts, nullptr)) != -1) {
@@ -101,6 +107,9 @@ namespace FeatureSetCreation {
                 break;
             case USE_GUI:
                 settings.guiEnabled = atoi(optarg);
+                break;
+            case ID:
+                settings.id = std::string(optarg);
                 break;
             case ORB_N_FEATURES:
                 settings.orbSettings.nFeatures = atoi(optarg);

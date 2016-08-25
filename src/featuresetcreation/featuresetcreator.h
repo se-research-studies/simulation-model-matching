@@ -21,7 +21,8 @@ private:
     void saveFeatureSet(const Common::FeatureSet& featureSet) const;
 
 private:
-    std::string recordingFile;
+    const std::string recordingFile;
+    const std::string id;
 
     std::unique_ptr<FeatureDetector> featureDetector;
     Common::FeatureSetDAO featureSetDao;
