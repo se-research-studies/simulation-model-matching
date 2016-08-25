@@ -45,6 +45,10 @@ namespace SimulationGame {
 
     Settings SimSettingsReader::readSettings(int argc, char* argv[])
     {
+        if (argc == 1) {
+            printUsage(argv[0]);
+            throw std::runtime_error("");
+        }
         Settings settings;
         int optIndex = 0;
         while ((optIndex = getopt_long_only(argc, argv, "", simulationGameLongopts, nullptr)) != -1) {
