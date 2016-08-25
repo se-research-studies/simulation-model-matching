@@ -1,9 +1,9 @@
 #include "featuresettingsreader.h"
 
 static const struct option featureSetCreationLongopts[] = {
-    {"rec", required_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::REC_FILE},
-    {"db", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::DATABASE},
-    {"detector", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::DETECTOR},
+    {"recordingFile", required_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::REC_FILE},
+    {"database", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::DATABASE},
+    {"detectionAlg", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::DETECTOR},
     {"guiEnabled", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::USE_GUI},
     {"id", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::ID},
     // ORB arguments
@@ -31,7 +31,7 @@ static const struct option featureSetCreationLongopts[] = {
     {"qualityLevel", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::SHI_QUALITY_LEVEL},
     {"minDistance", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::SHI_MIN_DISTANCE},
     {"blockSize", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::SHI_BLOCK_SIZE},
-    {"useHarrisDetector", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::SHI_USE_HARRIS},
+    {"useHarris", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::SHI_USE_HARRIS},
     {"kFree", optional_argument, nullptr, FeatureSetCreation::FeatureSettingsReader::SHI_K_FREE},
     {0, 0, 0, 0} //Required by getopt_long_only to mark the end of the arrays
 };
@@ -75,7 +75,7 @@ namespace FeatureSetCreation {
                 "  -qualityLevel      Optional ShiTomasi parameter. Default is 0.5.\n"
                 "  -minDistance       Optional ShiTomasi parameter. Default is 0.5.\n"
                 "  -blockSize         Optional ShiTomasi parameter. Default is 3.\n"
-                "  -useHarrisDetector Optional ShiTomasi parameter. Default is F (false).\n"
+                "  -useHarris         Optional ShiTomasi parameter. Default is F (false).\n"
                 "  -kFree             Optional ShiTomasi parameter. Default is 0.4.\n"
                 "\n"
                 "  Available detectors:\n"
