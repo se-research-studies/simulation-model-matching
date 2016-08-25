@@ -27,6 +27,7 @@ namespace SimulationGame {
         frameLimit = settings.frameLimit;
         showGui = settings.showGui;
         dataGatherer.setCorrelationFile(Common::Utils::fileName(settings.correlationFile));
+        dataGatherer.setId(settings.id);
         dataGatherer.setPermutationIndex(permutation.index);
         featureScale = settings.featureScale;
         featureSize = settings.featureSize;

@@ -12,6 +12,7 @@ namespace Common {
         static const std::string TABLENAME = "SimulationData";
         static const std::string COL_SIMULATIONNAME = "simulationName";
         static const std::string COL_CORRELATIONFILE = "correlationFile";
+        static const std::string COL_ID = "id";
         static const std::string COL_PERMUTATIONINDEX = "permutationIndex";
         static const std::string COL_FRAMES = "frames";
         static const std::string COL_COMPUTATIONTIMES = "computationTimes";

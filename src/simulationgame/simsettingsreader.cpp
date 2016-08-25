@@ -8,6 +8,7 @@ static const struct option simulationGameLongopts[] = {
     {"freq", optional_argument, nullptr, SimulationGame::SimSettingsReader::FREQ},
     {"db", optional_argument, nullptr, SimulationGame::SimSettingsReader::DATABASE},
     {"conf", optional_argument, nullptr, SimulationGame::SimSettingsReader::CONFIG_FILE},
+    {"id", optional_argument, nullptr, SimulationGame::SimSettingsReader::ID},
     {"autopilot", required_argument, nullptr, SimulationGame::SimSettingsReader::AUTOPILOT},
     {"frames", optional_argument, nullptr, SimulationGame::SimSettingsReader::FRAME_LIMIT},
     {"scale", optional_argument, nullptr, SimulationGame::SimSettingsReader::FEATURE_SCALE},
@@ -28,6 +29,7 @@ namespace SimulationGame {
                 "  -freq              Optional. freq for OpenDaVinci. Default is 10.\n"
                 "  -db                Optional. Database file. Default is ./data.sqlite.\n"
                 "  -conf              Optional. Path to OpenDaVinci conf file. File must be in same folder as executable if not set.\n"
+                "  -id                Optional. Arbitrary id that will be saved with the simulation data."
                 "  -autopilot         Required. Name of Algorithm to use.\n"
                 "  -frames            Optional. Integer. Maximum number of frames. Default is 0, ie. no limit. If set to 0 simulation can be stopped by pressing enter.\n"
                 "  -scale             Optional. Float. Scale factor for feature size. Default is 0.25.\n"
@@ -64,6 +66,9 @@ namespace SimulationGame {
                 break;
             case CONFIG_FILE:
                 settings.configurationFile =  std::string(optarg);
+                break;
+            case ID:
+                settings.id =  std::string(optarg);
                 break;
             case AUTOPILOT:
                 settings.autopilot =  std::string(optarg);

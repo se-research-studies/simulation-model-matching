@@ -21,6 +21,11 @@ namespace SimulationGame {
         data.setCorrelationFile(value);
     }
 
+    void DataGatherer::setId(const std::string& value)
+    {
+        data.setId(value);
+    }
+
     void DataGatherer::setPermutationIndex(const std::string& value)
     {
         data.setPermutationIndex(value);

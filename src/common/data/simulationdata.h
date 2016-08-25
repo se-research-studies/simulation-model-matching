@@ -19,6 +19,9 @@ namespace Common {
         std::string getCorrelationFile() const;
         void setCorrelationFile(const std::string& value);
 
+        std::string getId() const;
+        void setId(const std::string& value);
+
         std::string getPermutationIndex() const;
         void setPermutationIndex(const std::string& value);
 
@@ -57,6 +60,7 @@ namespace Common {
     private:
         std::string simulationName;
         std::string correlationFile;
+        std::string id;
         std::string permutationIndex;
         uint32_t frames = 0;
         uint32_t accelerations = 0;

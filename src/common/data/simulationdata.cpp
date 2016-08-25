@@ -27,6 +27,14 @@ namespace Common {
         correlationFile = value;
     }
 
+    std::string SimulationData::getId() const {
+        return id;
+    }
+
+    void SimulationData::setId(const std::string& value) {
+        id = value;
+    }
+
     std::string SimulationData::getPermutationIndex() const
     {
         return permutationIndex;

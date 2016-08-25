@@ -11,6 +11,7 @@ namespace Common {
         std::vector<TableColumn> columns;
         columns.push_back({SimulationDataContract::COL_SIMULATIONNAME, "TEXT"});
         columns.push_back({SimulationDataContract::COL_CORRELATIONFILE, "TEXT"});
+        columns.push_back({SimulationDataContract::COL_ID, "TEXT"});
         columns.push_back({SimulationDataContract::COL_PERMUTATIONINDEX, "TEXT"});
         columns.push_back({SimulationDataContract::COL_FRAMES, "INTEGER"});
         columns.push_back({SimulationDataContract::COL_COMPUTATIONTIMES, "TEXT"});
@@ -42,6 +43,7 @@ namespace Common {
         std::vector<TableField> result;
         result.push_back({SimulationDataContract::COL_SIMULATIONNAME, data.getSimulationName()});
         result.push_back({SimulationDataContract::COL_CORRELATIONFILE, data.getCorrelationFile()});
+        result.push_back({SimulationDataContract::COL_ID, data.getId()});
         result.push_back({SimulationDataContract::COL_PERMUTATIONINDEX, data.getPermutationIndex()});
         result.push_back({SimulationDataContract::COL_FRAMES, std::to_string(data.getFrames())});
         result.push_back({SimulationDataContract::COL_COMPUTATIONTIMES, data.computationTimesToString()});
