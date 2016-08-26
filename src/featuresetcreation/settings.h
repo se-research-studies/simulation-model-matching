@@ -40,7 +40,7 @@ namespace FeatureSetCreation {
   struct Settings {
     std::string recordingFile;
     std::string detectionAlg = "ORB";
-    std::string database = "../resources/data.sqlite";
+    std::string database = "data.sqlite";
     bool guiEnabled = true;
     std::string id;
     OrbSettings orbSettings;

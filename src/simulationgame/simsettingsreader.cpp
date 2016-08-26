@@ -6,14 +6,14 @@ static const struct option simulationGameLongopts[] = {
     // Operation arguments
     {"cid", optional_argument, nullptr, SimulationGame::SimSettingsReader::CID},
     {"freq", optional_argument, nullptr, SimulationGame::SimSettingsReader::FREQ},
-    {"db", optional_argument, nullptr, SimulationGame::SimSettingsReader::DATABASE},
-    {"conf", optional_argument, nullptr, SimulationGame::SimSettingsReader::CONFIG_FILE},
+    {"database", optional_argument, nullptr, SimulationGame::SimSettingsReader::DATABASE},
+    {"configurationFile", optional_argument, nullptr, SimulationGame::SimSettingsReader::CONFIG_FILE},
     {"id", optional_argument, nullptr, SimulationGame::SimSettingsReader::ID},
     {"autopilot", required_argument, nullptr, SimulationGame::SimSettingsReader::AUTOPILOT},
-    {"frames", optional_argument, nullptr, SimulationGame::SimSettingsReader::FRAME_LIMIT},
-    {"scale", optional_argument, nullptr, SimulationGame::SimSettingsReader::FEATURE_SCALE},
-    {"size", optional_argument, nullptr, SimulationGame::SimSettingsReader::FEATURE_SIZE},
-    {"cor", optional_argument, nullptr, SimulationGame::SimSettingsReader::CORRELATION_FILE},
+    {"frameLimit", optional_argument, nullptr, SimulationGame::SimSettingsReader::FRAME_LIMIT},
+    {"featureScale", optional_argument, nullptr, SimulationGame::SimSettingsReader::FEATURE_SCALE},
+    {"featureSize", optional_argument, nullptr, SimulationGame::SimSettingsReader::FEATURE_SIZE},
+    {"correlationFile", optional_argument, nullptr, SimulationGame::SimSettingsReader::CORRELATION_FILE},
     {"guiEnabled", optional_argument, nullptr, SimulationGame::SimSettingsReader::SHOW_GUI},
     {"repetitions", optional_argument, nullptr, SimulationGame::SimSettingsReader::REPETITIONS},
     {0, 0, 0, 0} //Required by getopt_long_only to mark the end of the arrays
@@ -29,7 +29,7 @@ namespace SimulationGame {
                 "  -freq              Optional. freq for OpenDaVinci. Default is 10.\n"
                 "  -database          Optional. Database file. Default is ./data.sqlite.\n"
                 "  -configurationFile Optional. Path to OpenDaVinci conf file. File must be in same folder as executable if not set.\n"
-                "  -id                Optional. Arbitrary id that will be saved with the simulation data."
+                "  -id                Optional. Arbitrary id that will be saved with the simulation data.\n"
                 "  -autopilot         Required. Name of Algorithm to use.\n"
                 "  -frameLimit        Optional. Integer. Maximum number of frames. Default is 0, ie. no limit. If set to 0 simulation can be stopped by pressing enter.\n"
                 "  -featureScale      Optional. Float. Scale factor for feature size. Default is 0.25.\n"

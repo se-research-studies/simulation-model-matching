@@ -48,11 +48,11 @@ namespace FeatureSetCreation {
     {
         fprintf(stderr, "Usage: %s -rec='file' [-options]\n", programName);
         fprintf(stderr,
-                "  -rec               Required. Recording file.\n"
-                "  -db                Optional. Database file. Default is ./data.sqlite.\n"
-                "  -detector          Optional. Feature Detection Algorithm. Default is ORB.\n"
+                "  -recordingFile     Required. Recording file.\n"
+                "  -database          Optional. Database file. Default is ./data.sqlite.\n"
+                "  -detectionAlg      Optional. Feature Detection Algorithm. Default is ORB.\n"
                 "  -guiEnabled        Optional. Default is true\n"
-                "  -id                Optional. Arbitrary id that will be saved with the features."
+                "  -id                Optional. Arbitrary id that will be saved with the features.\n"
                 "  -nFeatures         Optional ORB parameter. Default is 500.\n"
                 "  -scaleFactor       Optional ORB parameter. Default is 1.2\n"
                 "  -nLevels           Optional ORB parameter. Default is 8\n"

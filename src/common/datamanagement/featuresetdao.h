@@ -14,8 +14,9 @@ namespace Common {
         static const std::string COL_FRAME = "frame";
         static const std::string COL_FEATURES = "features";
         static const uint8_t INDEX_RECORDINGNAME = 0;
-        static const uint8_t INDEX_FRAME = 1;
-        static const uint8_t INDEX_FEATURES = 2;
+        static const uint8_t INDEX_ID = 1;
+        static const uint8_t INDEX_FRAME = 2;
+        static const uint8_t INDEX_FEATURES = 3;
     }
 
     class FeatureSetDAO : public DataAccessObject {

@@ -59,7 +59,7 @@ std::vector<TableField> FeatureSetDAO::toRow(const std::string& recordingName, c
 
 void FeatureSetDAO::deleteAll(const std::string& recordingName, const std::string& id) const {
     Database::getInstance().deleteRows(FeatureSetsContract::TABLENAME,
-                                       FeatureSetsContract::COL_RECORDINGNAME + "='" + recordingName + "' AND" +
+                                       FeatureSetsContract::COL_RECORDINGNAME + "='" + recordingName + "' AND " +
                                        FeatureSetsContract::COL_ID + "='" + id + "'");
 }
 

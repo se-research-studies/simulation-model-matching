@@ -7,7 +7,7 @@ namespace SimulationGame {
     struct Settings {
         std::string cid = "111";
         std::string freq = "10";
-        std::string database = "./data.sqlite";
+        std::string database = "data.sqlite";
         std::string configurationFile;
         std::string id;
         std::string autopilot;
