@@ -111,22 +111,16 @@ TARGET_LINK_LIBRARIES (SimulationGameLib CommonLib)
 #TARGET_LINK_LIBRARIES (CommonTestsLib CommonLib) 
 
 ###########################################################################
-# Build createFeatureSet executable.
-message(STATUS "Main file for createFeatureSet: " ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
-ADD_EXECUTABLE (createFeatureSet ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
-TARGET_LINK_LIBRARIES (createFeatureSet FeatureSetCreationLib) 
+# Build featureSetCreator executable.
+message(STATUS "Main file for featureSetCreator: " ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
+ADD_EXECUTABLE (featureSetCreator ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
+TARGET_LINK_LIBRARIES (featureSetCreator FeatureSetCreationLib) 
 
 ###########################################################################
 # Build simulationGame executable.
 message(STATUS "Main file for simulationGame: " ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
 ADD_EXECUTABLE (simulationGame ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
 TARGET_LINK_LIBRARIES (simulationGame SimulationGameLib) 
-
-###########################################################################
-# Build commonTests executable.
-#message(STATUS "Main file for commonTests: " ${PROJECT_SOURCE_DIR}/test/main_common_test.cpp)
-#ADD_EXECUTABLE (commonTests ${PROJECT_SOURCE_DIR}/test/main_common_test.cpp)
-#TARGET_LINK_LIBRARIES (commonTests CommonTestsLib) 
 
 ###########################################################################
 # This project will not be installed.
