@@ -17,6 +17,7 @@ namespace FeatureSetCreation {
 
     FeatureSetCreator::FeatureSetCreator(const Settings& settings)
         : recordingFile(settings.recordingFile), id(settings.id) {
+        // If new feature detection algorithms are added, they have to be included with their keyword here.
         if (settings.detectionAlg == "ORB") {
             featureDetector.reset(new FeatureDetectorORB(settings));
         } else if (settings.detectionAlg == "ShiTomasi") {
@@ -27,9 +28,11 @@ namespace FeatureSetCreation {
     FeatureSetCreator::~FeatureSetCreator() {
     }
 
-    // Runs through every image of recordingFile by opening the recording with the RecordingPlayer.
-    // Creates a mask from the values set in the .roni file, if present.
-    // Then lets the feature detector detect the keypoints in each frame.
+    /*
+     * Runs through every image of recordingFile by opening the recording with the RecordingPlayer.
+     * Creates a mask from the values set in the .roni file, if present.
+     * Then lets the feature detector detect the keypoints in each frame.
+     */
     void FeatureSetCreator::createFeatureSet() {
         Common::FeatureSet result(Common::Utils::fileName(recordingFile), id);
         uint32_t frameNumber = 0;
@@ -40,13 +43,13 @@ namespace FeatureSetCreation {
         std::cout << "Detecting features..." << std::endl;
         while (player.hasNext()) {
             cv::Mat image = player.next();
-            GuiController::instance().setImage(image, mask);
-            GuiController::instance().setFrame(frameNumber);
+            GuiController::getInstance().setImage(image, mask);
+            GuiController::getInstance().setFrame(frameNumber);
             Common::DirtyFrame dirtyFrame = featureDetector->detectFeatures(image, mask);
-            if (dirtyFrame.getFeatureCount() > 0) {
+            if (dirtyFrame.getFeatureCount() > 0) { // Do not add empty feature frames to the set
                 result.addFrame(frameNumber, featureDetector->detectFeatures(image, mask));
             }
-            GuiController::instance().show();
+            GuiController::getInstance().show();
             ++frameNumber;
         }
         std::cout << "Saving results..." << std::endl;

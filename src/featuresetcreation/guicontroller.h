@@ -17,7 +17,7 @@ namespace FeatureSetCreation {
         GuiController& operator=(const GuiController&) = delete;
 
     public:
-        static GuiController& instance();
+        static GuiController& getInstance();
 
     public:
         void setEnabled(bool isEnabled);

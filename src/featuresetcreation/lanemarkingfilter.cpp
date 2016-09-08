@@ -40,13 +40,15 @@ namespace FeatureSetCreation {
         cv::Canny(image, cannyImage, settings.firstThreshold, settings.secondThreshold, settings.apertureSize);
         std::vector<cv::Vec4i> lines;
         cv::HoughLinesP(cannyImage, lines, settings.rho, settings.theta, settings.voteThreshold, settings.minLineLength, settings.maxLineGap);
-        GuiController::instance().setLines(lines);
+        GuiController::getInstance().setLines(lines);
         return lines;
     }
 
-    // Tests if point is hit by line by projecting the point onto the line
-    // and then calculating the distance between point and the projected point.
-    // If the distance is less than the maxDistance set by the user the line hits the point.
+    /*
+     * Tests if point is hit by line by projecting the point onto the line
+     * and then calculating the distance between point and the projected point.
+     * If the distance is less than the maxDistance set by the user, the line hits the point.
+     */
     bool LaneMarkingFilter::getsHitByLine(const cv::Point2f& point, const cv::Vec4i& line) const
     {
         const cv::Point2f lineStart(line[0], line[1]);

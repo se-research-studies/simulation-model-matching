@@ -21,8 +21,7 @@ static const struct option simulationGameLongopts[] = {
 
 namespace SimulationGame {
 
-    void SimSettingsReader::printUsage(char* programName)
-    {
+    void SimSettingsReader::printUsage(char* programName) {
         fprintf(stderr, "Usage: %s -participant='name' [-options]\n", programName);
         fprintf(stderr,
                 "  -cid               Optional. cid for OpenDaVinci. Default is 111.\n"
@@ -40,13 +39,13 @@ namespace SimulationGame {
                 "\n"
                 "  Available autopilots:\n"
                 "    - LaneFollower\n"
+            //add new autopilots here
                 "\n"
                 "  Please note: All filenames must be absolute or relative to the location of the executable.\n"
                 );
     }
 
-    Settings SimSettingsReader::readSettings(int argc, char* argv[])
-    {
+    Settings SimSettingsReader::readSettings(int argc, char* argv[]) {
         if (argc == 1) {
             printUsage(argv[0]);
             throw std::runtime_error("");

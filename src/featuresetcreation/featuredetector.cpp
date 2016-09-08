@@ -7,6 +7,9 @@
 
 namespace FeatureSetCreation {
 
+    /*
+     * FeatureDetector is the abstract base class for all feature detectors. When deriving from it findKeyPoints has to be overriden.
+     */
     FeatureDetector::FeatureDetector(const Settings& settings)
         : guiEnabled(settings.guiEnabled), maxDistance(settings.laneMarkingDetectionSettings.maxDistance), laneDetector(settings.laneMarkingDetectionSettings) {
     }
@@ -14,10 +17,14 @@ namespace FeatureSetCreation {
     FeatureDetector::~FeatureDetector() {
     }
 
+    /*
+     * detectFeatures creates a DirtyFrame containing all features detected in image, except in mask. It calls the pure virtual method
+     * findKeyPoints, which has to return the features contained in the image. From that the features on lane markings are subtracted.
+     */
     Common::DirtyFrame FeatureDetector::detectFeatures(const cv::Mat& image, const cv::Mat& mask) {
         std::vector<cv::KeyPoint> keyPoints = findKeyPoints(image, mask);
         keyPoints = laneDetector.filterOutLaneMarkings(image, keyPoints);
-        GuiController::instance().setKeyPoints(keyPoints);
+        GuiController::getInstance().setKeyPoints(keyPoints);
         return convertToDirtyFrame(keyPoints);
     }
 

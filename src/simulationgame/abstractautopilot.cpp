@@ -14,16 +14,13 @@
 namespace SimulationGame {
 
     AbstractAutopilot::AbstractAutopilot(int argc, char** argv, const std::string& name)
-        : odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, name)
-    {
+        : odcore::base::module::TimeTriggeredConferenceClientModule(argc, argv, name) {
     }
 
-    AbstractAutopilot::~AbstractAutopilot()
-    {
+    AbstractAutopilot::~AbstractAutopilot() {
     }
 
-    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractAutopilot::runModule(const Settings& settings, Common::Permutation&& permutation)
-    {
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractAutopilot::runModule(const Settings& settings, Common::Permutation&& permutation) {
         frameLimit = settings.frameLimit;
         showGui = settings.showGui;
         dataGatherer.setCorrelationFile(Common::Utils::fileName(settings.correlationFile));
@@ -35,25 +32,21 @@ namespace SimulationGame {
         return odcore::base::module::TimeTriggeredConferenceClientModule::runModule();
     }
 
-    void AbstractAutopilot::forceQuit()
-    {
+    void AbstractAutopilot::forceQuit() {
         quitFlag = true;
     }
 
-    void AbstractAutopilot::setUp()
-    {
+    void AbstractAutopilot::setUp() {
         std::string simulationName = getDMCPClient()->getConfiguration().getValue<std::string>("global.scenario");
         dataGatherer.setSimulationName(Common::Utils::fileName(simulationName));
         currentFrame = 0;
     }
 
-    void AbstractAutopilot::tearDown()
-    {
+    void AbstractAutopilot::tearDown() {
         dataGatherer.save();
     }
 
-    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractAutopilot::body()
-    {
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractAutopilot::body() {
         gatherDataBeforeSimulation();
         while (continueBody()) {
             odcore::data::Container container = getKeyValueDataStore().get(odcore::data::image::SharedImage::ID());
@@ -68,15 +61,13 @@ namespace SimulationGame {
         return odcore::data::dmcp::ModuleExitCodeMessage::OKAY;
     }
 
-    bool AbstractAutopilot::continueBody()
-    {
+    bool AbstractAutopilot::continueBody() {
         return getModuleStateAndWaitForRemainingTimeInTimeslice() == odcore::data::dmcp::ModuleStateMessage::RUNNING &&
                 (frameLimit == 0 || currentFrame < frameLimit) &&
                 !quitFlag;
     }
 
-    void AbstractAutopilot::processFrame(const odcore::data::image::SharedImage& sharedImage)
-    {
+    void AbstractAutopilot::processFrame(const odcore::data::image::SharedImage& sharedImage) {
         std::shared_ptr<odcore::wrapper::SharedMemory> sharedImageMemory = odcore::wrapper::SharedMemoryFactory::attachToSharedMemory(sharedImage.getName());
         if (sharedImageMemory->isValid()) {
             ++currentFrame;
@@ -93,10 +84,9 @@ namespace SimulationGame {
         }
     }
 
-    cv::Mat AbstractAutopilot::prepareImage(const odcore::data::image::SharedImage& sharedImage, const std::shared_ptr<odcore::wrapper::SharedMemory>& sharedImageMemory)
-    {
+    cv::Mat AbstractAutopilot::prepareImage(const odcore::data::image::SharedImage& sharedImage, const std::shared_ptr<odcore::wrapper::SharedMemory>& sharedImageMemory) {
         odcore::base::Lock l(sharedImageMemory);
-        cv::Mat image(cv::Size(Common::Utils::to<int>(sharedImage.getWidth()), Common::Utils::to<int>(sharedImage.getHeight())),
+        cv::Mat image(cv::Size(Common::Utils::to<int>(sharedImage.getWidth()),Common::Utils::to<int>(sharedImage.getHeight())),
                       Common::Utils::to<int>(CV_MAKETYPE(CV_8U, sharedImage.getBytesPerPixel())),
                       sharedImageMemory->getSharedMemory());
         // The image has to be flipped horizontally and vertically. OpenGl seems to create a flipped image.
@@ -105,33 +95,27 @@ namespace SimulationGame {
         return image;
     }
 
-    void AbstractAutopilot::gatherDataBeforeSimulation()
-    {
+    void AbstractAutopilot::gatherDataBeforeSimulation() {
         dataGatherer.start();
     }
 
-    void AbstractAutopilot::gatherDataBeforeFrame()
-    {
+    void AbstractAutopilot::gatherDataBeforeFrame() {
         dataGatherer.startFrame();
     }
 
-    void AbstractAutopilot::gatherDataDuringFrame(double speed, double steeringWheelAngle)
-    {
+    void AbstractAutopilot::gatherDataDuringFrame(double speed, double steeringWheelAngle) {
         dataGatherer.midFrame(speed, steeringWheelAngle);
     }
 
-    void AbstractAutopilot::gatherDataAfterFrame()
-    {
+    void AbstractAutopilot::gatherDataAfterFrame() {
         dataGatherer.finishFrame();
     }
 
-    void AbstractAutopilot::gatherDataAfterSimulation()
-    {
+    void AbstractAutopilot::gatherDataAfterSimulation() {
         dataGatherer.stop();
     }
 
-    void AbstractAutopilot::addFeatures(cv::Mat& image)
-    {
+    void AbstractAutopilot::addFeatures(cv::Mat& image) {
         if (localFeatureSets.size() > 0) {
             odcore::data::Container containerVehicleData = getKeyValueDataStore().get(automotive::VehicleData::ID());
             automotive::VehicleData vd = containerVehicleData.getData<automotive::VehicleData>();
@@ -161,24 +145,21 @@ namespace SimulationGame {
         }
     }
 
-    bool AbstractAutopilot::liesInRectangle(cartesian::Point2& point, const Common::Rectangle& rectangle) const
-    {
+    bool AbstractAutopilot::liesInRectangle(cartesian::Point2& point, const Common::Rectangle& rectangle) const {
         int x = Common::Utils::to<int>(point.getP()[0]);
         int y = Common::Utils::to<int>(point.getP()[1]);
         return rectangle.getTopLeft().getX() < x && rectangle.getTopLeft().getY() < y &&
                 rectangle.getBottomRight().getX() > x && rectangle.getBottomRight().getY() > y;
     }
 
-    void AbstractAutopilot::addFeaturesFromFrame(cv::Mat& image, const Common::DirtyFrame& dirtyFrame) const
-    {
+    void AbstractAutopilot::addFeaturesFromFrame(cv::Mat& image, const Common::DirtyFrame& dirtyFrame) const {
         for (const Common::Feature& feature : dirtyFrame.getFeatures()) {
             int radius = featureSize > 0 ? featureSize : Common::Utils::to<int>((feature.getDiameter() / 2) * featureScale);
             cv::circle(image, cv::Point(feature.getX(), feature.getY()), radius, cv::Scalar(255, 255, 255), -1);
         }
     }
 
-    void AbstractAutopilot::setControls(double speed, double steeringWheelAngle)
-    {
+    void AbstractAutopilot::setControls(double speed, double steeringWheelAngle) {
         gatherDataDuringFrame(speed, steeringWheelAngle);
         vehicleControl.setSpeed(speed);
         vehicleControl.setSteeringWheelAngle(steeringWheelAngle);

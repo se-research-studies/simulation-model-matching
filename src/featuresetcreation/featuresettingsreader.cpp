@@ -81,6 +81,7 @@ namespace FeatureSetCreation {
                 "  Available detectors:\n"
                 "    - ORB\n"
                 "    - ShiTomasi\n"
+            // add new feature detectors here
                 "\n"
                 "  Please note: All filenames must be absolute or relative to the location of the executable.\n"
                 );
@@ -88,7 +89,7 @@ namespace FeatureSetCreation {
 
     Settings FeatureSettingsReader::readSettings(int argc, char* argv[])
     {
-        if (argc == 1) {
+        if (argc == 1) { // there is one required parameter, so abort if it was not set
             printUsage(argv[0]);
             throw std::runtime_error("");
         }

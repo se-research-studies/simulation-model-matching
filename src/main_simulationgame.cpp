@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
 
         SimulationGame::AutopilotRegistry registry(settings.cid, settings.freq);
         registry.registerAutopilot<SimulationGame::LaneFollower>("LaneFollower");
+        //add new autopilots here
 
         SimulationGame::GameRunner gameRunner(registry);
         gameRunner.start(settings);

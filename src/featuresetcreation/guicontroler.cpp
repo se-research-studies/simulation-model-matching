@@ -11,7 +11,12 @@ namespace FeatureSetCreation {
     GuiController::~GuiController() {
     }
 
-    GuiController& GuiController::instance()
+    /*
+     * This static method returns a reference to one instance of GuiController, realizing the singleton pattern.
+     * instance is local static. That means that it is created when instance() is called for the first time,
+     * is the same object every time instance() is called, and is deleted when the application is terminated.
+     */
+    GuiController& GuiController::getInstance()
     {
         static GuiController instance;
         return instance;

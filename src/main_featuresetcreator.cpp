@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) {
     try {
         FeatureSetCreation::Settings settings = FeatureSetCreation::FeatureSettingsReader::readSettings(argc, argv);
-        FeatureSetCreation::GuiController::instance().setEnabled(settings.guiEnabled);
+        FeatureSetCreation::GuiController::getInstance().setEnabled(settings.guiEnabled);
         Common::Database::getInstance().setDbFilename(argv[0], settings.database);
 
         FeatureSetCreation::SettingsValidator validator;

@@ -44,8 +44,7 @@ namespace SimulationGame {
         frameStartTime = std::chrono::steady_clock::now();
     }
 
-    void DataGatherer::midFrame(double speed, double steeringWheelAngle)
-    {
+    void DataGatherer::midFrame(double speed, double steeringWheelAngle) {
         // To not add the time this takes to the frame time the start time is stored and at the and the frameStartTime adapted
         std::chrono::steady_clock::time_point midFrameStart = std::chrono::steady_clock::now();
         frameMemory.setMemoryDuringFrame(getCurrentMemoryUsageInKb());
@@ -55,8 +54,7 @@ namespace SimulationGame {
         frameStartTime += (std::chrono::steady_clock::now() - midFrameStart);
     }
 
-    void DataGatherer::compareSpeed(double speed)
-    {
+    void DataGatherer::compareSpeed(double speed) {
         int speedComparison = Common::Utils::compare(speed, lastSpeed);
         if (speedComparison == 1) {
             data.addAcceleration();
@@ -81,14 +79,12 @@ namespace SimulationGame {
         dao.save(data);
     }
 
-    uint32_t DataGatherer::passedMicroSecs(const std::chrono::_V2::steady_clock::time_point& since)
-    {
+    uint32_t DataGatherer::passedMicroSecs(const std::chrono::_V2::steady_clock::time_point& since) {
         const std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
         return Common::Utils::to<uint32_t>(std::chrono::duration_cast<std::chrono::microseconds>(currentTime - since).count());
     }
 
-    uint64_t DataGatherer::getCurrentMemoryUsageInKb()
-    {
+    uint64_t DataGatherer::getCurrentMemoryUsageInKb() {
         FILE* fp = fopen( "/proc/self/statm", "r" );
         if (fp == nullptr) {
             return 0;
