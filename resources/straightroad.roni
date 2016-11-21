@@ -1,0 +1,22 @@
+{
+	"regions": [
+		{
+			"topLeft": {
+				"x": 58,
+				"y": 390
+			},
+			"topRight": {
+				"x": 700,
+				"y": 390
+			},
+			"bottomLeft": {
+				"x": 8,
+				"y": 479
+			},
+			"bottomRight": {
+				"x": 754,
+				"y": 479
+			}
+		}
+	]
+}
