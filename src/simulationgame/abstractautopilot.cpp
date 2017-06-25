@@ -20,7 +20,7 @@ namespace SimulationGame {
     AbstractAutopilot::~AbstractAutopilot() {
     }
 
-    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractAutopilot::runModule(const Settings& settings, Common::Permutation&& permutation) {
+    odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode AbstractAutopilot::doRunModule(const Settings& settings, Common::Permutation&& permutation) {
         frameLimit = settings.frameLimit;
         showGui = settings.showGui;
         dataGatherer.setCorrelationFile(Common::Utils::fileName(settings.correlationFile));

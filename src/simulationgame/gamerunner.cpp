@@ -9,8 +9,8 @@
 
 namespace SimulationGame {
 
-    GameRunner::GameRunner(SimulationGame::AutopilotRegistry& registry)
-        : registry(registry) {
+    GameRunner::GameRunner(SimulationGame::AutopilotRegistry& _registry)
+        : registry(_registry) {
     }
 
     GameRunner::~GameRunner() {
@@ -54,7 +54,7 @@ namespace SimulationGame {
     int GameRunner::runSimulationWithFrameLimit(const Settings& settings, Common::Permutation&& permutation) {
         std::unique_ptr<AbstractAutopilot> participant = registry.getAutopilot(settings.autopilot);
         std::future<odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode> simulation =
-                std::async(std::launch::async, &AbstractAutopilot::runModule, participant.get(), settings, std::move(permutation));
+                std::async(std::launch::async, &AbstractAutopilot::doRunModule, participant.get(), settings, std::move(permutation));
         while (simulation.wait_for(std::chrono::milliseconds(10)) != std::future_status::ready) { }
         return simulation.get();
     }
@@ -62,7 +62,7 @@ namespace SimulationGame {
     int GameRunner::runSimulationWithEnterKeyDetection(const Settings& settings, Common::Permutation&& permutation) {
         std::unique_ptr<AbstractAutopilot> participant = registry.getAutopilot(settings.autopilot);
         std::future<odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode> simulation =
-                std::async(std::launch::async, &AbstractAutopilot::runModule, participant.get(), settings, std::move(permutation));
+                std::async(std::launch::async, &AbstractAutopilot::doRunModule, participant.get(), settings, std::move(permutation));
         std::future<void> enterKey = std::async(std::launch::async, &GameRunner::waitForEnter);
         while (enterKey.wait_for(std::chrono::milliseconds(10)) != std::future_status::ready) { }
         participant->forceQuit();

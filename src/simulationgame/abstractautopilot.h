@@ -35,7 +35,7 @@ namespace SimulationGame {
             return std::make_unique<SubClass>(argc, argv);
         }
 
-        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode runModule(const Settings& settings, Common::Permutation&& permutation);
+        odcore::data::dmcp::ModuleExitCodeMessage::ModuleExitCode doRunModule(const Settings& settings, Common::Permutation&& permutation);
         void forceQuit();
 
         void setUp() override;
