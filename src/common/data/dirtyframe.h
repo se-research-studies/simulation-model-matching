@@ -9,7 +9,7 @@ namespace Common {
 
 class DirtyFrame {
 public:
-    DirtyFrame(std::vector<Feature>&& features);
+    DirtyFrame(std::vector<Feature>&& _features);
     DirtyFrame() = default;
     DirtyFrame(DirtyFrame&& other) = default;
 

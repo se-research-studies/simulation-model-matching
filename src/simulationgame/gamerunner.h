@@ -13,7 +13,7 @@ namespace SimulationGame {
 
     class GameRunner {
     public:
-        GameRunner(SimulationGame::AutopilotRegistry& registry);
+        GameRunner(SimulationGame::AutopilotRegistry& _registry);
         virtual ~GameRunner();
 
     public:

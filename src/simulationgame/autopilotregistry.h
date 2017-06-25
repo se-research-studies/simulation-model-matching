@@ -11,7 +11,7 @@ namespace SimulationGame {
     class AutopilotRegistry
     {
     public:
-        AutopilotRegistry(const std::string& cid, const std::string& freq);
+        AutopilotRegistry(const std::string& _cid, const std::string& _freq);
         virtual ~AutopilotRegistry();
 
     public:

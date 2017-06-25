@@ -2,8 +2,8 @@
 
 namespace Common {
 
-    Correlation::Correlation(const Rectangle& rectangle)
-        : rectangle(rectangle)
+    Correlation::Correlation(const Rectangle& _rectangle)
+        : rectangle(_rectangle)
     {
     }
 

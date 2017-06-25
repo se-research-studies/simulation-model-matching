@@ -2,8 +2,8 @@
 
 namespace Common {
 
-Coordinates::Coordinates(int x, int y)
-    : x(x), y(y) {
+Coordinates::Coordinates(int _x, int _y)
+    : x(_x), y(_y) {
 }
 
 int Coordinates::getX() const {

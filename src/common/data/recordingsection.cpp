@@ -2,8 +2,8 @@
 
 namespace Common {
 
-    RecordingSection::RecordingSection(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame)
-        : recordingName(recordingName), startFrame(startFrame), endFrame(endFrame) {
+    RecordingSection::RecordingSection(const std::string& _recordingName, uint32_t _startFrame, uint32_t _endFrame)
+        : recordingName(_recordingName), startFrame(_startFrame), endFrame(_endFrame) {
     }
 
     std::string RecordingSection::getRecordingName() const

@@ -6,8 +6,8 @@
 
 namespace Common {
 
-DirtyFrame::DirtyFrame(std::vector<Feature>&& features)
-    : features(features) {
+DirtyFrame::DirtyFrame(std::vector<Feature>&& _features)
+    : features(_features) {
 }
 
 const std::vector<Feature>& DirtyFrame::getFeatures() const {

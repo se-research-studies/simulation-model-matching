@@ -2,8 +2,8 @@
 
 namespace Common {
 
-Cursor::Cursor(sqlite3_stmt* statement)
-    : statement(statement) {
+Cursor::Cursor(sqlite3_stmt* _statement)
+    : statement(_statement) {
 }
 
 Cursor::Cursor(Cursor&& other)

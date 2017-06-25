@@ -2,8 +2,8 @@
 
 namespace FeatureSetCreation {
 
-    FeatureDetectorORB::FeatureDetectorORB(const Settings& settings)
-        : FeatureDetector(settings), settings(settings.orbSettings) {
+    FeatureDetectorORB::FeatureDetectorORB(const Settings& _settings)
+        : FeatureDetector(_settings), settings(_settings.orbSettings) {
     }
 
     FeatureDetectorORB::~FeatureDetectorORB() {

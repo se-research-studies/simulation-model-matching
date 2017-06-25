@@ -22,9 +22,6 @@ namespace SimulationGame {
         bool waitForProcessToStop(pid_t pid, uint8_t seconds);
 
     private:
-        const std::string cid;
-        const std::string freq;
-        const std::string configurationFile;
         std::queue<pid_t> runningProcesses;
     };
 

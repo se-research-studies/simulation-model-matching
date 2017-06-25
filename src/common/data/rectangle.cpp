@@ -2,8 +2,8 @@
 
 namespace Common {
 
-    Rectangle::Rectangle(const Coordinates& topLeft, const Coordinates& bottomRight)
-        : topLeft(topLeft), bottomRight(bottomRight) {
+    Rectangle::Rectangle(const Coordinates& _topLeft, const Coordinates& _bottomRight)
+        : topLeft(_topLeft), bottomRight(_bottomRight) {
     }
 
     Coordinates Rectangle::getTopLeft() const

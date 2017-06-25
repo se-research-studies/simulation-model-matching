@@ -2,8 +2,8 @@
 
 namespace SimulationGame {
 
-    AutopilotRegistry::AutopilotRegistry(const std::string& cid, const std::string& freq)
-        : cid(cid), freq(freq) {
+    AutopilotRegistry::AutopilotRegistry(const std::string& _cid, const std::string& _freq)
+        : cid(_cid), freq(_freq) {
     }
 
     AutopilotRegistry::~AutopilotRegistry() {

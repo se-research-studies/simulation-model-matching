@@ -9,7 +9,7 @@ namespace Common {
 
     class Correlation {
     public:
-        Correlation(const Rectangle& rectangle);
+        Correlation(const Rectangle& _rectangle);
 
     public:
         void addSection(RecordingSection&& section);

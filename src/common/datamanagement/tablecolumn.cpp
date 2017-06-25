@@ -1,7 +1,7 @@
 #include "tablecolumn.h"
 
 namespace Common {
-TableColumn::TableColumn(const std::string& name, const std::string& type)
-    : name(name), type(type) {
+TableColumn::TableColumn(const std::string& _name, const std::string& _type)
+    : name(_name), type(_type) {
 }
 }

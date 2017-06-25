@@ -10,7 +10,7 @@ namespace Common {
 
 class FeatureSet {
 public:
-    FeatureSet(const std::string& recordingName, const std::string& id = "");
+    FeatureSet(const std::string& _recordingName, const std::string& _id = "");
     FeatureSet(FeatureSet&& other) = default;
 
 public:

@@ -7,7 +7,7 @@ namespace Common {
 
     class RecordingSection {
     public:
-        RecordingSection(const std::string& recordingName, uint32_t startFrame, uint32_t endFrame);
+        RecordingSection(const std::string& _recordingName, uint32_t _startFrame, uint32_t _endFrame);
         RecordingSection(RecordingSection&& other) = default;
         RecordingSection(const RecordingSection& other) = default;
 

@@ -2,8 +2,8 @@
 
 namespace Common {
 
-Region::Region(const Coordinates& topLeft, const Coordinates& topRight, const Coordinates& bottomLeft, const Coordinates& bottomRight)
-    : topLeft(topLeft), topRight(topRight), bottomLeft(bottomLeft), bottomRight(bottomRight)
+Region::Region(const Coordinates& _topLeft, const Coordinates& _topRight, const Coordinates& _bottomLeft, const Coordinates& _bottomRight)
+    : topLeft(_topLeft), topRight(_topRight), bottomLeft(_bottomLeft), bottomRight(_bottomRight)
 {
 }
 

@@ -7,7 +7,7 @@ namespace FeatureSetCreation {
 
 class FeatureDetectorORB : public FeatureDetector {
 public:
-    FeatureDetectorORB(const Settings& settings);
+    FeatureDetectorORB(const Settings& _settings);
     virtual ~FeatureDetectorORB();
 
 protected:

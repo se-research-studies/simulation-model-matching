@@ -8,7 +8,7 @@ namespace Common {
 
 class Cursor {
 public:
-    Cursor(sqlite3_stmt* statement);
+    Cursor(sqlite3_stmt* _statement);
     Cursor(Cursor&& other);
     virtual ~Cursor();
 

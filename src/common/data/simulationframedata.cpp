@@ -2,8 +2,8 @@
 
 namespace Common {
 
-    FrameTime::FrameTime(uint32_t frame)
-        : frame(frame)
+    FrameTime::FrameTime(uint32_t _frame)
+        : frame(_frame)
     {
     }
 
@@ -32,8 +32,8 @@ namespace Common {
 
 
 
-    FrameMemory::FrameMemory(uint32_t frame)
-        : frame(frame)
+    FrameMemory::FrameMemory(uint32_t _frame)
+        : frame(_frame)
     {
     }
 
@@ -95,8 +95,8 @@ namespace Common {
 
 
 
-    FrameSteeringWheelAngle::FrameSteeringWheelAngle(uint32_t frame, double angle)
-        : frame(frame), angle(angle)
+    FrameSteeringWheelAngle::FrameSteeringWheelAngle(uint32_t _frame, double _angle)
+        : frame(_frame), angle(_angle)
     {
     }
 

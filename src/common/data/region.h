@@ -6,7 +6,7 @@ namespace Common {
 
 class Region {
 public:
-    Region(const Coordinates& topLeft, const Coordinates& topRight, const Coordinates& bottomLeft, const Coordinates& bottomRight);
+    Region(const Coordinates& _topLeft, const Coordinates& _topRight, const Coordinates& _bottomLeft, const Coordinates& _bottomRight);
 
 public:
     Coordinates getTopLeft() const;

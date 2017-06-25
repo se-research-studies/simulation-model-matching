@@ -6,7 +6,7 @@ namespace Common {
 
 class Coordinates {
 public:
-    Coordinates(int x, int y);
+    Coordinates(int _x, int _y);
     Coordinates() = default;
     Coordinates(const Coordinates&) = default;
 

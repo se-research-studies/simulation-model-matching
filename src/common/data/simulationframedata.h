@@ -8,7 +8,7 @@ namespace Common {
     class FrameTime {
     public:
         FrameTime() = default;
-        FrameTime(uint32_t frame);
+        FrameTime(uint32_t _frame);
 
     public:
         void setComputationTime(uint32_t computationTime);
@@ -26,7 +26,7 @@ namespace Common {
     class FrameMemory {
     public:
         FrameMemory() = default;
-        FrameMemory(uint32_t frame);
+        FrameMemory(uint32_t _frame);
 
     public:
         void setMemoryBeforeFrame(uint64_t memBeforeFrame);
@@ -54,7 +54,7 @@ namespace Common {
     class FrameSteeringWheelAngle {
       public:
         FrameSteeringWheelAngle() = default;
-        FrameSteeringWheelAngle(uint32_t frame, double angle);
+        FrameSteeringWheelAngle(uint32_t _frame, double _angle);
 
     public:
         void setAngle(double value);

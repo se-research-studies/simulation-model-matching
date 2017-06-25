@@ -2,8 +2,8 @@
 
 namespace Common {
 
-FeatureSet::FeatureSet(const std::string& recordingName, const std::string& id)
-    : recordingName(recordingName), id(id), emptyFrame(DirtyFrame()) {
+FeatureSet::FeatureSet(const std::string& _recordingName, const std::string& _id)
+    : recordingName(_recordingName), id(_id), emptyFrame(DirtyFrame()) {
 }
 
 std::string FeatureSet::getRecordingName() const {

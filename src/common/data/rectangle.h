@@ -10,7 +10,7 @@ namespace Common {
     class Rectangle {
     public:
         Rectangle() = default;
-        Rectangle(const Coordinates& topLeft, const Coordinates& bottomRight);
+        Rectangle(const Coordinates& _topLeft, const Coordinates& _bottomRight);
 
     public:
         Coordinates getTopLeft() const;
@@ -32,11 +32,11 @@ namespace Common {
 namespace std {
     template<> struct hash<Common::Rectangle> {
         size_t operator()(const Common::Rectangle& rectangle) const {
-            size_t hash = std::hash<int>()(rectangle.getTopLeft().getX());
-            hash = Common::Utils::hashCombine(hash, rectangle.getTopLeft().getY());
-            hash = Common::Utils::hashCombine(hash, rectangle.getBottomRight().getX());
-            hash = Common::Utils::hashCombine(hash, rectangle.getBottomRight().getY());
-            return hash;
+            size_t result = std::hash<int>()(rectangle.getTopLeft().getX());
+            result = Common::Utils::hashCombine(result, rectangle.getTopLeft().getY());
+            result = Common::Utils::hashCombine(result, rectangle.getBottomRight().getX());
+            result = Common::Utils::hashCombine(result, rectangle.getBottomRight().getY());
+            return result;
         }
     };
 }
