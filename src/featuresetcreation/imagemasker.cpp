@@ -6,8 +6,8 @@
 
 namespace FeatureSetCreation {
 
-    ImageMasker::ImageMasker(const std::string recordingFile)
-        : recordingFile(recordingFile) {
+    ImageMasker::ImageMasker(const std::string _recordingFile)
+        : recordingFile(_recordingFile) {
     }
 
     ImageMasker::~ImageMasker() {

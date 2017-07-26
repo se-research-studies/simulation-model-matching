@@ -2,6 +2,7 @@
 
 #include <opencv2/core/core.hpp>
 
+#include <opendavinci/odcore/wrapper/SharedMemory.h>
 #include <opendavinci/odtools/player/Player.h>
 
 namespace FeatureSetCreation {

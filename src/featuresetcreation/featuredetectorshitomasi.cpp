@@ -2,8 +2,8 @@
 
 namespace FeatureSetCreation {
 
-    FeatureDetectorShiTomasi::FeatureDetectorShiTomasi(const Settings& settings)
-        : FeatureDetector(settings), settings(settings.shiTomasiSettings) {
+    FeatureDetectorShiTomasi::FeatureDetectorShiTomasi(const Settings& _settings)
+        : FeatureDetector(_settings), settings(_settings.shiTomasiSettings) {
     }
 
     FeatureDetectorShiTomasi::~FeatureDetectorShiTomasi() {

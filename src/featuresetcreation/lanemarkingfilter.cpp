@@ -9,8 +9,8 @@
 
 namespace FeatureSetCreation {
 
-    LaneMarkingFilter::LaneMarkingFilter(const LaneMarkingFilterSettings& settings)
-        : settings(settings) {
+    LaneMarkingFilter::LaneMarkingFilter(const LaneMarkingFilterSettings& _settings)
+        : settings(_settings) {
     }
 
     LaneMarkingFilter::~LaneMarkingFilter() {
@@ -55,7 +55,7 @@ namespace FeatureSetCreation {
         const cv::Point2f lineEnd(line[2], line[3]);
         float lineLengthSquared = pointDistanceSquared(lineStart, lineEnd);
         float distance;
-        if (lineLengthSquared == 0.0) { // Line is a point
+        if (fabs(lineLengthSquared) < 1e-5) { // Line is a point
             distance = pointDistance(point, lineStart);
         } else {
             cv::Point2f projectedPoint = projectPointOntoLine(point, lineLengthSquared, lineStart, lineEnd);
