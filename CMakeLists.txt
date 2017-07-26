@@ -1,26 +1,11 @@
-# simulation-model-matching - Experiment to study matching
-#                             recordings from the real world
-#                             with simulation data to extract
-#                             matching feature sets.
-# Copyright (C) 2015  Christian Berger
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
-PROJECT (simulation-model-matching)
+PROJECT (FeatureSetCreator)
+
+###########################################################################
+
+SET(GCC_COVERAGE_COMPILE_FLAGS "-std=c++11")
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 ###########################################################################
 # Set the search path for .cmake files.
@@ -38,11 +23,6 @@ ENDIF()
 ###########################################################################
 # Include flags for compiling.
 INCLUDE (CompileFlags)
-
-###########################################################################
-# Find and configure CxxTest.
-SET (CXXTEST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cxxtest") 
-INCLUDE (CheckCxxTestEnvironment)
 
 ###########################################################################
 # Find OpenDaVINCI.
@@ -65,85 +45,82 @@ SET(OPENDLV_DIR "${CMAKE_INSTALL_PREFIX}")
 FIND_PACKAGE (OpenDLV)
 
 ###########################################################################
-# Set linking libraries to successfully link simulations.
-SET (LIBRARIES ${OPENDAVINCI_LIBRARIES}
-               ${AUTOMOTIVEDATA_LIBRARIES}
-               ${OPENDLV_LIBRARIES}
-               ${OpenCV_LIBS})
+FIND_PATH(JSONCPP_INCLUDE_DIR NAMES NAMES json/features.h PATH_SUFFIXES jsoncpp PATHS ${Jsoncpp_PKGCONF_INCLUDE_DIRS})
+FIND_LIBRARY(JSONCPP_LIBRARY NAMES jsoncpp PATHS ${Jsoncpp_PKGCONF_LIBRARY_DIRS})
+if(NOT JSONCPP_INCLUDE_DIR)
+  message(SEND_ERROR "Failed to find json/features.h")
+endif()
+if(NOT JSONCPP_LIBRARY)
+  message(SEND_ERROR "Failed to find the jsoncpp library")
+endif()
+
+FIND_PATH(SQLITE3_INCLUDE_DIR sqlite3.h)
+FIND_LIBRARY(SQLITE3_LIBRARY sqlite3)
+if(NOT SQLITE3_INCLUDE_DIR)
+  message(SEND_ERROR "Failed to find sqlite3.h")
+endif()
+if(NOT SQLITE3_LIBRARY)
+  message(SEND_ERROR "Failed to find the sqlite3 library")
+endif()
+
 
 ###########################################################################
 # Set header files from OpenDaVINCI.
-INCLUDE_DIRECTORIES (${OPENDAVINCI_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES (SYSTEM ${OPENDAVINCI_INCLUDE_DIRS})
 # Set header files from AutomotiveData.
-INCLUDE_DIRECTORIES (${AUTOMOTIVEDATA_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES (SYSTEM ${AUTOMOTIVEDATA_INCLUDE_DIRS})
 # Set header files from OpenDLV.
-INCLUDE_DIRECTORIES (${OPENDLV_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES (SYSTEM ${OPENDLV_INCLUDE_DIRS})
+# Header for jsoncpp and sqlite3
+INCLUDE_DIRECTORIES (SYSTEM ${JSONCPP_INCLUDE_DIR})
+INCLUDE_DIRECTORIES (SYSTEM ${SQLITE3_INCLUDE_DIR})
 # Set include directory.
-INCLUDE_DIRECTORIES(include)
+INCLUDE_DIRECTORIES (${PROJECT_SOURCE_DIR}/include)
+message(STATUS "Include Dir: " ${PROJECT_SOURCE_DIR}/include)
 
 ###########################################################################
-# Build this project.
-FILE(GLOB_RECURSE thisproject-sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-ADD_LIBRARY (${PROJECT_NAME}lib-static STATIC ${thisproject-sources})
-ADD_EXECUTABLE (${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/apps/${PROJECT_NAME}.cpp")
-TARGET_LINK_LIBRARIES (${PROJECT_NAME} ${PROJECT_NAME}lib-static ${LIBRARIES}) 
+# Build the common sources as library
+message(STATUS "CommonLib base path: " ${PROJECT_SOURCE_DIR}/src/common/)
+FILE(GLOB_RECURSE COMMON_SOURCES ${PROJECT_SOURCE_DIR}/src/common/*.cpp)
+FILE(GLOB_RECURSE COMMON_HEADERS ${PROJECT_SOURCE_DIR}/src/common/*.h)
+ADD_LIBRARY(CommonLib ${COMMON_SOURCES} ${COMMON_HEADERS})
+TARGET_LINK_LIBRARIES (CommonLib ${OPENDAVINCI_LIBRARIES} ${AUTOMOTIVEDATA_LIBRARIES} ${OPENDLV_LIBRARIES} ${OpenCV_LIBS} ${JSONCPP_LIBRARY} ${SQLITE3_LIBRARY}) 
 
 ###########################################################################
-# Enable CxxTest for all available simulations to run simulation by
-# executing make test.
-#
-# This custom command copies the straightroad.rec* files to where
-# the test suites are generated (more correctly to the parent folder) so
-# that the test suite "ExampleDriverTestSuite2.h" can open it during
-# exection.
-ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/straightroad.rec.mem
-                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec ${CMAKE_BINARY_DIR}
-                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec.mem ${CMAKE_BINARY_DIR}
-                   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/resources/straightroad.rec.mem)
-ADD_CUSTOM_TARGET(${PROJECT_NAME}-CopyRecordingForSimulations DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/straightroad.rec.mem)
+# Build the FeatureSetCreator sources as library
+message(STATUS "FeatureSetCreationLib base path: " ${PROJECT_SOURCE_DIR}/src/featuresetcreation/)
+FILE(GLOB_RECURSE FEATURESETCREATION_SOURCES ${PROJECT_SOURCE_DIR}/src/featuresetcreation/*.cpp)
+FILE(GLOB_RECURSE FEATURESETCREATION_HEADERS ${PROJECT_SOURCE_DIR}/src/featuresetcreation/*.h)
+ADD_LIBRARY(FeatureSetCreationLib ${FEATURESETCREATION_SOURCES} ${FEATURESETCREATION_HEADERS})
+TARGET_LINK_LIBRARIES (FeatureSetCreationLib CommonLib) 
 
-ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Track.scnx
-                   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/resources/Track.scnx ${CMAKE_BINARY_DIR}
-                   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/resources/Track.scnx)
-ADD_CUSTOM_TARGET(${PROJECT_NAME}-CopyScenarioForSimulations DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Track.scnx)
+###########################################################################
+# Build the SimulationGame sources as library
+message(STATUS "SimulationGameLib base path: " ${PROJECT_SOURCE_DIR}/src/simulationgame/)
+FILE(GLOB_RECURSE SIMULATIONGAME_SOURCES ${PROJECT_SOURCE_DIR}/src/simulationgame/*.cpp)
+FILE(GLOB_RECURSE SIMULATIONGAME_HEADERS ${PROJECT_SOURCE_DIR}/src/simulationgame/*.h)
+ADD_LIBRARY(SimulationGameLib ${SIMULATIONGAME_SOURCES} ${SIMULATIONGAME_HEADERS})
+TARGET_LINK_LIBRARIES (SimulationGameLib CommonLib) 
 
-# Here, the actual simulation runners are generated. Depending on the
-# availability of libodsimulation, either all or only the ones that are
-# not depending thereon are generated.
-IF(CXXTEST_FOUND)
-    FILE(GLOB thisproject-simulations "${CMAKE_CURRENT_SOURCE_DIR}/testsuites/*.h")
+###########################################################################
+# Build the CommonTest sources as library
+#message(STATUS "CommonTestsLib base path: " ${PROJECT_SOURCE_DIR}/test/common/)
+#FILE(GLOB_RECURSE COMMON_TESTS_SOURCES ${PROJECT_SOURCE_DIR}/test/common/*.cpp)
+#FILE(GLOB_RECURSE COMMON_TESTS_HEADERS ${PROJECT_SOURCE_DIR}/test/common/*.h)
+#ADD_LIBRARY(CommonTestsLib ${COMMON_TESTS_SOURCES} ${COMMON_TESTS_HEADERS})
+#TARGET_LINK_LIBRARIES (CommonTestsLib CommonLib) 
 
-    FOREACH(simulation ${thisproject-simulations})
-        STRING(REPLACE "/" ";" simulation-list ${simulation})
+###########################################################################
+# Build featureSetCreator executable.
+message(STATUS "Main file for featureSetCreator: " ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
+ADD_EXECUTABLE (featureSetCreator ${PROJECT_SOURCE_DIR}/src/main_featuresetcreator.cpp)
+TARGET_LINK_LIBRARIES (featureSetCreator FeatureSetCreationLib) 
 
-        LIST(LENGTH simulation-list len)
-        MATH(EXPR lastItem "${len}-1")
-        LIST(GET simulation-list "${lastItem}" simulation-short)
-
-        SET(CXXTEST_TESTGEN_ARGS ${CXXTEST_TESTGEN_ARGS} --world=${PROJECT_NAME}-${testsuite-short})
-        CXXTEST_ADD_TEST(${simulation-short}-TestSuite ${simulation-short}-Simulation.cpp ${simulation})
-        IF(UNIX)
-            IF(   ("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
-               OR ("${CMAKE_SYSTEM_NAME}" STREQUAL "FreeBSD")
-               OR ("${CMAKE_SYSTEM_NAME}" STREQUAL "DragonFly") )
-                SET_SOURCE_FILES_PROPERTIES(${simulation-short}-Simulation.cpp PROPERTIES COMPILE_FLAGS "-Wno-effc++ -Wno-float-equal -Wno-error=suggest-attribute=noreturn")
-            ELSE()
-                SET_SOURCE_FILES_PROPERTIES(${simulation-short}-Simulation.cpp PROPERTIES COMPILE_FLAGS "-Wno-effc++ -Wno-float-equal")
-            ENDIF()
-        ENDIF()
-        IF(WIN32)
-            SET_SOURCE_FILES_PROPERTIES(${simulation-short}-Simulation.cpp PROPERTIES COMPILE_FLAGS "")
-        ENDIF()
-
-        SET_TESTS_PROPERTIES(${simulation-short}-TestSuite PROPERTIES TIMEOUT 3000)
-        TARGET_LINK_LIBRARIES(${simulation-short}-TestSuite ${PROJECT_NAME}lib-static ${LIBRARIES})
-
-        # For the test suites that use an SCNX scenario, we are additionally copying
-        # the required scenarios to where the simulation runners are going to be executed.
-        ADD_DEPENDENCIES(${simulation-short}-TestSuite ${PROJECT_NAME}-CopyScenarioForSimulations)
-        ADD_DEPENDENCIES(${simulation-short}-TestSuite ${PROJECT_NAME}-CopyRecordingForSimulations)
-    ENDFOREACH()
-ENDIF(CXXTEST_FOUND)
+###########################################################################
+# Build simulationGame executable.
+message(STATUS "Main file for simulationGame: " ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
+ADD_EXECUTABLE (simulationGame ${PROJECT_SOURCE_DIR}/src/main_simulationgame.cpp)
+TARGET_LINK_LIBRARIES (simulationGame SimulationGameLib) 
 
 ###########################################################################
 # This project will not be installed.
